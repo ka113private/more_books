@@ -9,14 +9,14 @@ class InquiryForm(forms.Form):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        self.fields['name'].widget.attr['class'] = form-control
-        self.fields['name'].widget.attr['placeholder'] = 'お名前をここに入力してください。'
+        self.fields['name'].widget.attrs['class'] = 'form-control'
+        self.fields['name'].widget.attrs['placeholder'] = 'お名前をここに入力してください。'
 
-        self.fields['email'].widget.attr['class'] = form-control
-        self.fields['email'].widget.attr['placeholder'] = 'メールアドレスをここに入力してください。'
+        self.fields['email'].widget.attrs['class'] = 'form-control'
+        self.fields['email'].widget.attrs['placeholder'] = 'メールアドレスをここに入力してください。'
 
-        self.fields['title'].widget.attr['class'] = form-control
-        self.fields['title'].widget.attr['placeholder'] = 'タイトルをここに入力してください。'
+        self.fields['title'].widget.attrs['class'] = 'form-control'
+        self.fields['title'].widget.attrs['placeholder'] = 'タイトルをここに入力してください。'
 
-        self.fields['message'].widget.attr['class'] = form-control
-        self.fields['message'].widget.attr['placeholder'] = 'メッセージをここに入力してください。'
+        self.fields['message'].widget.attrs['class'] = 'form-control'
+        self.fields['message'].widget.attrs['placeholder'] = 'メッセージをここに入力してください。'
