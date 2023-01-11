@@ -27,10 +27,22 @@
             <nav class="navbar navbar-light bg-light static-top">
                 <div class="container">
                     <a class="navbar-brand" href="{% url 'books:index' %">More Books!</a>
-                    <a class="navbar-brand" href="#">本を探す</a>
-                    <a class="navbar-brand" href="#">お問い合わせ</a>
-                    <a class="btn btn-primary" href="#">Sign Up</a>
-                    <a class="btn btn-primary" href="#">Log In</a>
+                    <ul class="navbar-nav me-auto">
+                        <li class="nav-item">
+                            <a class="nav-link {% block active_search %}{% endblock %}" href="">本を探す</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {% block active_inquiry %}{% endblock %}" href="{% url 'books:inquiry' %}">お問い合わせ</a>
+                        </li>
+                    </ul>
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Sign Up</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="btn btn-primary" href="#">Log In</a>
+                        </li>
+                    </ul>
                 </div>
             </nav>
 
