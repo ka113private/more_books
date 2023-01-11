@@ -1,0 +1,56 @@
+{% load static %}
+
+<html lang="ja">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>{% block title %}{% endblock %}</title>
+        <!-- Favicon-->
+        <link rel="icon" type="image/x-icon" href="{% static 'assets/favicon.ico'%}" />
+        <!-- Bootstrap icons-->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" type="text/css" />
+        <!-- Google fonts-->
+        <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic,700italic" rel="stylesheet" type="text/css" />
+        <!-- Core theme CSS (includes Bootstrap)-->
+        <link href="{% static 'css/landing-page-gh-pages.css' %}" rel="stylesheet" />
+        <!-- My style -->
+    </body>
+        <link rel="stylesheet", type="text/css", href="{% static 'css/mystyle.css' %}">
+        {% block head %}{% endblock %}
+    </head>
+
+    <body>
+        <div id = "wrapper">
+            <!-- Navigation-->
+            <nav class="navbar navbar-light bg-light static-top">
+                <div class="container">
+                    <a class="navbar-brand" href="{% url 'books:index' %">More Books!</a>
+                    <a class="navbar-brand" href="#">本を探す</a>
+                    <a class="navbar-brand" href="#">お問い合わせ</a>
+                    <a class="btn btn-primary" href="#">Sign Up</a>
+                    <a class="btn btn-primary" href="#">Log In</a>
+                </div>
+            </nav>
+
+            {% block header %}{% endblock %}
+
+            {% block contents %}{% endblock %}
+
+            <!-- Footer -->
+            <footer class="footer bg-light">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-6 h-100 text-center text-lg-start my-auto">
+                             <p class="text-muted small mb-4 mb-lg-0">Copyright &copy; More Books! 2022. All Rights Reserved.</p>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+
+            <!-- Bootstrap core jS -->
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+        </div>
+    </body>
+</html>
