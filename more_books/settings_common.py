@@ -75,7 +75,7 @@ ACCOUNT_EMAIL_SUBJECT_PREFIX = ''
 # デフォルトのメールの送信元設定
 DEFAULT_FROM_EMAIL = os.environ.get('FROM_EMAIL')
 
-
+MEDIA_URL = '/media/'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
