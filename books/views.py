@@ -6,7 +6,7 @@ from django.views import generic
 from .forms import InquiryForm
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .models import Books
+from .models import Book
 
 logger = logging.getLogger(__name__)
 
@@ -25,10 +25,10 @@ class InquiryView(generic.FormView):
         return super().form_valid(form)
 
 class BookListView(LoginRequiredMixin, generic.ListView):
-    model = Books
+    model = Book
     template_name = 'book_list.html'
 
     def get_queryset(self):
         #　☆検索機能はそのうち実装する。
-        books = Books
-        return books
+        book_list = Book.objects.order_by('-created_at')
+        return book_list
