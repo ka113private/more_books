@@ -32,3 +32,7 @@ class BookListView(LoginRequiredMixin, generic.ListView):
         #　☆検索機能はそのうち実装する。
         book_list = Book.objects.order_by('-created_at')
         return book_list
+
+class BookDetailView(LoginRequiredMixin, generic.DetailView):
+    model = Book
+    template_name = 'book_detail.html'

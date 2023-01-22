@@ -41,7 +41,7 @@ class FavoriteBook(models.Model):
 
 class BookTag(models.Model):
     """書籍タグ"""
-    book_id = models.ForeignKey(Book, verbose_name='書籍ID', on_delete=models.PROTECT)
+    book_id = models.ForeignKey(Book, related_name='Booktags',verbose_name='書籍ID', on_delete=models.PROTECT)
     tag_id = models.ForeignKey(Tag, verbose_name='タグID', on_delete=models.PROTECT)
     created_at = models.DateTimeField(verbose_name='作成日時', auto_now_add=True)
 
