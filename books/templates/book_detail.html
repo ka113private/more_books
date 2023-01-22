@@ -14,16 +14,19 @@
             <div class="col-md-6"><img class="card-img-top mb-5 mb-md-0" src="../../media/{{ object.thumbnail_image }}" alt="..." /></div>
             <div class="col-md-6">
                 <!-- <div class="small mb-1"></div> -->
-                <h1 class="display-5 fw-bolder">{{ object.title }}</h1>
+                <h1 class="display-5 fw-bolder">{{ object.title }}
+                    <a href="{{ object.amazon_url }}"><img src="../../static/assets/img/amazon_icon.png" witdh="40" height="40"></a>
+                </h1>
                 <div class="fs-5 mb-5">
                     <span>{{ object.author }}</span>
                 </div>
                 <p class="lead">{{ object.description }}</p>
                 <div class="d-flex">
                     {% for booktag in object.Booktags.all %}
-                    <button class="btn btn-outline-dark flex-shrink-0"　href="{% url 'books:book_list' %}" type="button">
+                    <!-- ★タグ名でlist表示できるようにする -->
+                    <a class="btn btn-outline-dark flex-shrink-0" href="{% url 'books:book_list' %}" type="button">
                         #{{ booktag.tag_id.name }}
-                    </button>
+                    </a>
                     <i class="bi-heart-fill"></i>
                     {% endfor %}
                 </div>
