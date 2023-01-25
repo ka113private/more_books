@@ -39,6 +39,7 @@ class FavoriteBook(models.Model):
     class Meta:
         verbose_name='FavoriteBook'
 
+
 class BookTag(models.Model):
     """書籍タグ"""
     book_id = models.ForeignKey(Book, related_name='Booktags',verbose_name='書籍ID', on_delete=models.PROTECT)

@@ -13,6 +13,16 @@
         <div class="row gx-4 gx-lg-5 align-items-center">
             <div class="col-md-6"><img class="card-img-top mb-5 mb-md-0" src="../../media/{{ object.thumbnail_image }}" alt="..." /></div>
             <div class="col-md-6">
+                <!-- いいね機能 -->
+                {% if is_user_favorite_book %}
+                <button type="button" id="ajax-favorite" style="border:none;background:none">
+                    <i class="fas fa-heart text-danger" id="favorite-booktag"></i>
+                </button>
+                {% else %}
+                <button type="button" id="ajax-favorite" style="border:none;background:none">
+                    <i class="far fa-heart text-danger" id="favorite-booktag"></i>
+                </button>
+                {% endif %}
                 <!-- <div class="small mb-1"></div> -->
                 <h1 class="display-5 fw-bolder">{{ object.title }}
                     <a href="{{ object.amazon_url }}"><img src="../../static/assets/img/amazon_icon.png" witdh="40" height="40"></a>
@@ -27,7 +37,7 @@
                     <a class="btn btn-outline-dark flex-shrink-0" href="{% url 'books:book_list' %}" type="button">
                         #{{ booktag.tag_id.name }}
                     </a>
-                    <i class="bi-heart-fill"></i>
+                    <!-- <i class="bi-heart-fill"></i> -->
                     {% endfor %}
                 </div>
             </div>
