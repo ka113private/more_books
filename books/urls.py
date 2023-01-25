@@ -7,4 +7,6 @@ urlpatterns = [
     path('inquiry/', views.InquiryView.as_view(), name="inquiry"),
     path('book-list/', views.BookListView.as_view(), name="book_list"),
     path('book-detail/<int:pk>/', views.BookDetailView.as_view(), name="book_detail"),
+    path('favorite_book/', views.favorite_book, name="favorite_book")
+
 ]
