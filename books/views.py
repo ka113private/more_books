@@ -36,3 +36,13 @@ class BookListView(LoginRequiredMixin, generic.ListView):
 class BookDetailView(LoginRequiredMixin, generic.DetailView):
     model = Book
     template_name = 'book_detail.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        #ログインユーザーがいいねしているかどうか
+        if self.object.favoritebook_set.filter(user_id=self.request.user).exists():
+            context['is_user_favorite_book'] = True
+        else:
+            context['is_user_favorite_book'] = False
+
+        return context
