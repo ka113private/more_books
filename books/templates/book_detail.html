@@ -13,16 +13,18 @@
         <div class="row gx-4 gx-lg-5 align-items-center">
             <div class="col-md-6"><img class="card-img-top mb-5 mb-md-0" src="../../media/{{ object.thumbnail_image }}" alt="..." /></div>
             <div class="col-md-6">
-                <!-- いいね機能 -->
+
+                <!-- 書籍お気に入り機能 -->
                 {% if is_user_favorite_book %}
-                <button type="button" id="ajax-favorite" style="border:none;background:none">
+                <button type="button" id="ajax-favorite-book" style="border:none;background:none">
                     <i class="fas fa-heart text-danger" id="favorite-book"></i>
                 </button>
                 {% else %}
-                <button type="button" id="ajax-favorite" style="border:none;background:none">
+                <button type="button" id="ajax-favorite-book" style="border:none;background:none">
                     <i class="far fa-heart text-danger" id="favorite-book"></i>
                 </button>
                 {% endif %}
+
                 <!-- <div class="small mb-1"></div> -->
                 <h1 class="display-5 fw-bolder">{{ object.title }}
                     <a href="{{ object.amazon_url }}"><img src="../../static/assets/img/amazon_icon.png" witdh="40" height="40"></a>
@@ -44,4 +46,29 @@
         </div>
     </div>
 </section>
+{% endblock %}
+
+{% block extrajs %}
+<!--★非同期でいいねにする機能は後で実装
+<script type="text/javascript">
+    document.getElementByID('ajax-favorite-book').addEventListener('click',e => {
+    e.preventDefault();
+    const url = '{% url "books:favorite_book" %}';
+    fetch(url, {
+    method: 'POST',
+    body: 'book_pk={{book.pk}}',
+    headers:{
+        'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8,
+        'X-CSRFToken': '{{csrf_token}}',
+    },
+    }).then(responce => {
+    return responce.json();
+    }).then(responce => {
+    console.log(responce);
+    }).catch(error => {
+    console.log(error);
+    });
+    });
+</script>
+-->
 {% endblock %}
