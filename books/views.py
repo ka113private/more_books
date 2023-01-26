@@ -6,7 +6,9 @@ from django.views import generic
 from .forms import InquiryForm
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .models import Book
+from .models import Book, FavoriteBook
+from django.http import JsonResponse
+from django.shortcuts import get_object_or_404
 
 logger = logging.getLogger(__name__)
 
@@ -46,3 +48,22 @@ class BookDetailView(LoginRequiredMixin, generic.DetailView):
             context['is_user_favorite_book'] = False
 
         return context
+
+def favorite_book(request):
+    book_pk = request.BOOK.get('book_pk')
+    context = {
+        'user':f'{request.user.username}'
+    }
+    book = get_object_or_404(Book, pk=book_pk)
+    favorite = FavoriteBook.objects.filter(book_id = book, user_id = user)
+
+    if favorite.exists():
+        favorite.delete()
+        context['method'] = 'delete'
+    else:
+        favorite.create(book_id = book, user_id = user)
+        context['method'] = 'create'
+
+    context['favorite_book_count'] = book.favoritebook_set.count()
+
+    return JsonResponse(context)
