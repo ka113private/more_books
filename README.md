@@ -75,3 +75,23 @@
 - related_nameはなるべくmodelに定義したほうがよさそう。Book.favoritebook_set.allでもできるが、外部キーが二つ以上ある場合にエラーになるので定義したほうが安全。
 - 明日は書籍タグいいね機能とマイページ、検索機能を実装したい。
 
+### 〇2023/1/27
+  ＜時間＞\
+  6:15～7:30
+  ＜実績＞
+- book-detailページにタグいいね機能の実装
+
+＜所感＞
+- 「AttributeError at /book-detail/2/ 'Book' object has no attribute 'booktag_set'」が出るときはviewにただしくmodelがimportされているかをチェックする。
+- {% ～ %}タグ内で変数を使う方法で少し戸惑った。Qiitaの「【Django】{% static %}タグ内で変数を使う方法」を参考にした。→withタグとaddタグを使えばよいことを発見。
+- withタグ、addタグの使い方のために「Djangoのテンプレートで文字列を連結する方法」を参照。とくにtemplate内で文字と数値(pk)を加算するためにはbooktag.pk|slugifyとASCIIに変換する必要があるので注意
+
+### 〇2023/1/29
+  ＜時間＞\
+  21:00～23:30
+  ＜実績＞
+- book-detailページにタグいいね機能の実装（表示するところまで）
+- mypageに自分のプロフィール画像を表示するところまで
+
+＜所感＞
+- 結局、書籍タグいいねを表示させるのに2日かかった。解決法としてはcontentにdic形式で値を持たせたが、そのときのKeyをBooktagモデル、valueをいいね状態（bool）で管理した。うまくいったのはよかったが、タグ名表示のために{{booktag.tag_id.name}}としたが、booktagモデルからnameまでを表示できるのがよくわからない。
