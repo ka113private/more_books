@@ -6,7 +6,7 @@ from django.views import generic
 from .forms import InquiryForm
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .models import Book, FavoriteBook
+from .models import Book, FavoriteBook, BookTag, TagLike ,Tag, Bookshelf, CustomUser
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 
@@ -41,11 +41,58 @@ class BookDetailView(LoginRequiredMixin, generic.DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        #ログインユーザーがいいねしているかどうか
+        #ログインユーザーの書籍お気に入り状態を取得
         if self.object.favoritebook_set.filter(user_id=self.request.user).exists():
             context['is_user_favorite_book'] = True
         else:
             context['is_user_favorite_book'] = False
+        #ログインユーザーのタグいいね状態を取得
+        tag_list = self.object.booktags.all()
+        tag_islike_dic = {}
+        for booktag in tag_list:
+            if booktag.taglike_set.filter(user_id=self.request.user).exists():
+                tag_islike_dic[booktag] = True
+            else:
+                tag_islike_dic[booktag] = False
+        context['tag_islike_dic'] = tag_islike_dic
+        return context
+
+class MyPageView(LoginRequiredMixin, generic.DetailView):
+    model = CustomUser
+    template_name = "mypage.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        #ログインユーザーのほしい書籍
+        want_list = Bookshelf.objects.filter(user_id=self.request.user, status=1)
+        want_dic = {}
+        for want in want_list:
+            if FavoriteBook.objects.filter(user_id=self.request.user, book_id=want.book_id).exists():
+                want_dic[want] = True
+            else:
+                want_dic[want] = False
+        context['want_dic'] = want_dic
+
+        # ログインユーザーの読書中書籍
+        reading_list = Bookshelf.objects.filter(user_id=self.request.user, status=2)
+        reading_dic = {}
+        for reading in reading_list:
+            if FavoriteBook.objects.filter(user_id=self.request.user, book_id=reading.book_id).exists():
+                reading_dic[reading] = True
+            else:
+                reading_dic[reading] = False
+        context['reading_dic'] = reading_dic
+
+        # ログインユーザーの読了書籍F
+        read_list = Bookshelf.objects.filter(user_id=self.request.user, status=3)
+        read_dic = {}
+        for read in read_list:
+            if FavoriteBook.objects.filter(user_id=self.request.user, book_id=read.book_id).exists():
+                read_dic[read] = True
+            else:
+                read_dic[read] = False
+        context['read_dic'] = read_dic
+
 
         return context
 

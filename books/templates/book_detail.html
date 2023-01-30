@@ -13,18 +13,20 @@
         <div class="row gx-4 gx-lg-5 align-items-center">
             <div class="col-md-6"><img class="card-img-top mb-5 mb-md-0" src="../../media/{{ object.thumbnail_image }}" alt="..." /></div>
             <div class="col-md-6">
+                <div class="d-flex justify-content-end">
+                    <!-- 書籍お気に入り機能 -->
+                    {% if is_user_favorite_book %}
+                    <button type="button" id="ajax-favorite-book" style="border:none;background:none">
+                        <i class="fas fa-solid fa-star text-warning" id="favorite-book"></i>
+                    </button>
+                    {% else %}
+                    <button type="button" id="ajax-favorite-book" style="border:none;background:none">
+                        <i class="far fa-solid fa-star text-warning" id="favorite-book"></i>
+                    </button>
+                    {% endif %}
 
-                <!-- 書籍お気に入り機能 -->
-                {% if is_user_favorite_book %}
-                <button type="button" id="ajax-favorite-book" style="border:none;background:none">
-                    <i class="fas fa-heart text-danger" id="favorite-book"></i>
-                </button>
-                {% else %}
-                <button type="button" id="ajax-favorite-book" style="border:none;background:none">
-                    <i class="far fa-heart text-danger" id="favorite-book"></i>
-                </button>
-                {% endif %}
-
+                    <a class="btn btn-secondary" href="{% url 'books:mypage' user.id%}">my本棚に追加</a>
+                </div>
                 <!-- <div class="small mb-1"></div> -->
                 <h1 class="display-5 fw-bolder">{{ object.title }}
                     <a href="{{ object.amazon_url }}"><img src="../../static/assets/img/amazon_icon.png" witdh="40" height="40"></a>
@@ -33,23 +35,37 @@
                     <span>{{ object.author }}</span>
                 </div>
                 <p class="lead">{{ object.description }}</p>
-                <div class="d-flex">
-                    {% for booktag in object.Booktags.all %}
-                    <!-- ★タグ名でlist表示できるようにする -->
-                    <a class="btn btn-outline-dark flex-shrink-0" href="{% url 'books:book_list' %}" type="button">
-                        #{{ booktag.tag_id.name }}
-                    </a>
-                    <!-- <i class="bi-heart-fill"></i> -->
-                    {% endfor %}
+                <div class="d-flex align-content-around flex-wrap ">
+                    {% for tag_islike_key, tag_islike_value in tag_islike_dic.items %}
+                        <!-- ★タグ名でlist表示できるようにする -->
+                        <a class="btn btn-outline-dark flex-shrink-0" href="{% url 'books:book_list' %}" type="button">
+                            #{{ tag_islike_key.tag_id.name }}
+                        </a>
+                        <!-- 書籍タグいいね機能 -->
+                        {% if tag_islike_value %}
+                        <button type="button" id="ajax-favorite-booktag" style="border:none;background:none">
+                            <i class="fas fa-heart text-danger" id="favorite-booktag"></i>
+                        </button>
+                        {% else %}
+                        <button type="button" id="ajax-favorite-booktag" style="border:none;background:none">
+                            <i class="far fa-heart text-danger" id="favorite-booktag"></i>
+                        </button>
+                        {% endif %}
+                        <!-- <i class="bi-heart-fill"></i> -->
+                {% endfor %}
                 </div>
+                <button type="button" id="ajax-booktag-add" style="border:none;background:none">
+                            <i class="fa-solid fa-plus" id="booktag-add">タグを追加する</i>
+                </button>
             </div>
         </div>
     </div>
 </section>
 {% endblock %}
 
+<!--
 {% block extrajs %}
-<!--★非同期でいいねにする機能は後で実装
+★非同期でいいねにする機能は後で実装
 <script type="text/javascript">
     document.getElementByID('ajax-favorite-book').addEventListener('click',e => {
     e.preventDefault();
@@ -70,5 +86,5 @@
     });
     });
 </script>
--->
 {% endblock %}
+-->
