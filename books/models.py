@@ -42,21 +42,21 @@ class FavoriteBook(models.Model):
 
 class BookTag(models.Model):
     """書籍タグ"""
-    book_id = models.ForeignKey(Book, related_name='Booktags',verbose_name='書籍ID', on_delete=models.PROTECT)
+    book_id = models.ForeignKey(Book, related_name='booktags', verbose_name='書籍ID', on_delete=models.PROTECT)
     tag_id = models.ForeignKey(Tag, verbose_name='タグID', on_delete=models.PROTECT)
     created_at = models.DateTimeField(verbose_name='作成日時', auto_now_add=True)
 
     class Meta:
         verbose_name='BookTag'
 
-class FavoriteTag(models.Model):
-    """お気に入りタグ"""
+class TagLike(models.Model):
+    """タグいいね"""
     user_id = models.ForeignKey(CustomUser, verbose_name='ユーザーID', on_delete=models.PROTECT)
     booktag_id = models.ForeignKey(BookTag, verbose_name='書籍タグID', on_delete=models.PROTECT)
     created_at = models.DateTimeField(verbose_name='作成日時', auto_now_add=True)
 
     class Meta:
-        verbose_name='FavoriteTag'
+        verbose_name='TagLike'
 
 class Bookshelf(models.Model):
     """本棚"""
@@ -67,4 +67,4 @@ class Bookshelf(models.Model):
     update_at = models.DateTimeField(verbose_name='更新日時', auto_now=True)
 
     class Meta:
-        verbose_name='Booksshelf'
+        verbose_name='Bookshelf'
