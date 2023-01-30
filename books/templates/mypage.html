@@ -11,15 +11,17 @@
 <section class="py-5">
     <div class="container px-4 px-lg-5 my-5">
         <div class="row gx-4 gx-lg-5 align-items-center">
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <img class="card-img-top mb-5 mb-md-0 rounded-circle border" src="../../media/{{ object.profile_image }}" alt="..."/>
                 <div class="fs-1">
                     <span>{{ object.username }}</span>
                 </div>
                 <a class="btn btn-secondary" href="#">プロフィールを編集</a>
             </div>
-            <div class="col-md-8">
-                <p class="h2">読みたい</p>
+            <div class="col-md-9">
+                <p class="h2">読みたい
+                    <a class="btn btn-secondary" href="#">編集</a>
+                </p>
                  <div class="container-fluid">
                      <div class="row flex-nowrap">
                          {% for want_key, want_is_favo in want_dic.items %}
@@ -36,7 +38,9 @@
                          {% endfor %}
                      </div>
                  </div>
-                <p class="h2">続きを読む</p>
+                <p class="h2">続きを読む
+                    <a class="btn btn-secondary" href="#">編集</a>
+                </p>
                  <div class="container-fluid">
                      <div class="row flex-nowrap">
                          {% for reading_key, reading_is_favo in reading_dic.items %}
@@ -53,7 +57,9 @@
                          {% endfor %}
                      </div>
                  </div>
-                <p class="h2">もう一度読む</p>
+                <p class="h2">もう一度読む
+                    <a class="btn btn-secondary" href="#">編集</a>
+                </p>
                  <div class="container-fluid">
                      <div class="row flex-nowrap">
                          {% for read_key, read_is_favo in read_dic.items %}
