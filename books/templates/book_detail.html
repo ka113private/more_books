@@ -39,7 +39,7 @@
                     {% for tag_islike_key, tag_islike_value in tag_islike_dic.items %}
                         <!-- ★タグ名でlist表示できるようにする -->
                         <a class="btn btn-outline-dark flex-shrink-0" href="{% url 'books:book_list' %}" type="button">
-                            #{{ tag_islike_key.tag_id.name }}
+                            #{{ tag_islike_key.tag.name }}
                         </a>
                         <!-- 書籍タグいいね機能 -->
                         {% if tag_islike_value %}
