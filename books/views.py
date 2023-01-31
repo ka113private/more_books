@@ -42,7 +42,7 @@ class BookDetailView(LoginRequiredMixin, generic.DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         #ログインユーザーの書籍お気に入り状態を取得
-        if self.object.favoritebook_set.filter(user_id=self.request.user).exists():
+        if self.object.favoritebook_set.filter(user=self.request.user).exists():
             context['is_user_favorite_book'] = True
         else:
             context['is_user_favorite_book'] = False
@@ -50,7 +50,7 @@ class BookDetailView(LoginRequiredMixin, generic.DetailView):
         tag_list = self.object.booktags.all()
         tag_islike_dic = {}
         for booktag in tag_list:
-            if booktag.taglike_set.filter(user_id=self.request.user).exists():
+            if booktag.taglike_set.filter(user=self.request.user).exists():
                 tag_islike_dic[booktag] = True
             else:
                 tag_islike_dic[booktag] = False
@@ -64,30 +64,30 @@ class MyPageView(LoginRequiredMixin, generic.DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         #ログインユーザーのほしい書籍
-        want_list = Bookshelf.objects.filter(user_id=self.request.user, status=1)
+        want_list = Bookshelf.objects.filter(user=self.request.user, status=1)
         want_dic = {}
         for want in want_list:
-            if FavoriteBook.objects.filter(user_id=self.request.user, book_id=want.book_id).exists():
+            if FavoriteBook.objects.filter(user=self.request.user, book=want.book).exists():
                 want_dic[want] = True
             else:
                 want_dic[want] = False
         context['want_dic'] = want_dic
 
         # ログインユーザーの読書中書籍
-        reading_list = Bookshelf.objects.filter(user_id=self.request.user, status=2)
+        reading_list = Bookshelf.objects.filter(user=self.request.user, status=2)
         reading_dic = {}
         for reading in reading_list:
-            if FavoriteBook.objects.filter(user_id=self.request.user, book_id=reading.book_id).exists():
+            if FavoriteBook.objects.filter(user=self.request.user, book=reading.book).exists():
                 reading_dic[reading] = True
             else:
                 reading_dic[reading] = False
         context['reading_dic'] = reading_dic
 
         # ログインユーザーの読了書籍F
-        read_list = Bookshelf.objects.filter(user_id=self.request.user, status=3)
+        read_list = Bookshelf.objects.filter(user=self.request.user, status=3)
         read_dic = {}
         for read in read_list:
-            if FavoriteBook.objects.filter(user_id=self.request.user, book_id=read.book_id).exists():
+            if FavoriteBook.objects.filter(user=self.request.user, book=read.book).exists():
                 read_dic[read] = True
             else:
                 read_dic[read] = False
@@ -102,13 +102,13 @@ def favorite_book(request):
         'user':f'{request.user.username}'
     }
     book = get_object_or_404(Book, pk=book_pk)
-    favorite = FavoriteBook.objects.filter(book_id = book, user_id = user)
+    favorite = FavoriteBook.objects.filter(book = book, user = user)
 
     if favorite.exists():
         favorite.delete()
         context['method'] = 'delete'
     else:
-        favorite.create(book_id = book, user_id = user)
+        favorite.create(book = book, user = user)
         context['method'] = 'create'
 
     context['favorite_book_count'] = book.favoritebook_set.count()

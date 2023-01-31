@@ -27,8 +27,8 @@
                          {% for want_key, want_is_favo in want_dic.items %}
                          <div class="col-2">
                              <div class="card">
-                                 <a href="{%url 'books:book_detail' want_key.book_id.pk %}">
-                                     <img class="card-img-top" src="../../media/{{ want_key.book_id.thumbnail_image }}" alt="">
+                                 <a href="{%url 'books:book_detail' want_key.book.pk %}">
+                                     <img class="card-img-top" src="../../media/{{ want_key.book.thumbnail_image }}" alt="">
                                  </a>
                              </div>
                              {% if want_is_favo %}
@@ -46,8 +46,8 @@
                          {% for reading_key, reading_is_favo in reading_dic.items %}
                          <div class="col-2">
                              <div class="card">
-                                 <a href="{%url 'books:book_detail' reading_key.book_id.pk %}">
-                                     <img class="card-img-top" src="../../media/{{ reading_key.book_id.thumbnail_image }}" alt="">
+                                 <a href="{%url 'books:book_detail' reading_key.book.pk %}">
+                                     <img class="card-img-top" src="../../media/{{ reading_key.book.thumbnail_image }}" alt="">
                                  </a>
                              </div>
                              {% if reading_is_favo %}
@@ -65,8 +65,8 @@
                          {% for read_key, read_is_favo in read_dic.items %}
                          <div class="col-2">
                              <div class="card">
-                                 <a href="{%url 'books:book_detail' read_key.book_id.pk %}">
-                                     <img class="card-img-top" src="../../media/{{ read_key.book_id.thumbnail_image }}" alt="">
+                                 <a href="{%url 'books:book_detail' read_key.book.pk %}">
+                                     <img class="card-img-top" src="../../media/{{ read_key.book.thumbnail_image }}" alt="">
                                  </a>
                              </div>
                              {% if read_is_favo %}
