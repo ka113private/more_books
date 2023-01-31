@@ -32,8 +32,8 @@ class Tag(models.Model):
 
 class FavoriteBook(models.Model):
     """お気に入り書籍"""
-    user_id = models.ForeignKey(CustomUser, verbose_name='ユーザーID', on_delete=models.PROTECT)
-    book_id = models.ForeignKey(Book, verbose_name='書籍ID', on_delete=models.PROTECT)
+    user_id = models.ForeignKey(CustomUser, verbose_name='ユーザー', on_delete=models.PROTECT)
+    book_id = models.ForeignKey(Book, verbose_name='書籍', on_delete=models.PROTECT)
     created_at = models.DateTimeField(verbose_name='作成日時', auto_now_add=True)
 
     class Meta:
@@ -42,17 +42,17 @@ class FavoriteBook(models.Model):
 
 class BookTag(models.Model):
     """書籍タグ"""
-    book_id = models.ForeignKey(Book, related_name='booktags', verbose_name='書籍ID', on_delete=models.PROTECT)
-    tag_id = models.ForeignKey(Tag, verbose_name='タグID', on_delete=models.PROTECT)
+    book_id = models.ForeignKey(Book, related_name='booktags', verbose_name='書籍', on_delete=models.PROTECT)
+    tag_id = models.ForeignKey(Tag, verbose_name='タグ', on_delete=models.PROTECT)
     created_at = models.DateTimeField(verbose_name='作成日時', auto_now_add=True)
 
     class Meta:
         verbose_name='BookTag'
 
 class TagLike(models.Model):
-    """タグいいね"""
-    user_id = models.ForeignKey(CustomUser, verbose_name='ユーザーID', on_delete=models.PROTECT)
-    booktag_id = models.ForeignKey(BookTag, verbose_name='書籍タグID', on_delete=models.PROTECT)
+    """書籍タグいいね"""
+    user_id = models.ForeignKey(CustomUser, verbose_name='ユーザー', on_delete=models.PROTECT)
+    booktag_id = models.ForeignKey(BookTag, verbose_name='書籍タグ', on_delete=models.PROTECT)
     created_at = models.DateTimeField(verbose_name='作成日時', auto_now_add=True)
 
     class Meta:
@@ -60,8 +60,8 @@ class TagLike(models.Model):
 
 class Bookshelf(models.Model):
     """本棚"""
-    user_id = models.ForeignKey(CustomUser, verbose_name='ユーザーID', on_delete=models.PROTECT)
-    book_id = models.ForeignKey(Book, verbose_name='書籍ID', on_delete=models.PROTECT)
+    user_id = models.ForeignKey(CustomUser, verbose_name='ユーザー', on_delete=models.PROTECT)
+    book_id= models.ForeignKey(Book, verbose_name='書籍', on_delete=models.PROTECT)
     status = models.IntegerField(verbose_name='ステータス')
     created_at = models.DateTimeField(verbose_name='作成日時', auto_now_add=True)
     update_at = models.DateTimeField(verbose_name='更新日時', auto_now=True)
