@@ -1,6 +1,7 @@
 import os
 from django import forms
 from django.core.mail import EmailMessage
+from .models import Tag
 
 class InquiryForm(forms.Form):
     name = forms.CharField(label='お名前', max_length=30)
@@ -41,3 +42,14 @@ class InquiryForm(forms.Form):
 
         emailMessage = EmailMessage(subject=subject, body=message, from_email=from_email, to=to_list, cc=cc_list)
         emailMessage.send()
+
+class TagAddForm(forms.ModelForm):
+    """タグ追加フォーム"""
+    class Meta:
+        model = Tag
+        fields = ('name',)
+
+    def __int__(self, *args, **kwargs):
+        super().__int__(*args, **kwargs)
+        for field in self.field.values():
+            field.widget.attrs['class']='form-control'
