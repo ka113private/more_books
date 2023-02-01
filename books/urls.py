@@ -8,6 +8,7 @@ urlpatterns = [
     path('book-list/', views.BookListView.as_view(), name="book_list"),
     path('book-detail/<int:pk>/', views.BookDetailView.as_view(), name="book_detail"),
     path('mypage/<int:pk>/', views.MyPageView.as_view(), name="mypage"),
-    path('favorite_book/', views.favorite_book, name="favorite_book")
+    path('favorite_book/', views.favorite_book, name="favorite_book"),
+    path('tag-add/<int:pk>', views.TagAddView.as_view(), name="tag_add")
 
 ]

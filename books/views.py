@@ -3,7 +3,7 @@ import logging
 from django.urls import reverse_lazy
 from django.shortcuts import render
 from django.views import generic
-from .forms import InquiryForm
+from .forms import InquiryForm, TagAddForm
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Book, FavoriteBook, BookTag, TagLike ,Tag, Bookshelf, CustomUser
@@ -55,6 +55,8 @@ class BookDetailView(LoginRequiredMixin, generic.DetailView):
             else:
                 tag_islike_dic[booktag] = False
         context['tag_islike_dic'] = tag_islike_dic
+        #モーダル用のフォーム
+        context['tag_add_form'] = TagAddForm
         return context
 
 class MyPageView(LoginRequiredMixin, generic.DetailView):
@@ -95,6 +97,35 @@ class MyPageView(LoginRequiredMixin, generic.DetailView):
 
 
         return context
+
+class TagAddView(LoginRequiredMixin, generic.CreateView):
+    """
+    タグ追加ビュー
+    書籍詳細ページのフォームからpkを受け取り、モデル保存処理をする。
+    すでにDBに保存済みのタグかどうかを判定し、未保存の場合はタグモデルへの保存及び書籍タグへの追加を行う。
+    保存済みの場合は書籍タグのみ追加を行う。
+    """
+    model = Book
+    form_class = TagAddForm
+    """★詳細ページに遷移できるように修正"""
+    success_url = reverse_lazy('books:book_list')
+
+    def form_valid(self, form):
+        # 既にtagモデルに同名のタグが保存されているか確認する。されていない場合はタグを保存
+        pk = self.kwargs['pk']
+        tag = form.save(commit=False)
+        if not (Tag.objects.filter(name=tag.name).exists()):
+            tag.save()
+        target_tag = Tag.objects.get(name=tag.name)
+        book = Book.objects.get(pk=pk)
+        if not (BookTag.objects.filter(book=book, tag=target_tag).exists()):
+            booktag = BookTag(book=book, tag=target_tag)
+            booktag.save()
+            messages.success(self.request, 'タグを追加しました。')
+        else:
+            messages.success(self.request, 'すでにタグは登録済みです。')
+
+        return super().form_valid(form)
 
 def favorite_book(request):
     book_pk = request.BOOK.get('book_pk')

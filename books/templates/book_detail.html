@@ -52,12 +52,15 @@
                         </button>
                         {% endif %}
                         <!-- <i class="bi-heart-fill"></i> -->
-                {% endfor %}
+                    {% endfor %}
                 </div>
-                <a class="btn btn-secondary" href="#">タグを追加</a>
+                <button type="button" class="mt-2 btn btn-sm btn-rounded btn-primary"
+                        data-toggle="modal" data-target="#tagAddModal-{{object.pk}}">タグを追加
+                </button>
             </div>
         </div>
     </div>
+    {% include 'tag_add_modal.html' %}
 </section>
 {% endblock %}
 
