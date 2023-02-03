@@ -3,7 +3,7 @@ import logging
 from django.urls import reverse_lazy
 from django.shortcuts import render
 from django.views import generic
-from .forms import InquiryForm, TagAddForm
+from .forms import InquiryForm, TagAddForm, BookshelfAddForm
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Book, FavoriteBook, BookTag, TagLike ,Tag, Bookshelf, CustomUser
@@ -55,8 +55,15 @@ class BookDetailView(LoginRequiredMixin, generic.DetailView):
             else:
                 tag_islike_dic[booktag] = False
         context['tag_islike_dic'] = tag_islike_dic
-        #モーダル用のフォーム
+
+        #ログインユーザーが本棚に書籍を追加しているかどうか
+        if Bookshelf.objects.filter(book=self.object, user=self.request.user).exists():
+            context['is_add_bookshelf'] = True
+        else:
+            context['is_add_bookshelf'] = False
+        #モーダル用フォーム
         context['tag_add_form'] = TagAddForm
+
         return context
 
 class MyPageView(LoginRequiredMixin, generic.DetailView):
@@ -124,6 +131,29 @@ class TagAddView(LoginRequiredMixin, generic.CreateView):
             messages.success(self.request, 'タグを追加しました。')
         else:
             messages.success(self.request, 'すでにタグは登録済みです。')
+
+        return super().form_valid(form)
+
+class BookshelfAddView(LoginRequiredMixin, generic.CreateView):
+    """
+    書籍をMy本棚に追加するビュー
+    該当の書籍とログインユーザーをBookShelfモデルとしてDBに登録する。
+    """
+    """★マイページに遷移できるように修正"""
+    model = Bookshelf
+    form_class = BookshelfAddForm
+
+    def get_success_url(self):
+        return reverse_lazy('books:mypage', kwargs={'pk':self.request.user.pk})
+
+    def form_valid(self, form):
+        bookshelf = form.save(commit=False)
+        pk = self.kwargs['pk']
+        bookshelf.user = self.request.user
+        bookshelf.book = Book.objects.get(pk=pk)
+        bookshelf.status = 1 #読みたい状態(未読)として登録する
+        bookshelf.save()
+        messages.success(self.request, '本棚に書籍を追加しました。')
 
         return super().form_valid(form)
 
