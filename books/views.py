@@ -157,6 +157,7 @@ class BookshelfAddView(LoginRequiredMixin, generic.CreateView):
 
         return super().form_valid(form)
 
+
 def favorite_book(request):
     book_pk = request.BOOK.get('book_pk')
     context = {

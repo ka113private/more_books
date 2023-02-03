@@ -31,9 +31,10 @@
                 <div class="container-fluid">
                     <a class="navbar-brand" href="{% url 'books:index' %}">More Books!</a>
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0" >
-                        <li class="nav-item">
-                            <a class="nav-link {% block active_search %}{% endblock %}" href="">本を探す</a>
-                        </li>
+                         <form class="d-flex" action="{}">
+                             <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                             <button class="btn btn-outline-success" type="submit">Search</button>
+                         </form>
                     </ul>
                     <ul class="navbar-nav ms-auto">
                         <li class="nav-item">
