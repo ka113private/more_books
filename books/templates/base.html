@@ -27,30 +27,27 @@
     <body>
         <div id = "wrapper">
             <!-- Navigation-->
-            <nav class="navbar navbar-light bg-light static-top">
-                <div class="container">
+            <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                <div class="container-fluid">
                     <a class="navbar-brand" href="{% url 'books:index' %}">More Books!</a>
-                    <ul class="navbar-nav me-auto">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0" >
                         <li class="nav-item">
                             <a class="nav-link {% block active_search %}{% endblock %}" href="">本を探す</a>
                         </li>
+                    </ul>
+                    <ul class="navbar-nav ms-auto">
                         <li class="nav-item">
                             <a class="nav-link {% block active_inquiry %}{% endblock %}" href="{% url 'books:inquiry' %}">お問い合わせ</a>
                         </li>
-                    </ul>
-                    <ul class="navbar-nav ms-auto">
                         {% if user.is_authenticated %}
                         <li class="nav-item">
                             <a class="nav-link" href="{% url 'account_logout' %}">Log Out</a>
                         </li>
                         <li class="nav-item">
-
                             <a class="nav-link" href="{% url 'books:mypage' user.pk%}">{{user.username}}
-                                <div style="width:2rem">
-                                <img class="img-thumbnail img-fluid rounded-circle" src="../../media/{{ user.profile_image }}" alt="..."/>
-                                </div>
+                                <img class="img-thumbnail img-fluid rounded-circle" src="../../media/{{ user.profile_image }}" alt="..."
+                                      width="24" height="24" class="d-inline-block align-text-top">
                             </a>
-
                         </li>
                         {% else %}
                         <li class="nav-item">
