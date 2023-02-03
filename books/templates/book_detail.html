@@ -25,7 +25,15 @@
                     </button>
                     {% endif %}
 
-                    <a class="btn btn-secondary" href="{% url 'books:mypage' user.id%}">my本棚に追加</a>
+                    {% if is_add_bookshelf %}
+                    <button type="button" class="btn btn-secondary" disabled>My本棚に追加済み</button>
+                    {% else %}
+                    <form class="mt-5" action="{% url 'books:bookshelf_add' book.pk %}" method="POST">
+                        {% csrf_token %}
+                        <button class="btn btn-primary" type="submit">My本棚に追加</button>
+                    </form>
+                    {% endif %}
+
                 </div>
                 <!-- <div class="small mb-1"></div> -->
                 <h1 class="display-5 fw-bolder">{{ object.title }}

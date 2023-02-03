@@ -1,7 +1,7 @@
 import os
 from django import forms
 from django.core.mail import EmailMessage
-from .models import Tag
+from .models import Tag, Bookshelf
 
 class InquiryForm(forms.Form):
     name = forms.CharField(label='お名前', max_length=30)
@@ -48,6 +48,17 @@ class TagAddForm(forms.ModelForm):
     class Meta:
         model = Tag
         fields = ('name',)
+
+    def __int__(self, *args, **kwargs):
+        super().__int__(*args, **kwargs)
+        for field in self.field.values():
+            field.widget.attrs['class']='form-control'
+
+class BookshelfAddForm(forms.ModelForm):
+    """書籍をマイページの本棚に追加するフォーム"""
+    class Meta:
+        model = Bookshelf
+        fields = ()
 
     def __int__(self, *args, **kwargs):
         super().__int__(*args, **kwargs)
