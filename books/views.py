@@ -9,6 +9,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Book, FavoriteBook, BookTag, TagLike ,Tag, Bookshelf, CustomUser
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
+from django.db.models import Q
+
 
 logger = logging.getLogger(__name__)
 
@@ -30,10 +32,24 @@ class BookListView(LoginRequiredMixin, generic.ListView):
     model = Book
     template_name = 'book_list.html'
 
-    def get_queryset(self):
-        #　☆検索機能はそのうち実装する。
-        book_list = Book.objects.order_by('-created_at')
-        return book_list
+    def get_queryset(self, **kwargs):
+        queryset = Book.objects.order_by('-created_at')
+        query = self.request.GET.get('query')
+
+        if query:
+            #★タグ検索もできるようにする
+            queryset = queryset.filter(
+                Q(title__icontains=query)|Q(author__icontains=query)|Q(description__icontains=query)
+            )
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        query = self.request.GET.get('query')
+        context['query'] = query
+
+        return context
+
 
 class BookDetailView(LoginRequiredMixin, generic.DetailView):
     model = Book
@@ -101,8 +117,6 @@ class MyPageView(LoginRequiredMixin, generic.DetailView):
             else:
                 read_dic[read] = False
         context['read_dic'] = read_dic
-
-
         return context
 
 class TagAddView(LoginRequiredMixin, generic.CreateView):
