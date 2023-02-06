@@ -1,7 +1,7 @@
 import os
 from django import forms
 from django.core.mail import EmailMessage
-from .models import Tag, Bookshelf
+from .models import Tag, Bookshelf, CustomUser
 
 class InquiryForm(forms.Form):
     name = forms.CharField(label='お名前', max_length=30)
@@ -59,6 +59,18 @@ class BookshelfAddForm(forms.ModelForm):
     class Meta:
         model = Bookshelf
         fields = ()
+
+    def __int__(self, *args, **kwargs):
+        super().__int__(*args, **kwargs)
+        for field in self.field.values():
+            field.widget.attrs['class']='form-control'
+
+
+class ProfileEditForm(forms.ModelForm):
+    """プロフィール画像をアップロードするフォーム"""
+    class Meta:
+        model = CustomUser
+        fields = ('profile_image',)
 
     def __int__(self, *args, **kwargs):
         super().__int__(*args, **kwargs)

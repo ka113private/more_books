@@ -3,7 +3,7 @@ import logging
 from django.urls import reverse_lazy
 from django.shortcuts import render
 from django.views import generic
-from .forms import InquiryForm, TagAddForm, BookshelfAddForm
+from .forms import InquiryForm, TagAddForm, BookshelfAddForm, ProfileEditForm
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Book, FavoriteBook, BookTag, TagLike ,Tag, Bookshelf, CustomUser
@@ -117,6 +117,8 @@ class MyPageView(LoginRequiredMixin, generic.DetailView):
             else:
                 read_dic[read] = False
         context['read_dic'] = read_dic
+        #プロフィール画像編集フォーム
+        context['profile_edit_form']=ProfileEditForm
         return context
 
 class TagAddView(LoginRequiredMixin, generic.CreateView):
@@ -153,7 +155,6 @@ class BookshelfAddView(LoginRequiredMixin, generic.CreateView):
     書籍をMy本棚に追加するビュー
     該当の書籍とログインユーザーをBookShelfモデルとしてDBに登録する。
     """
-    """★マイページに遷移できるように修正"""
     model = Bookshelf
     form_class = BookshelfAddForm
 
@@ -169,6 +170,19 @@ class BookshelfAddView(LoginRequiredMixin, generic.CreateView):
         bookshelf.save()
         messages.success(self.request, '本棚に書籍を追加しました。')
 
+        return super().form_valid(form)
+
+class ProfileEditView(LoginRequiredMixin, generic.UpdateView):
+    """プロフィール画像更新用のview"""
+    model = CustomUser
+    form_class = ProfileEditForm
+
+    def get_success_url(self):
+        return reverse_lazy('books:mypage', kwargs={'pk': self.request.user.pk})
+
+    def form_valid(self, form):
+        form.save()
+        messages.success(self.request, 'プロフィール画像を更新しました')
         return super().form_valid(form)
 
 
