@@ -1,0 +1,33 @@
+<div class="modal fade" id="mypageWantModal-{{key.pk}}" tabindex="-1" aria-labelledby="mypageWantModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <form class="mt-5" action="{% url 'books:bookshelf_edit' key.pk %}" method="POST">
+                {% csrf_token %}
+                <div class="modal-header">
+                    <h5 class="modal-title" id="mypageWantModalLabel">変更</h5>
+                    <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="container-fluid">
+                        <div class="col-md-3">
+                            <img class="card-img-top" src="../../media/{{ key.book.thumbnail_image }}" alt="">
+                        </div>
+                        <div class="col-md-3">
+                            <div class="row">
+                                {{ key.book.title }}
+                            </div>
+                            <div class="row">
+                                {{ key.book.author }}
+                            </div>
+                            {{ bookshelf_edit_form}}
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" type="submit" name="move_to_reading_button">続きを読むへ移動</button>
+                    <button class="btn btn-secondary" type="submit" name="book_detail_button">書籍詳細</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

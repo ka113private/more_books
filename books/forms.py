@@ -76,3 +76,14 @@ class ProfileEditForm(forms.ModelForm):
         super().__int__(*args, **kwargs)
         for field in self.field.values():
             field.widget.attrs['class']='form-control'
+
+class BookshelfEditForm(forms.ModelForm):
+    """本棚にある書籍のステータスを変更するフォーム"""
+    class Meta:
+        model = Bookshelf
+        fields=()
+
+    def __int__(self, *args, **kwargs):
+        super().__int__(*args, **kwargs)
+        for field in self.field.values():
+            field.widget.attrs['class']='form-control'

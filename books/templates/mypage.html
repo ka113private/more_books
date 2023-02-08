@@ -8,7 +8,7 @@
 {% endblock %}
 
 {% block contents %}
-<section class="py-5">
+<section>
     <div class="container px-4 px-lg-5 my-5">
         <div class="row gx-4 gx-lg-5 align-items-center">
             <div class="col-md-3">
@@ -21,62 +21,67 @@
                 </button>
             </div>
             <div class="col-md-9">
-                <p class="h2">読みたい
-                    <a class="btn btn-secondary" href="#">編集</a>
-                </p>
+                <p class="h2">読みたい</p>
                  <div class="container-fluid">
                      <div class="row flex-nowrap">
-                         {% for want_key, want_is_favo in want_dic.items %}
+                         {% for key, want_is_favo in want_dic.items %}
                          <div class="col-2">
-                             <div class="card">
-                                 <!-- Sale badge-->
-                                 {% if want_is_favo %}
-                                 <div class="badge bg-dark text-white position-absolute" style="top: 0.5rem; right: 0.5rem">
-                                     <i class="fas fa-solid fa-star text-warning"></i>
+                             <div style="height: 200px;">
+                                 <div class="card">
+                                     {% if want_is_favo %}
+                                     <div class="badge bg-dark text-white position-absolute" style="top: 0.5rem; right: 0.5rem">
+                                         <i class="fas fa-solid fa-star text-warning"></i>
+                                     </div>
+                                     {% endif %}
+                                     <a data-toggle="modal" data-target="#mypageWantModal-{{key.pk}}">
+                                         <img class="card-img-top" src="../../media/{{ key.book.thumbnail_image }}" alt="">
+                                     </a>
                                  </div>
-                                 {% endif %}
-                                 <a href="{%url 'books:book_detail' want_key.book.pk %}">
-                                     <img class="card-img-top" src="../../media/{{ want_key.book.thumbnail_image }}" alt="">
-                                 </a>
                              </div>
                          </div>
+                         {% include 'mypage_want_modal.html' %}
                          {% endfor %}
                      </div>
                  </div>
-                <p class="h2">続きを読む
-                    <a class="btn btn-secondary" href="#">編集</a>
-                </p>
+                <p class="h2">続きを読む</p>
                  <div class="container-fluid">
                      <div class="row flex-nowrap">
-                         {% for reading_key, reading_is_favo in reading_dic.items %}
+                         {% for key, reading_is_favo in reading_dic.items %}
                          <div class="col-2">
-                             <div class="card">
-                                 <a href="{%url 'books:book_detail' reading_key.book.pk %}">
-                                     <img class="card-img-top" src="../../media/{{ reading_key.book.thumbnail_image }}" alt="">
-                                 </a>
+                             <div style="height: 200px;">
+                                 <div class="card">
+                                     {% if reading_is_favo %}
+                                     <div class="badge bg-dark text-white position-absolute" style="top: 0.5rem; right: 0.5rem">
+                                         <i class="fas fa-solid fa-star text-warning"></i>
+                                     </div>
+                                     {% endif %}
+                                     <a data-toggle="modal" data-target="#mypageReadingModal-{{key.pk}}">
+                                         <img class="card-img-top" src="../../media/{{ key.book.thumbnail_image }}" alt="">
+                                     </a>
+                                 </div>
                              </div>
-                             {% if reading_is_favo %}
-                              <i class="fas fa-solid fa-star text-warning"></i>
-                             {% endif %}
                          </div>
+                         {% include 'mypage_reading_modal.html' %}
                          {% endfor %}
                      </div>
                  </div>
-                <p class="h2">もう一度読む
-                    <a class="btn btn-secondary" href="#">編集</a>
-                </p>
+                <p class="h2">もう一度読む</p>
                  <div class="container-fluid">
                      <div class="row flex-nowrap">
-                         {% for read_key, read_is_favo in read_dic.items %}
+                         {% for key, read_is_favo in read_dic.items %}
                          <div class="col-2">
-                             <div class="card">
-                                 <a href="{%url 'books:book_detail' read_key.book.pk %}">
-                                     <img class="card-img-top" src="../../media/{{ read_key.book.thumbnail_image }}" alt="">
-                                 </a>
+                             <div style="height: 200px;">
+                                 <div class="card">
+                                     {% if read_is_favo %}
+                                     <div class="badge bg-dark text-white position-absolute" style="top: 0.5rem; right: 0.5rem">
+                                        <i class="fas fa-solid fa-star text-warning"></i>
+                                    </div>
+                                    {% endif %}
+                                     <a data-toggle="modal" data-target="#mypageReadingModal-{{key.pk}}">
+                                        <img class="card-img-top" src="../../media/{{ key.book.thumbnail_image }}" alt="">
+                                     </a>
+                                 </div>
                              </div>
-                             {% if read_is_favo %}
-                              <i class="fas fa-solid fa-star text-warning"></i>
-                             {% endif %}
                          </div>
                          {% endfor %}
                      </div>
@@ -85,6 +90,7 @@
         </div>
     </div>
     {% include 'profile_edit_modal.html' %}
+
 </section>
 {% endblock %}
 

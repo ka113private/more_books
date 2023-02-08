@@ -166,3 +166,17 @@
 
 ＜所感＞
 - Djangoで画像をアップロードする際はenctype="multipart/form-data"を忘れない。忘れると更新できなくなる。
+
+### 〇2023/2/7
+  ＜時間＞\
+  5:00～7:00 9:50～11:10（新幹線の中）
+  ＜実績＞
+- mypageの本棚状態の変更（下記の2点でだいぶ詰まった）
+
+＜所感＞
+- viewからcontect経由でmodelformをtemplete表示し、そのmodelformで受け取った値をaction→url→viewで処理する場合には以下の注意が必要
+①urlのactionで指定する処理先のurlのリクエストパラメータにはmodelformで指定した（処理先のviewも同じはず）modelのpkを使用する。
+　→該当のmodelが見つからないって404エラーが出る。
+②処理先のviewのform_validメソッドではform.save(commit=False)により該当のpkのobjectが取得できる（formでfield指定していなくても該当のpkのobjectが取得できる）
+　→object=form.save(commit=False)でobjectを取得し、object.name＝〇〇といった形ですきなようにデータを格納し、最後にobject.save()をすればよい。
+- 
