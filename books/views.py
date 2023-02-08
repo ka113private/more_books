@@ -3,7 +3,7 @@ import logging
 from django.urls import reverse_lazy
 from django.shortcuts import render
 from django.views import generic
-from .forms import InquiryForm, TagAddForm, BookshelfAddForm, ProfileEditForm
+from .forms import InquiryForm, TagAddForm, BookshelfAddForm, ProfileEditForm, BookshelfEditForm
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Book, FavoriteBook, BookTag, TagLike ,Tag, Bookshelf, CustomUser
@@ -119,6 +119,8 @@ class MyPageView(LoginRequiredMixin, generic.DetailView):
         context['read_dic'] = read_dic
         #プロフィール画像編集フォーム
         context['profile_edit_form']=ProfileEditForm
+        #本棚の書籍のステータス編集フォーム
+        context['bookshelf_edit_form'] = BookshelfEditForm
         return context
 
 class TagAddView(LoginRequiredMixin, generic.CreateView):
@@ -184,6 +186,37 @@ class ProfileEditView(LoginRequiredMixin, generic.UpdateView):
         form.save()
         messages.success(self.request, 'プロフィール画像を更新しました')
         return super().form_valid(form)
+
+class BookshelfEditView(LoginRequiredMixin, generic.UpdateView):
+    """本棚更新用のview"""
+    model = Bookshelf
+    form_class = BookshelfEditForm
+
+    def get_success_url(self):
+        if 'book_detail_button' in self.request.POST:
+            print('test2')
+            bookshelf = Bookshelf.objects.get(pk=self.kwargs['pk'])
+            return reverse_lazy('books:book_detail', kwargs={'pk': bookshelf.book.pk})
+        else:
+            bookshelf = Bookshelf.objects.get(pk=self.kwargs['pk'])
+            return reverse_lazy('books:mypage', kwargs={'pk': self.request.user.pk})
+
+
+    def form_valid(self, form):
+        if 'move_to_reading_button' in self.request.POST:
+            bookshelf = form.save(commit=False)
+            bookshelf.status = 2
+            bookshelf.save()
+            return super().form_valid(form)
+        elif 'move_to_read_button' in self.request.POST:
+            bookshelf = form.save(commit=False)
+            bookshelf.status = 3
+            bookshelf.save()
+            return super().form_valid(form)
+        else:
+            print('test')
+            return super().form_valid(form)
+
 
 
 def favorite_book(request):

@@ -61,7 +61,7 @@ class TagLike(models.Model):
 class Bookshelf(models.Model):
     """本棚"""
     user = models.ForeignKey(CustomUser, verbose_name='ユーザー', on_delete=models.PROTECT)
-    book= models.ForeignKey(Book, verbose_name='書籍', on_delete=models.PROTECT)
+    book = models.ForeignKey(Book, verbose_name='書籍', on_delete=models.PROTECT)
     status = models.IntegerField(verbose_name='ステータス')
     created_at = models.DateTimeField(verbose_name='作成日時', auto_now_add=True)
     update_at = models.DateTimeField(verbose_name='更新日時', auto_now=True)
