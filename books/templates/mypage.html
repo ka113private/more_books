@@ -21,10 +21,12 @@
                 </button>
             </div>
             <div class="col-md-9">
-                <p class="h2">読みたい</p>
+                <p class="h2">読みたい
+                    <a class="btn btn-primary" href="{% url 'books:my_list' 1%}">もっと見る</a>
+                </p>
                  <div class="container-fluid">
                      <div class="row flex-nowrap">
-                         {% for key, want_is_favo in want_dic.items %}
+                         {% for bookshelf, want_is_favo in want_dic.items %}
                          <div class="col-2">
                              <div style="height: 200px;">
                                  <div class="card">
@@ -33,8 +35,8 @@
                                          <i class="fas fa-solid fa-star text-warning"></i>
                                      </div>
                                      {% endif %}
-                                     <a data-toggle="modal" data-target="#mypageWantModal-{{key.pk}}">
-                                         <img class="card-img-top" src="../../media/{{ key.book.thumbnail_image }}" alt="">
+                                     <a data-toggle="modal" data-target="#mypageWantModal-{{bookshelf.pk}}">
+                                         <img class="card-img-top" src="../../media/{{ bookshelf.book.thumbnail_image }}" alt="">
                                      </a>
                                  </div>
                              </div>
@@ -43,10 +45,12 @@
                          {% endfor %}
                      </div>
                  </div>
-                <p class="h2">続きを読む</p>
+                <p class="h2">続きを読む
+                     <a class="btn btn-primary" href="{% url 'books:my_list' 2%}">もっと見る</a>
+                </p>
                  <div class="container-fluid">
                      <div class="row flex-nowrap">
-                         {% for key, reading_is_favo in reading_dic.items %}
+                         {% for bookshelf, reading_is_favo in reading_dic.items %}
                          <div class="col-2">
                              <div style="height: 200px;">
                                  <div class="card">
@@ -55,8 +59,8 @@
                                          <i class="fas fa-solid fa-star text-warning"></i>
                                      </div>
                                      {% endif %}
-                                     <a data-toggle="modal" data-target="#mypageReadingModal-{{key.pk}}">
-                                         <img class="card-img-top" src="../../media/{{ key.book.thumbnail_image }}" alt="">
+                                     <a data-toggle="modal" data-target="#mypageReadingModal-{{bookshelf.pk}}">
+                                         <img class="card-img-top" src="../../media/{{ bookshelf.book.thumbnail_image }}" alt="">
                                      </a>
                                  </div>
                              </div>
@@ -65,10 +69,12 @@
                          {% endfor %}
                      </div>
                  </div>
-                <p class="h2">もう一度読む</p>
+                <p class="h2">もう一度読む
+                    <a class="btn btn-primary" href="{% url 'books:my_list' 3%}">もっと見る</a>
+                </p>
                  <div class="container-fluid">
                      <div class="row flex-nowrap">
-                         {% for key, read_is_favo in read_dic.items %}
+                         {% for bookshelf, read_is_favo in read_dic.items %}
                          <div class="col-2">
                              <div style="height: 200px;">
                                  <div class="card">
@@ -77,8 +83,8 @@
                                         <i class="fas fa-solid fa-star text-warning"></i>
                                     </div>
                                     {% endif %}
-                                     <a data-toggle="modal" data-target="#mypageReadingModal-{{key.pk}}">
-                                        <img class="card-img-top" src="../../media/{{ key.book.thumbnail_image }}" alt="">
+                                     <a data-toggle="modal" data-target="#mypageReadingModal-{{bookshelf.pk}}">
+                                        <img class="card-img-top" src="../../media/{{ bookshelf.book.thumbnail_image }}" alt="">
                                      </a>
                                  </div>
                              </div>

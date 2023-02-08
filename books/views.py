@@ -34,8 +34,8 @@ class BookListView(LoginRequiredMixin, generic.ListView):
 
     def get_queryset(self, **kwargs):
         queryset = Book.objects.order_by('-created_at')
+        #検索機能
         query = self.request.GET.get('query')
-
         if query:
             #★タグ検索もできるようにする
             queryset = queryset.filter(
@@ -50,6 +50,41 @@ class BookListView(LoginRequiredMixin, generic.ListView):
 
         return context
 
+class BookListTagView(LoginRequiredMixin, generic.ListView):
+    model = Book
+    template_name = 'book_list.html'
+
+    def get_queryset(self, **kwargs):
+        tag_pk = self.kwargs['pk']
+        tag = Tag.objects.get(pk=tag_pk)
+        book_pk_list = BookTag.objects.filter(tag=tag).values_list('book', flat=True)
+        book_list = Book.objects.filter(pk__in=list(book_pk_list))
+        print(book_list)
+        return book_list
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        tag_pk = self.kwargs['pk']
+        tag = Tag.objects.get(pk=tag_pk)
+        context['query'] = "#" + tag.name
+
+        return context
+
+class MyListView(LoginRequiredMixin, generic.ListView):
+    model = Bookshelf
+    template_name = 'my_list.html'
+
+    def get_queryset(self, **kwargs):
+        status = self.kwargs['status']
+        bookshelf_list = Bookshelf.objects.filter(user=self.request.user, status=status)
+        return bookshelf_list
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        status = self.kwargs['status']
+        context['status'] = status
+
+        return context
 
 class BookDetailView(LoginRequiredMixin, generic.DetailView):
     model = Book
@@ -108,7 +143,7 @@ class MyPageView(LoginRequiredMixin, generic.DetailView):
                 reading_dic[reading] = False
         context['reading_dic'] = reading_dic
 
-        # ログインユーザーの読了書籍F
+        # ログインユーザーの読了書籍
         read_list = Bookshelf.objects.filter(user=self.request.user, status=3)
         read_dic = {}
         for read in read_list:
