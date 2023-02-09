@@ -1,10 +1,10 @@
-<div class="modal fade" id="mypageReadingModal-{{bookshelf.pk}}" tabindex="-1" aria-labelledby="mypageReadingModalLabel" aria-hidden="true">
+<div class="modal fade" id="mypageWantModal-{{bookshelf.pk}}" tabindex="-1" aria-labelledby="mypageWantModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <form class="mt-5" action="{% url 'books:bookshelf_edit' bookshelf.pk %}" method="POST">
                 {% csrf_token %}
                 <div class="modal-header">
-                    <h5 class="modal-title" id="mypageReadingModalLabel">変更</h5>
+                    <h5 class="modal-title" id="mypageWantModalLabel">変更</h5>
                     <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -24,7 +24,6 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-primary" type="submit" name="move_to_read_button">もう一度読むに移動</button>
                     <button class="btn btn-secondary" type="submit" name="book_detail_button">書籍詳細</button>
                 </div>
             </form>
