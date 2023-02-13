@@ -15,6 +15,6 @@ urlpatterns = [
     path('bookshelf-add/<int:pk>', views.BookshelfAddView.as_view(), name="bookshelf_add"),
     path('bookshelf-edit/<int:pk>', views.BookshelfEditView.as_view(), name="bookshelf_edit"),
     path('profile-edit/<int:pk>', views.ProfileEditView.as_view(), name="profile_edit"),
-
+    path('recommend', views.RecommendListView.as_view(), name="recommend")
 
 ]

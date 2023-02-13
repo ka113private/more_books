@@ -32,7 +32,7 @@
                     <a class="navbar-brand" href="{% url 'books:index' %}">More Books!</a>
                     <ul class="navbar-nav me-auto" >
                         <li class="nav-item">
-                            <a class="nav-link {% block active_search %}{% endblock %}" href="{% url 'books:book_list' %}">本を探す</a>
+                            <a class="nav-link {% block active_recommend %}{% endblock %}" href="{% url 'books:recommend' %}">本を探す</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link {% block active_bookshelf %}{% endblock %}" href="{% url 'books:book_list' %}">My本棚</a>

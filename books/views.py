@@ -9,7 +9,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Book, FavoriteBook, BookTag, TagLike ,Tag, Bookshelf, CustomUser
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
-from django.db.models import Q
+from django.db.models import Q, Count
 
 
 logger = logging.getLogger(__name__)
@@ -252,7 +252,41 @@ class BookshelfEditView(LoginRequiredMixin, generic.UpdateView):
             print('test')
             return super().form_valid(form)
 
+class RecommendListView(LoginRequiredMixin, generic.ListView):
+    """ユーザーへのおすすめの書籍を一覧表示するView"""
+    model = Book
+    template_name = 'recommend_list.html'
 
+    def get_queryset(self):
+        #　すでに本棚に登録してある書籍以外の人気順リストを表示
+        my_books = Bookshelf.objects.filter(user=self.request.user).values('book')
+        popular_books = Book.objects\
+            .annotate(favorite_count=Count('favoritebook'))\
+            .order_by('-favorite_count')\
+            .exclude(pk__in=my_books)
+        return popular_books
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        #　自分がいいねした書籍タグをタグ名でまとめ、タグごとのいいね数を降順に並べる
+        my_taglikes = TagLike.objects.filter(user=self.request.user)\
+            .select_related()\
+            .values('booktag__tag')\
+            .annotate(count=Count('booktag__pk'))\
+            .order_by('-count')
+        recommend_dic = {}
+        # いいねしたタグが付けられている書籍のlistを作成
+        for taglike_dic in my_taglikes:
+            tag = Tag.objects.get(pk=taglike_dic['booktag__tag'])
+            booktags = BookTag.objects.filter(tag=tag).order_by('-created_at')
+            related_books = []
+            for booktag in booktags:
+                related_books.append(booktag.book)
+            recommend_dic[tag.name] = related_books
+        context['recommend_dic'] = recommend_dic
+
+
+        return context
 
 def favorite_book(request):
     book_pk = request.BOOK.get('book_pk')
