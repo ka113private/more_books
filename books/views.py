@@ -187,7 +187,7 @@ class TagAddView(LoginRequiredMixin, generic.CreateView):
 
         return super().form_valid(form)
 
-class BookshelfAddView(LoginRequiredMixin, generic.CreateView):
+class MybooksAddView(LoginRequiredMixin, generic.CreateView):
     """
     書籍をMy本棚に追加するビュー
     該当の書籍とログインユーザーをBookShelfモデルとしてDBに登録する。
@@ -203,7 +203,7 @@ class BookshelfAddView(LoginRequiredMixin, generic.CreateView):
         pk = self.kwargs['pk']
         bookshelf.user = self.request.user
         bookshelf.book = Book.objects.get(pk=pk)
-        bookshelf.status = 1 #読みたい状態(未読)として登録する
+        bookshelf.status = '読みたい' #読みたい状態(未読)として登録する
         bookshelf.save()
         messages.success(self.request, '本棚に書籍を追加しました。')
 
@@ -284,8 +284,26 @@ class RecommendListView(LoginRequiredMixin, generic.ListView):
                 related_books.append(booktag.book)
             recommend_dic[tag.name] = related_books
         context['recommend_dic'] = recommend_dic
+        return context
 
+class MybooksListView(LoginRequiredMixin, generic.ListView):
+    """ユーザーのmy本棚を表示するView"""
+    model = Book
+    template_name = 'mybooks.html'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        #Bookshelfテーブルの取得
+        all = Bookshelf.objects.filter(user=self.request.user)
+        mybooks_want = all.filter(status="読みたい")
+        mybooks_reading = all.filter(status="読書中")
+        mybooks_read = all.filter(status="読書済み")
+        context['mybooks_want'] = mybooks_want
+        context['mybooks_reading'] = mybooks_reading
+        context['mybooks_read'] = mybooks_read
+        #お気に入り書籍の取得
+        favorite_books = FavoriteBook.objects.filter(user=self.request.user)
+        context['favorite_books'] = favorite_books
         return context
 
 def favorite_book(request):

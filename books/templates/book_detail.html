@@ -28,7 +28,7 @@
                     {% if is_add_bookshelf %}
                     <button type="button" class="btn btn-secondary" disabled>My本棚に追加済み</button>
                     {% else %}
-                    <form class="mt-5" action="{% url 'books:bookshelf_add' book.pk %}" method="POST">
+                    <form class="mt-5" action="{% url 'books:mybooks_add' book.pk %}" method="POST">
                         {% csrf_token %}
                         <button class="btn btn-primary" type="submit">My本棚に追加</button>
                     </form>

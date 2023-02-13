@@ -35,7 +35,7 @@
                             <a class="nav-link {% block active_recommend %}{% endblock %}" href="{% url 'books:recommend' %}">本を探す</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link {% block active_bookshelf %}{% endblock %}" href="{% url 'books:book_list' %}">My本棚</a>
+                            <a class="nav-link {% block active_mybooks %}{% endblock %}" href="{% url 'books:mybooks' %}">My本棚</a>
                         </li>
                         <form class="d-flex" action="{% url 'books:book_list' %}" method="get">
                              <input class="form-control me-2" type="search" name="query" placeholder="Search" aria-label="Search">
