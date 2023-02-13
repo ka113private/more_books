@@ -39,6 +39,9 @@ class FavoriteBook(models.Model):
     class Meta:
         verbose_name='FavoriteBook'
 
+    def __str__(self):
+        return self.book.title
+
 
 class BookTag(models.Model):
     """書籍タグ"""
@@ -49,6 +52,9 @@ class BookTag(models.Model):
     class Meta:
         verbose_name='BookTag'
 
+    def __str__(self):
+        return self.tag.name
+
 class TagLike(models.Model):
     """書籍タグいいね"""
     user = models.ForeignKey(CustomUser, verbose_name='ユーザー', on_delete=models.PROTECT)
@@ -58,13 +64,19 @@ class TagLike(models.Model):
     class Meta:
         verbose_name='TagLike'
 
+    def __str__(self):
+        return self.booktag.tag.name
+
 class Bookshelf(models.Model):
     """本棚"""
     user = models.ForeignKey(CustomUser, verbose_name='ユーザー', on_delete=models.PROTECT)
     book = models.ForeignKey(Book, verbose_name='書籍', on_delete=models.PROTECT)
-    status = models.IntegerField(verbose_name='ステータス')
+    status = models.CharField(verbose_name='ステータス', max_length=10)
     created_at = models.DateTimeField(verbose_name='作成日時', auto_now_add=True)
     update_at = models.DateTimeField(verbose_name='更新日時', auto_now=True)
 
     class Meta:
         verbose_name='Bookshelf'
+
+    def __str__(self):
+        return self.book.title
