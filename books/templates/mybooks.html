@@ -37,11 +37,12 @@
                             {% for mybook in mybooks_want %}
                             <div class="col-2">
                                 <div class="card">
-                                    <a href="{% url 'books:book_detail' mybook.book.pk%}">
+                                    <a data-toggle="modal" data-target="#want-modal-{{ mybook.book.pk }}">
                                         <img class="card-img-top" src="../media/{{ mybook.book.thumbnail_image }}" alt="..." />
                                     </a>
                                 </div>
                             </div>
+                            {% include 'want_modal.html' %}
                             {% endfor %}
                             </div>
                         </div>
@@ -50,11 +51,12 @@
                             {% for mybook in mybooks_reading %}
                             <div class="col-2">
                                 <div class="card">
-                                    <a href="{% url 'books:book_detail' mybook.book.pk%}">
+                                    <a data-toggle="modal" data-target="#reading-modal-{{ mybook.book.pk }}">
                                         <img class="card-img-top" src="../media/{{ mybook.book.thumbnail_image }}" alt="..." />
                                     </a>
                                 </div>
                             </div>
+                            {% include 'reading_modal.html' %}
                             {% endfor %}
                             </div>
                         </div>
@@ -63,11 +65,12 @@
                             {% for mybook in mybooks_read %}
                             <div class="col-2">
                                 <div class="card">
-                                    <a href="{% url 'books:book_detail' mybook.book.pk%}">
+                                    <a data-toggle="modal" data-target="#read-modal-{{ mybook.book.pk }}">
                                         <img class="card-img-top" src="../media/{{ mybook.book.thumbnail_image }}" alt="..." />
                                     </a>
                                 </div>
                             </div>
+                            {% include 'read_modal.html' %}
                             {% endfor %}
                             </div>
                         </div>

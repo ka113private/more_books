@@ -32,8 +32,8 @@ class Tag(models.Model):
 
 class FavoriteBook(models.Model):
     """お気に入り書籍"""
-    user = models.ForeignKey(CustomUser, verbose_name='ユーザー', on_delete=models.PROTECT)
-    book = models.ForeignKey(Book, verbose_name='書籍', on_delete=models.PROTECT)
+    user = models.ForeignKey(CustomUser, verbose_name='ユーザー', on_delete=models.CASCADE)
+    book = models.ForeignKey(Book, verbose_name='書籍', on_delete=models.CASCADE)
     created_at = models.DateTimeField(verbose_name='作成日時', auto_now_add=True)
 
     class Meta:
@@ -45,8 +45,8 @@ class FavoriteBook(models.Model):
 
 class BookTag(models.Model):
     """書籍タグ"""
-    book = models.ForeignKey(Book, related_name='booktags', verbose_name='書籍', on_delete=models.PROTECT)
-    tag = models.ForeignKey(Tag, verbose_name='タグ', on_delete=models.PROTECT)
+    book = models.ForeignKey(Book, related_name='booktags', verbose_name='書籍', on_delete=models.CASCADE)
+    tag = models.ForeignKey(Tag, verbose_name='タグ', on_delete=models.CASCADE)
     created_at = models.DateTimeField(verbose_name='作成日時', auto_now_add=True)
 
     class Meta:
@@ -57,8 +57,8 @@ class BookTag(models.Model):
 
 class TagLike(models.Model):
     """書籍タグいいね"""
-    user = models.ForeignKey(CustomUser, verbose_name='ユーザー', on_delete=models.PROTECT)
-    booktag = models.ForeignKey(BookTag, verbose_name='書籍タグ', on_delete=models.PROTECT)
+    user = models.ForeignKey(CustomUser, verbose_name='ユーザー', on_delete=models.CASCADE)
+    booktag = models.ForeignKey(BookTag, verbose_name='書籍タグ', on_delete=models.CASCADE)
     created_at = models.DateTimeField(verbose_name='作成日時', auto_now_add=True)
 
     class Meta:
@@ -69,8 +69,8 @@ class TagLike(models.Model):
 
 class Bookshelf(models.Model):
     """本棚"""
-    user = models.ForeignKey(CustomUser, verbose_name='ユーザー', on_delete=models.PROTECT)
-    book = models.ForeignKey(Book, verbose_name='書籍', on_delete=models.PROTECT)
+    user = models.ForeignKey(CustomUser, verbose_name='ユーザー', on_delete=models.CASCADE)
+    book = models.ForeignKey(Book, verbose_name='書籍', on_delete=models.CASCADE)
     status = models.CharField(verbose_name='ステータス', max_length=10)
     created_at = models.DateTimeField(verbose_name='作成日時', auto_now_add=True)
     update_at = models.DateTimeField(verbose_name='更新日時', auto_now=True)
