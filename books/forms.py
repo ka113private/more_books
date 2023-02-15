@@ -77,7 +77,7 @@ class ProfileEditForm(forms.ModelForm):
         for field in self.field.values():
             field.widget.attrs['class']='form-control'
 
-class BookshelfEditForm(forms.ModelForm):
+class StatusChangeForm(forms.ModelForm):
     """本棚にある書籍のステータスを変更するフォーム"""
     class Meta:
         model = Bookshelf

@@ -1,0 +1,21 @@
+<div class="modal fade" id="delete-modal-{{mybook.book.pk}}" tabindex="-1" aria-labelledby="DeleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="container">
+                    <div class="row">
+                        <p>本当にMy本棚から書籍を削除しますか？</p>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-danger" name="btn_delete" type="submit">削除</button>
+                <a class="btn btn-secondary" href="{% url 'books:mybooks'%}">キャンセル</a>
+            </div>
+            {% include 'feedback_modal.html' %}
+        </div>
+    </div>
+</div>

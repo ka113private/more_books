@@ -3,7 +3,7 @@ import logging
 from django.urls import reverse_lazy
 from django.shortcuts import render
 from django.views import generic
-from .forms import InquiryForm, TagAddForm, BookshelfAddForm, ProfileEditForm, BookshelfEditForm
+from .forms import InquiryForm, TagAddForm, BookshelfAddForm, ProfileEditForm, StatusChangeForm
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Book, FavoriteBook, BookTag, TagLike ,Tag, Bookshelf, CustomUser
@@ -167,8 +167,9 @@ class TagAddView(LoginRequiredMixin, generic.CreateView):
     """
     model = Book
     form_class = TagAddForm
-    """★詳細ページに遷移できるように修正"""
-    success_url = reverse_lazy('books:book_list')
+
+    def get_success_url(self):
+        return reverse_lazy('books:book_detail',  kwargs={'pk': self.kwargs['pk']})
 
     def form_valid(self, form):
         # 既にtagモデルに同名のタグが保存されているか確認する。されていない場合はタグを保存
@@ -196,14 +197,14 @@ class MybooksAddView(LoginRequiredMixin, generic.CreateView):
     form_class = BookshelfAddForm
 
     def get_success_url(self):
-        return reverse_lazy('books:mypage', kwargs={'pk':self.request.user.pk})
+        return reverse_lazy('books:mybooks')
 
     def form_valid(self, form):
         bookshelf = form.save(commit=False)
         pk = self.kwargs['pk']
         bookshelf.user = self.request.user
         bookshelf.book = Book.objects.get(pk=pk)
-        bookshelf.status = '読みたい' #読みたい状態(未読)として登録する
+        bookshelf.status = "読みたい" #読みたい状態(未読)として登録する
         bookshelf.save()
         messages.success(self.request, '本棚に書籍を追加しました。')
 
@@ -222,35 +223,53 @@ class ProfileEditView(LoginRequiredMixin, generic.UpdateView):
         messages.success(self.request, 'プロフィール画像を更新しました')
         return super().form_valid(form)
 
-class BookshelfEditView(LoginRequiredMixin, generic.UpdateView):
-    """本棚更新用のview"""
+class StatusChangeView(LoginRequiredMixin, generic.UpdateView):
+    """MyBooksのステータス変更のview"""
     model = Bookshelf
-    form_class = BookshelfEditForm
+    form_class = StatusChangeForm
 
     def get_success_url(self):
-        if 'book_detail_button' in self.request.POST:
-            print('test2')
-            bookshelf = Bookshelf.objects.get(pk=self.kwargs['pk'])
-            return reverse_lazy('books:book_detail', kwargs={'pk': bookshelf.book.pk})
-        else:
-            bookshelf = Bookshelf.objects.get(pk=self.kwargs['pk'])
-            return reverse_lazy('books:mypage', kwargs={'pk': self.request.user.pk})
-
+        return reverse_lazy('books:mybooks')
 
     def form_valid(self, form):
-        if 'move_to_reading_button' in self.request.POST:
+        #削除ボタンが押下された場合
+        if "btn_delete" in self.request.POST:
             bookshelf = form.save(commit=False)
-            bookshelf.status = 2
-            bookshelf.save()
-            return super().form_valid(form)
-        elif 'move_to_read_button' in self.request.POST:
-            bookshelf = form.save(commit=False)
-            bookshelf.status = 3
-            bookshelf.save()
-            return super().form_valid(form)
+            target = Bookshelf.objects.get(pk=bookshelf.pk)
+            target.delete()
+            messages.success(self.request, '本棚から削除しました')
         else:
-            print('test')
-            return super().form_valid(form)
+            bookshelf = form.save(commit=False)
+            target = Bookshelf.objects.get(pk=bookshelf.pk)
+            if (target.status=="読みたい"):
+                bookshelf.status = "読書中"
+            elif (target.status=="読書中"):
+                bookshelf.status = "読了"
+            bookshelf.save()
+        return super().form_valid(form)
+
+class FeedbackView(LoginRequiredMixin, generic.UpdateView):
+    """読了の際にユーザーの読書の感想をタグいいねでフィードバックしてもらうView"""
+
+    def get_success_url(self):
+        return reverse_lazy('books:mybooks')
+
+    def post(self, request, *args, **kwargs):
+        checks_value = request.POST.getlist('booktags')
+        taglikes = TagLike.objects.filter(user=self.request.user)
+        booktags = BookTag.objects.all()
+        #チェックボックスでチェックが入っている項目に関してはいいねとしてみなす。
+        for value in checks_value:
+            booktag = booktags.get(pk=value)
+            if not taglikes.filter(booktag=booktag).exists():
+                taglike = TagLike(user=self.request.user, booktag=booktag)
+                taglike.save()
+        #ステータスを読了にする。
+        bookshelf = Bookshelf.objects.get(pk=self.kwargs['pk'])
+        bookshelf.status = "読了"
+        bookshelf.save()
+        #★mybooksページに遷移させたい。
+        return render(request, 'index.html')
 
 class RecommendListView(LoginRequiredMixin, generic.ListView):
     """ユーザーへのおすすめの書籍を一覧表示するView"""
@@ -297,13 +316,16 @@ class MybooksListView(LoginRequiredMixin, generic.ListView):
         all = Bookshelf.objects.filter(user=self.request.user)
         mybooks_want = all.filter(status="読みたい")
         mybooks_reading = all.filter(status="読書中")
-        mybooks_read = all.filter(status="読書済み")
+        mybooks_read = all.filter(status="読了")
         context['mybooks_want'] = mybooks_want
         context['mybooks_reading'] = mybooks_reading
         context['mybooks_read'] = mybooks_read
         #お気に入り書籍の取得
         favorite_books = FavoriteBook.objects.filter(user=self.request.user)
         context['favorite_books'] = favorite_books
+        #bookタグの一覧を取得
+        booktags = BookTag.objects.all()
+        context['booktags'] = booktags
         return context
 
 def favorite_book(request):
