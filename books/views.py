@@ -287,6 +287,9 @@ class RecommendListView(LoginRequiredMixin, generic.ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        #　新着の書籍：Bookモデルを最新順として取得
+        new_books = Book.objects.order_by('-created_at')
+        context['new_books'] = new_books
         #　自分がいいねした書籍タグをタグ名でまとめ、タグごとのいいね数を降順に並べる
         my_taglikes = TagLike.objects.filter(user=self.request.user)\
             .select_related()\

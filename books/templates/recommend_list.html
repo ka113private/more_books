@@ -13,12 +13,31 @@
 <section>
     <div class="container px-4 px-lg-5 my-5">
         <div class="row gx-4 gx-lg-5 align-items-center">
-            <p class="h2">人気の書籍
+            <p class="h2">話題の書籍
                 <a class="btn btn-primary" href="{% url 'books:my_list' 1%}">もっと見る</a>
             </p>
              <div class="container-fluid">
                  <div class="row flex-nowrap">
                      {% for book in book_list %}
+                     <div class="col-2">
+                         <div class="card">
+                          <a href="{% url 'books:book_detail' book.pk%}">
+                              <!-- Thumnail image-->
+                              <img class="card-img-top" src="../media/{{ book.thumbnail_image }}" alt="..." />
+                          </a>
+                         </div>
+                     </div>
+                     {% endfor %}
+                 </div>
+             </div>
+        </div>
+        <div class="row gx-4 gx-lg-5 align-items-center">
+            <p class="h2">新着の書籍
+                <a class="btn btn-primary" href="{% url 'books:my_list' 1%}">もっと見る</a>
+            </p>
+             <div class="container-fluid">
+                 <div class="row flex-nowrap">
+                     {% for book in new_books %}
                      <div class="col-2">
                          <div class="card">
                           <a href="{% url 'books:book_detail' book.pk%}">
