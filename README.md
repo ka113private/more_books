@@ -192,4 +192,12 @@
 　→該当のmodelが見つからないって404エラーが出る。
 ②処理先のviewのform_validメソッドではform.save(commit=False)により該当のpkのobjectが取得できる（formでfield指定していなくても該当のpkのobjectが取得できる）
 　→object=form.save(commit=False)でobjectを取得し、object.name＝〇〇といった形ですきなようにデータを格納し、最後にobject.save()をすればよい。
-- 
+
+### 〇2023/2/19
+  ＜時間＞\
+  21:00～23:20（新幹線の中）
+  ＜実績＞
+- いいね機能の実装
+
+＜所感＞
+- 参考サイト：https://qlitre-weblog.com/django-iine-ajax-create/

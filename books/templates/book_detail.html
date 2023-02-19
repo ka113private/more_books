@@ -50,16 +50,55 @@
                             #{{ tag_islike_key.tag.name }}
                         </a>
                         <!-- 書籍タグいいね機能 -->
-                        {% if tag_islike_value %}
-                        <button type="button" id="ajax-favorite-booktag" style="border:none;background:none">
-                            <i class="fas fa-heart text-danger" id="favorite-booktag"></i>
+                        {% if tag_islike_value.0 %}
+                        <button type="button" id="{{tag_islike_key.pk}}" style="border:none;background:none">
+                            <i class="fas fa-heart text-danger" id="like-for-tag-icon-{{tag_islike_key.pk}}">
+                                <span id="like-for-tag-count-{{tag_islike_key.pk}}">{{tag_islike_value.1}}</span>
+                            </i>
                         </button>
                         {% else %}
-                        <button type="button" id="ajax-favorite-booktag" style="border:none;background:none">
-                            <i class="far fa-heart text-danger" id="favorite-booktag"></i>
+                        <button type="button" id="{{tag_islike_key.pk}}" style="border:none;background:none">
+                            <i class="far fa-heart text-danger" id="like-for-tag-icon-{{tag_islike_key.pk}}">
+                                <span id="like-for-tag-count-{{tag_islike_key.pk}}">{{tag_islike_value.1}}</span>
+                            </i>
                         </button>
                         {% endif %}
                         <!-- <i class="bi-heart-fill"></i> -->
+
+                    <!-- 書籍タグに対するいいね（Ajax）-->
+                    <script type="text/javascript">
+                        document.getElementById({{tag_islike_key.pk}}).addEventListener('click', e => {
+                            e.preventDefault();
+                            const url = '{% url "books:like_for_tag" %}';
+                            fetch(url, {
+                                method: 'POST',
+                                body: `booktag_pk={{tag_islike_key.pk}}`,
+                                headers: {
+                                    'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
+                                    'X-CSRFToken': '{{ csrf_token }}',
+                                    },
+                                }).then(response => {
+                                    return response.json();
+                                }).then(response => {
+                            // いいね数を書き換える
+                            const counter = document.getElementById('like-for-tag-count-{{tag_islike_key.pk}}')
+                            counter.textContent = response.like_for_tag_count
+                            const icon = document.getElementById('like-for-tag-icon-{{tag_islike_key.pk}}')
+                            // 作成した場合はハートをいいね状態にする
+                            if (response.method == 'create'){
+                                icon.classList.remove('far')
+                                icon.classList.add('fas')
+                                icon.id = 'like-for-tag-icon-{{tag_islike_key.pk}}'
+                            } else {
+                                icon.classList.remove('fas')
+                                icon.classList.add('far')
+                                icon.id = 'like-for-tag-icon-{{tag_islike_key.pk}}'
+                            }
+                        }).catch(error => {
+                          console.log(error);
+                        });
+                      });
+                    </script>
                     {% endfor %}
                 </div>
                 <button type="button" class="mt-2 btn btn-sm btn-rounded btn-primary"
@@ -72,28 +111,6 @@
 </section>
 {% endblock %}
 
-<!--
 {% block extrajs %}
-★非同期でいいねにする機能は後で実装
-<script type="text/javascript">
-    document.getElementByID('ajax-favorite-book').addEventListener('click',e => {
-    e.preventDefault();
-    const url = '{% url "books:favorite_book" %}';
-    fetch(url, {
-    method: 'POST',
-    body: 'book_pk={{book.pk}}',
-    headers:{
-        'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8,
-        'X-CSRFToken': '{{csrf_token}}',
-    },
-    }).then(responce => {
-    return responce.json();
-    }).then(responce => {
-    console.log(responce);
-    }).catch(error => {
-    console.log(error);
-    });
-    });
-</script>
+
 {% endblock %}
--->
