@@ -101,10 +101,12 @@ class BookDetailView(LoginRequiredMixin, generic.DetailView):
         tag_list = self.object.booktags.all()
         tag_islike_dic = {}
         for booktag in tag_list:
+            like_count = TagLike.objects.filter(booktag=booktag).count()
             if booktag.taglike_set.filter(user=self.request.user).exists():
-                tag_islike_dic[booktag] = True
+                #tag_islike_dicのformat：{'booktag':(is_like, count)}
+                tag_islike_dic[booktag] = (True, like_count)
             else:
-                tag_islike_dic[booktag] = False
+                tag_islike_dic[booktag] = (False, like_count)
         context['tag_islike_dic'] = tag_islike_dic
 
         #ログインユーザーが本棚に書籍を追加しているかどうか
@@ -114,7 +116,6 @@ class BookDetailView(LoginRequiredMixin, generic.DetailView):
             context['is_add_bookshelf'] = False
         #モーダル用フォーム
         context['tag_add_form'] = TagAddForm
-
         return context
 
 class MyPageView(LoginRequiredMixin, generic.DetailView):
@@ -331,21 +332,21 @@ class MybooksListView(LoginRequiredMixin, generic.ListView):
         context['booktags'] = booktags
         return context
 
-def favorite_book(request):
-    book_pk = request.BOOK.get('book_pk')
+def like_for_tag(request):
+    booktag_pk = request.POST.get('booktag_pk')#POSTメソッドのbodyに格納されているbook_pk（辞書型）を取得
     context = {
-        'user':f'{request.user.username}'
+        'user':request.user.username
     }
-    book = get_object_or_404(Book, pk=book_pk)
-    favorite = FavoriteBook.objects.filter(book = book, user = user)
+    booktag = get_object_or_404(BookTag, pk=booktag_pk)
+    taglike= TagLike.objects.filter(booktag=booktag)
 
-    if favorite.exists():
-        favorite.delete()
+    if taglike.exists():
+        taglike.delete()
         context['method'] = 'delete'
     else:
-        favorite.create(book = book, user = user)
+        taglike.create(booktag=booktag, user=request.user)
         context['method'] = 'create'
 
-    context['favorite_book_count'] = book.favoritebook_set.count()
+    context['like_for_tag_count'] = TagLike.objects.filter(booktag=booktag).count()
 
     return JsonResponse(context)
