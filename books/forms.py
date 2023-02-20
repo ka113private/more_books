@@ -87,3 +87,4 @@ class StatusChangeForm(forms.ModelForm):
         super().__int__(*args, **kwargs)
         for field in self.field.values():
             field.widget.attrs['class']='form-control'
+

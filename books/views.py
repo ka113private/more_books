@@ -332,13 +332,32 @@ class MybooksListView(LoginRequiredMixin, generic.ListView):
         context['booktags'] = booktags
         return context
 
+def favorite_for_book(request):
+    """書籍へのお気に入り処理"""
+    book_pk = request.POST.get('book_pk')#POSTメソッドのbodyに格納されているbook_pk（辞書型）を取得
+    context = {
+        'user':request.user.username
+    }
+    book = get_object_or_404(Book, pk=book_pk)
+    favoriteBook= FavoriteBook.objects.filter(book=book, user=request.user)
+
+    if favoriteBook.exists():
+        favoriteBook.delete()
+        context['method'] = 'delete'
+    else:
+        favoriteBook.create(book=book, user=request.user)
+        context['method'] = 'create'
+
+    return JsonResponse(context)
+
 def like_for_tag(request):
-    booktag_pk = request.POST.get('booktag_pk')#POSTメソッドのbodyに格納されているbook_pk（辞書型）を取得
+    """書籍タグへのいいね処理"""
+    booktag_pk = request.POST.get('booktag_pk')#POSTメソッドのbodyに格納されているbooktag_pk（辞書型）を取得
     context = {
         'user':request.user.username
     }
     booktag = get_object_or_404(BookTag, pk=booktag_pk)
-    taglike= TagLike.objects.filter(booktag=booktag)
+    taglike= TagLike.objects.filter(booktag=booktag, user=request.user)
 
     if taglike.exists():
         taglike.delete()

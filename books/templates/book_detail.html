@@ -14,20 +14,53 @@
             <div class="col-md-4"><img class="card-img-top mb-5 mb-md-0" src="../../media/{{ object.thumbnail_image }}" alt="..." /></div>
             <div class="col-md-8">
                 <div class="d-flex justify-content-end">
+
                     <!-- 書籍お気に入り機能 -->
                     {% if is_user_favorite_book %}
                     <button type="button" id="ajax-favorite-book" style="border:none;background:none">
-                        <i class="fas fa-solid fa-star text-warning" id="favorite-book"></i>
+                        <i class="fas fa-solid fa-star text-warning" id="favorite-for-book-icon"></i>
                     </button>
                     {% else %}
                     <button type="button" id="ajax-favorite-book" style="border:none;background:none">
-                        <i class="far fa-solid fa-star text-warning" id="favorite-book"></i>
+                        <i class="far fa-solid fa-star text-warning" id="favorite-for-book-icon"></i>
                     </button>
                     {% endif %}
+                    <!-- 書籍に対するお気に入り（Ajax）-->
+                    <script type="text/javascript">
+                        document.getElementById('ajax-favorite-book').addEventListener('click', e => {
+                            e.preventDefault();
+                            const url = '{% url "books:favorite_for_book" %}';
+                            fetch(url, {
+                                method: 'POST',
+                                body: 'book_pk={{object.pk}}',
+                                headers: {
+                                    'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
+                                    'X-CSRFToken': '{{ csrf_token }}',
+                                    },
+                                }).then(response => {
+                                    return response.json();
+                                }).then(response => {
+                            const icon = document.getElementById('favorite-for-book-icon')
+                            // 作成した場合は星をお気に入り状態にする
+                            if (response.method == 'create'){
+                                icon.classList.remove('far')
+                                icon.classList.add('fas')
+                                icon.id = 'favorite-for-book-icon'
+                            } else {
+                                icon.classList.remove('fas')
+                                icon.classList.add('far')
+                                icon.id = 'favorite-for-book-icon'
+                            }
+                            }).catch(error => {
+                          console.log(error);
+                        });
+                      });
+                    </script>
 
                     {% if is_add_bookshelf %}
                     <button type="button" class="btn btn-secondary" disabled>My本棚に追加済み</button>
                     {% else %}
+                    <!-- ★formだとお気に入りの星がずれるのでボタンにしたい -->
                     <form class="mt-5" action="{% url 'books:mybooks_add' book.pk %}" method="POST">
                         {% csrf_token %}
                         <button class="btn btn-primary" type="submit">My本棚に追加</button>
@@ -64,7 +97,6 @@
                         </button>
                         {% endif %}
                         <!-- <i class="bi-heart-fill"></i> -->
-
                     <!-- 書籍タグに対するいいね（Ajax）-->
                     <script type="text/javascript">
                         document.getElementById({{tag_islike_key.pk}}).addEventListener('click', e => {
@@ -94,7 +126,7 @@
                                 icon.classList.add('far')
                                 icon.id = 'like-for-tag-icon-{{tag_islike_key.pk}}'
                             }
-                        }).catch(error => {
+                            }).catch(error => {
                           console.log(error);
                         });
                       });
