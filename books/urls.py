@@ -29,6 +29,8 @@ urlpatterns = [
     path('recommend', views.RecommendListView.as_view(), name="recommend"),
     #My本棚ページ遷移用URL
     path('mybooks', views.MybooksListView.as_view(), name="mybooks"),
+    #書籍へのお気に入り非同期処理URL
+    path('favorite-for-book', views.favorite_for_book, name="favorite_for_book"),
     #書籍タグへのいいね非同期処理URL
     path('like-for-tag', views.like_for_tag, name="like_for_tag")
 

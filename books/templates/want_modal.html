@@ -22,7 +22,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <a class="btn btn-primary" data-toggle="modal" data-target="#feedback-modal-{{ mybook.book.pk }}">読書中へ移動</a>
+                    <button class="btn btn-primary" type="submit" href="{% url 'books:status_change' mybook.pk%}">読書中へ移動</button>
                     <a class="btn btn-secondary" href="{% url 'books:book_detail' mybook.book.pk%}">書籍詳細</a>
                     <a class="btn btn-danger" data-toggle="modal" name="btn_delete" data-target="#delete-modal-{{ mybook.book.pk }}">本棚から削除</a>
                 </div>
