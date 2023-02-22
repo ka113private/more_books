@@ -5,19 +5,20 @@ from django.shortcuts import render
 from django.views import generic
 from .forms import InquiryForm, TagAddForm, BookshelfAddForm, ProfileEditForm, StatusChangeForm
 from django.contrib import messages
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from .models import Book, FavoriteBook, BookTag, TagLike ,Tag, Bookshelf, CustomUser
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from django.db.models import Q, Count
 
-
 logger = logging.getLogger(__name__)
 
 class IndexView(generic.TemplateView):
+    """インデックスページ用View"""
     template_name = "index.html"
 
 class InquiryView(generic.FormView):
+    """問い合わせページ用View"""
     template_name = "inquiry.html"
     form_class = InquiryForm
     success_url = reverse_lazy('books:inquiry')
@@ -29,6 +30,7 @@ class InquiryView(generic.FormView):
         return super().form_valid(form)
 
 class BookListView(LoginRequiredMixin, generic.ListView):
+    """一覧ページ用View"""
     model = Book
     template_name = 'book_list.html'
 
@@ -51,6 +53,7 @@ class BookListView(LoginRequiredMixin, generic.ListView):
         return context
 
 class BookListTagView(LoginRequiredMixin, generic.ListView):
+    """タグボタンを押下したときに遷移する一覧ページ用View"""
     model = Book
     template_name = 'book_list.html'
 
@@ -71,6 +74,7 @@ class BookListTagView(LoginRequiredMixin, generic.ListView):
         return context
 
 class MyListView(LoginRequiredMixin, generic.ListView):
+    """My本棚ページ用のView"""
     model = Bookshelf
     template_name = 'my_list.html'
 
@@ -87,6 +91,7 @@ class MyListView(LoginRequiredMixin, generic.ListView):
         return context
 
 class BookDetailView(LoginRequiredMixin, generic.DetailView):
+    """書籍詳細ページ用View"""
     model = Book
     template_name = 'book_detail.html'
 
@@ -119,6 +124,7 @@ class BookDetailView(LoginRequiredMixin, generic.DetailView):
         return context
 
 class MyPageView(LoginRequiredMixin, generic.DetailView):
+    """マイページ用View"""
     model = CustomUser
     template_name = "mypage.html"
 
@@ -131,7 +137,7 @@ class MyPageView(LoginRequiredMixin, generic.DetailView):
 
 class TagAddView(LoginRequiredMixin, generic.CreateView):
     """
-    タグ追加ビュー
+    タグ追加処理用ビュー
     書籍詳細ページのフォームからpkを受け取り、モデル保存処理をする。
     すでにDBに保存済みのタグかどうかを判定し、未保存の場合はタグモデルへの保存及び書籍タグへの追加を行う。
     保存済みの場合は書籍タグのみ追加を行う。
