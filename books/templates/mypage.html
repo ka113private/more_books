@@ -11,117 +11,14 @@
 <section>
     <div class="container px-4 px-lg-5 my-5">
         <div class="row gx-4 gx-lg-5 align-items-center">
-            <div class="col-md-3">
-                <img class="card-img-top mb-5 mb-md-0 rounded-circle border" src="../../media/{{ object.profile_image }}" alt="..."/>
-                <div class="fs-1">
-                    <span>{{ object.username }}</span>
-                </div>
-                <button type="button" class="mt-2 btn btn-sm btn-secondary"
-                        data-toggle="modal" data-target="#profileEditModal-{{user.pk}}">プロフィールの修正
-                </button>
+            <img class="card-img-top mb-5 mb-md-0 rounded-circle border" src="../../media/{{ object.profile_image }}" alt="..."/>
+            <div class="fs-1">
+                <span>{{ object.username }}</span>
             </div>
-            <div class="col-md-9">
-                <p class="h2">読みたい
-                    <a class="btn btn-primary" href="{% url 'books:my_list' 1%}">もっと見る</a>
-                </p>
-                 <div class="container-fluid">
-                     <div class="row flex-nowrap">
-                         {% for bookshelf, want_is_favo in want_dic.items %}
-                         <div class="col-2">
-                             <div style="height: 200px;">
-                                 <div class="card">
-                                     {% if want_is_favo %}
-                                     <div class="badge bg-dark text-white position-absolute" style="top: 0.5rem; right: 0.5rem">
-                                         <i class="fas fa-solid fa-star text-warning"></i>
-                                     </div>
-                                     {% endif %}
-                                     <a data-toggle="modal" data-target="#mypageWantModal-{{bookshelf.pk}}">
-                                         <img class="card-img-top" src="../../media/{{ bookshelf.book.thumbnail_image }}" alt="">
-                                     </a>
-                                 </div>
-                             </div>
-                         </div>
-                         {% include 'mypage_want_modal.html' %}
-                         {% endfor %}
-                     </div>
-                 </div>
-                <p class="h2">続きを読む
-                     <a class="btn btn-primary" href="{% url 'books:my_list' 2%}">もっと見る</a>
-                </p>
-                 <div class="container-fluid">
-                     <div class="row flex-nowrap">
-                         {% for bookshelf, reading_is_favo in reading_dic.items %}
-                         <div class="col-2">
-                             <div style="height: 200px;">
-                                 <div class="card">
-                                     {% if reading_is_favo %}
-                                     <div class="badge bg-dark text-white position-absolute" style="top: 0.5rem; right: 0.5rem">
-                                         <i class="fas fa-solid fa-star text-warning"></i>
-                                     </div>
-                                     {% endif %}
-                                     <a data-toggle="modal" data-target="#mypageReadingModal-{{bookshelf.pk}}">
-                                         <img class="card-img-top" src="../../media/{{ bookshelf.book.thumbnail_image }}" alt="">
-                                     </a>
-                                 </div>
-                             </div>
-                         </div>
-                         {% include 'mypage_reading_modal.html' %}
-                         {% endfor %}
-                     </div>
-                 </div>
-                <p class="h2">もう一度読む
-                    <a class="btn btn-primary" href="{% url 'books:my_list' 3%}">もっと見る</a>
-                </p>
-                 <div class="container-fluid">
-                     <div class="row flex-nowrap">
-                         {% for bookshelf, read_is_favo in read_dic.items %}
-                         <div class="col-2">
-                             <div style="height: 200px;">
-                                 <div class="card">
-                                     {% if read_is_favo %}
-                                     <div class="badge bg-dark text-white position-absolute" style="top: 0.5rem; right: 0.5rem">
-                                        <i class="fas fa-solid fa-star text-warning"></i>
-                                    </div>
-                                    {% endif %}
-                                     <a data-toggle="modal" data-target="#mypageReadingModal-{{bookshelf.pk}}">
-                                        <img class="card-img-top" src="../../media/{{ bookshelf.book.thumbnail_image }}" alt="">
-                                     </a>
-                                 </div>
-                             </div>
-                         </div>
-                         {% endfor %}
-                     </div>
-                 </div>
-            </div>
+            <button type="button" class="mt-2 btn btn-sm btn-secondary"
+                    data-toggle="modal" data-target="#profileEditModal-{{user.pk}}">プロフィールの修正
+            </button>
         </div>
     </div>
-    {% include 'profile_edit_modal.html' %}
-
 </section>
 {% endblock %}
-
-<!--
-{% block extrajs %}
-★非同期でいいねにする機能は後で実装
-<script type="text/javascript">
-    document.getElementByID('ajax-favorite-book').addEventListener('click',e => {
-    e.preventDefault();
-    const url = '{% url "books:favorite_book" %}';
-    fetch(url, {
-    method: 'POST',
-    body: 'book_pk={{book.pk}}',
-    headers:{
-        'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8,
-        'X-CSRFToken': '{{csrf_token}}',
-    },
-    }).then(responce => {
-    return responce.json();
-    }).then(responce => {
-    console.log(responce);
-    }).catch(error => {
-    console.log(error);
-    });
-    });
-</script>
-{% endblock %}
--->

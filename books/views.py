@@ -124,39 +124,9 @@ class MyPageView(LoginRequiredMixin, generic.DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        #ログインユーザーのほしい書籍
-        want_list = Bookshelf.objects.filter(user=self.request.user, status=1)
-        want_dic = {}
-        for want in want_list:
-            if FavoriteBook.objects.filter(user=self.request.user, book=want.book).exists():
-                want_dic[want] = True
-            else:
-                want_dic[want] = False
-        context['want_dic'] = want_dic
-
-        # ログインユーザーの読書中書籍
-        reading_list = Bookshelf.objects.filter(user=self.request.user, status=2)
-        reading_dic = {}
-        for reading in reading_list:
-            if FavoriteBook.objects.filter(user=self.request.user, book=reading.book).exists():
-                reading_dic[reading] = True
-            else:
-                reading_dic[reading] = False
-        context['reading_dic'] = reading_dic
-
-        # ログインユーザーの読了書籍
-        read_list = Bookshelf.objects.filter(user=self.request.user, status=3)
-        read_dic = {}
-        for read in read_list:
-            if FavoriteBook.objects.filter(user=self.request.user, book=read.book).exists():
-                read_dic[read] = True
-            else:
-                read_dic[read] = False
-        context['read_dic'] = read_dic
         #プロフィール画像編集フォーム
         context['profile_edit_form']=ProfileEditForm
-        #本棚の書籍のステータス編集フォーム
-        context['bookshelf_edit_form'] = BookshelfEditForm
+
         return context
 
 class TagAddView(LoginRequiredMixin, generic.CreateView):
