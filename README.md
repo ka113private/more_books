@@ -201,3 +201,14 @@
 
 ＜所感＞
 - 参考サイト：https://qlitre-weblog.com/django-iine-ajax-create/
+
+### 〇2023/2/22
+  ＜時間＞\
+  18:00～20:20（新幹線の中）
+  ＜実績＞
+- 単体テストの実装
+
+＜所感＞
+- issueを使った開発の仕方を知った。（https://qiita.com/tkmd35/items/9612c03dc60b1c516969）
+- コードをレビューしてほしい。
+- ChatGPTにいろいろ聞く。
