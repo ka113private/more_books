@@ -12,10 +12,19 @@ from django.shortcuts import get_object_or_404
 from django.db.models import Q, Count
 
 logger = logging.getLogger(__name__)
+NUM_BOOKS_TO_DISPLAY = 6 #一覧で表示する際の書籍の数
 
 class IndexView(generic.TemplateView):
     """インデックスページ用View"""
     template_name = "index.html"
+
+    def get_context_data(self, **kwargs):
+
+        context = super().get_context_data(**kwargs)
+        new_arrivals = Book.objects.order_by('-created_at')[:NUM_BOOKS_TO_DISPLAY]
+        context['new_arrivals'] = new_arrivals
+
+        return context
 
 class InquiryView(generic.FormView):
     """問い合わせページ用View"""
