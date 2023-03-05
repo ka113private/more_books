@@ -79,7 +79,7 @@
                 <div class="d-flex align-content-around flex-wrap ">
                     {% for tag_islike_key, tag_islike_value in tag_islike_dic.items %}
                         <!-- ★タグ名でlist表示できるようにする -->
-                        <a class="btn btn-outline-dark flex-shrink-0" href="{% url 'books:book_list_tag' tag_islike_key.tag.pk%}" type="button">
+                        <a class="btn btn-outline-dark flex-shrink-0" href="{% url 'books:book_list_from_tag' tag_islike_key.tag.pk%}" type="button">
                             #{{ tag_islike_key.tag.name }}
                         </a>
                         <!-- 書籍タグいいね機能 -->

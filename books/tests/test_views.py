@@ -20,6 +20,72 @@ class LoggedInTestCase(TestCase):
         # テスト用ユーザーでログインする
         self.client.login(email=self.test_user.email, password=self.password)
 
+class TestBookListFromSearchView(LoggedInTestCase):
+    """BookListFromSearchView用のテストクラス"""
+    def setUp(self):
+        self.loginSetUp()
+        self.book1= Book.objects.create(title='Book1', author='Author1', description='Description1')
+        self.book2 = Book.objects.create(title='Book2', author='Author2', description='Description2')
+        self.url = reverse('books:book_list_from_search')
+
+    def test_book_list_from_search(self):
+        """書籍詳細ページが正しく表示されることを確認する。"""
+        #書籍タイトルが検索対象に入っているか
+        params = {'query': 'Book'}
+        response = self.client.get(self.url, params)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed('book_list.html')
+        self.assertContains(response, self.book1.title)
+        self.assertContains(response, self.book2.title)
+        #著者名が検索対象に入っているか
+        params = {'query': 'Author'}
+        response = self.client.get(self.url, params)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed('book_list.html')
+        self.assertContains(response, self.book1.title)
+        self.assertContains(response, self.book2.title)
+        #書籍概要が検索対象に入っているか
+        params = {'query': 'Description'}
+        response = self.client.get(self.url, params)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed('book_list.html')
+        self.assertContains(response, self.book1.title)
+        self.assertContains(response, self.book2.title)
+        #'Book1'で検索した時にBook2は結果表示されないか
+        params = {'query': 'Book1'}
+        response = self.client.get(self.url, params)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed('book_list.html')
+        self.assertContains(response, self.book1.title)
+        self.assertNotContains(response, self.book2.title)
+
+class TestBookListFromTagView(LoggedInTestCase):
+    def setUp(self):
+        self.loginSetUp()
+        self.book1 = Book.objects.create(title='Book1', author='Author1', description='Description1')
+        self.book2 = Book.objects.create(title='Book2', author='Author2', description='Description2')
+        self.book3 = Book.objects.create(title='Book3', author='Author3', description='Description3')
+        self.tag1 = Tag.objects.create(name='Tag1')
+        self.booktag1 = BookTag.objects.create(book=self.book1, tag=self.tag1)
+        self.booktag2 = BookTag.objects.create(book=self.book2, tag=self.tag1)
+
+    def test_book_list_from_tag(self):
+        #tag1というタグがついている書籍が正しく取得できているか。
+        url = reverse('books:book_list_from_tag', kwargs={'pk': self.tag1.pk})
+        response = self.client.get(url)
+        self.assertTemplateUsed('book_list.html')
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, self.book1.title)
+        self.assertContains(response, self.book2.title)
+        self.assertNotContains(response, self.book3.title)
+
+    def test_book_list_from_tag_with_invalid_id(self):
+        url = reverse('books:book_list_from_tag', kwargs={'pk': 999999})
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 404)
+
+
+
 class TestBookDetailView(LoggedInTestCase):
     """BookDetailView用のテストクラス"""
 
@@ -27,7 +93,6 @@ class TestBookDetailView(LoggedInTestCase):
         self.loginSetUp()
         self.book = Book.objects.create(title='Book', author='Author', description='Description')
         self.url = reverse('books:book_detail',  kwargs={'pk': self.book.pk})
-        print('book:'+self.book.title)
 
     def test_book_detail_view(self):
         "書籍詳細ページが正しく表示されることを検証する"

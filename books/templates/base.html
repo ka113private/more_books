@@ -38,7 +38,7 @@
                         <li class="nav-item">
                             <a class="nav-link {% block active_mybooks %}{% endblock %}" href="{% url 'books:mybooks' %}">My本棚</a>
                         </li>
-                        <form class="d-flex" action="{% url 'books:book_list' %}" method="get">
+                        <form class="d-flex" action="{% url 'books:book_list_from_search' %}" method="get">
                              <input class="form-control me-2" type="search" name="query" placeholder="Search" aria-label="Search">
                              <button class="btn btn-outline-success" type="submit">Search</button>
                         </form>

@@ -38,7 +38,7 @@ class InquiryView(generic.FormView):
         logger.info('Inquiry sent by {}'.format(form.cleaned_data['name']))
         return super().form_valid(form)
 
-class BookListView(LoginRequiredMixin, generic.ListView):
+class BookListFromSearchView(LoginRequiredMixin, generic.ListView):
     """一覧ページ用View"""
     model = Book
     template_name = 'book_list.html'
@@ -58,20 +58,21 @@ class BookListView(LoginRequiredMixin, generic.ListView):
         context = super().get_context_data(**kwargs)
         query = self.request.GET.get('query')
         context['query'] = query
+        #検索結果の表示や選択したタグに紐づく書籍の表示をする際にhtml表示を少し変えるためにどのビューから生成されたのか判定するために以下を設定
+        context['view_from'] = 'BookListFromSearchView'
 
         return context
 
-class BookListTagView(LoginRequiredMixin, generic.ListView):
+class BookListFromTagView(LoginRequiredMixin, generic.ListView):
     """タグボタンを押下したときに遷移する一覧ページ用View"""
     model = Book
     template_name = 'book_list.html'
 
     def get_queryset(self, **kwargs):
         tag_pk = self.kwargs['pk']
-        tag = Tag.objects.get(pk=tag_pk)
+        tag = get_object_or_404(Tag, pk=tag_pk)
         book_pk_list = BookTag.objects.filter(tag=tag).values_list('book', flat=True)
         book_list = Book.objects.filter(pk__in=list(book_pk_list))
-        print(book_list)
         return book_list
 
     def get_context_data(self, **kwargs):
@@ -79,24 +80,31 @@ class BookListTagView(LoginRequiredMixin, generic.ListView):
         tag_pk = self.kwargs['pk']
         tag = Tag.objects.get(pk=tag_pk)
         context['query'] = "#" + tag.name
+        context['view_from']='BookListFromTagView'
 
         return context
 
-class MyListView(LoginRequiredMixin, generic.ListView):
-    """My本棚ページ用のView"""
-    model = Bookshelf
-    template_name = 'my_list.html'
+class BookListFromCustomView(LoginRequiredMixin, generic.ListView):
+    """カスタム書籍一覧ページ用のView"""
+    model = Book
+    template_name = 'book_list.html'
 
     def get_queryset(self, **kwargs):
-        status = self.kwargs['status']
-        bookshelf_list = Bookshelf.objects.filter(user=self.request.user, status=status)
-        return bookshelf_list
+        self.custom = self.kwargs['custom']
+        book_list = Book.objects.all()
+        if (self.custom == 'new_arrivals'):
+            book_list = book_list.order_by('-created_at')
+        elif (self.custom == 'popular'):
+            book_list = book_list.annotate(favorite_count=Count('favoritebook'))\
+                .order_by('-favorite_count')
+        return book_list
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        status = self.kwargs['status']
-        context['status'] = status
-
+        if (self.custom == 'new_arrivals'):
+            context['query'] = '新着の書籍'
+        elif (self.custom == 'popular'):
+            context['query'] = '人気の書籍'
         return context
 
 class BookDetailView(LoginRequiredMixin, generic.DetailView):
@@ -263,25 +271,26 @@ class RecommendListView(LoginRequiredMixin, generic.ListView):
     template_name = 'recommend_list.html'
 
     def get_queryset(self):
-        #　すでに本棚に登録してある書籍以外の人気順リストを表示
+        #　書籍の人気順リストを表示
         my_books = Bookshelf.objects.filter(user=self.request.user).values('book')
         popular_books = Book.objects\
             .annotate(favorite_count=Count('favoritebook'))\
             .order_by('-favorite_count')\
-            .exclude(pk__in=my_books)
+            [:NUM_BOOKS_TO_DISPLAY]
         return popular_books
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         #　新着の書籍：Bookモデルを最新順として取得
-        new_books = Book.objects.order_by('-created_at')
+        new_books = Book.objects.order_by('-created_at')[:NUM_BOOKS_TO_DISPLAY]
         context['new_books'] = new_books
         #　自分がいいねした書籍タグをタグ名でまとめ、タグごとのいいね数を降順に並べる
         my_taglikes = TagLike.objects.filter(user=self.request.user)\
             .select_related()\
             .values('booktag__tag')\
             .annotate(count=Count('booktag__pk'))\
-            .order_by('-count')
+            .order_by('-count')\
+            [:NUM_BOOKS_TO_DISPLAY]
         recommend_dic = {}
         # いいねしたタグが付けられている書籍のlistを作成
         for taglike_dic in my_taglikes:

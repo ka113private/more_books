@@ -18,11 +18,16 @@
         <div class="row gx-4 gx-lg-5">
             {% for book in book_list %}
             <div class="col-md-3">
+                <!--12を割った数字の数が列数になる -->
                 <div class="col mb-5">
                 <div class="card">
                     <a href="{% url 'books:book_detail' book.pk%}">
                     <!-- Thumnail image-->
-                    <img class="card-img-top" src="../media/{{ book.thumbnail_image }}" alt="..." />
+                        {% if view_from == 'BookListFromTagView'%}
+                            <img class="card-img-top" src="../../media/{{ book.thumbnail_image }}" alt="..." />
+                        {% else %}
+                            <img class="card-img-top" src="../media/{{ book.thumbnail_image }}" alt="..." />
+                        {% endif %}
                     </a>
                     <!-- Book details-->
                     <div class="card-body p-4">

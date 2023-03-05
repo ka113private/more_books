@@ -8,9 +8,9 @@ urlpatterns = [
     #問い合わせページ遷移用URL
     path('inquiry/', views.InquiryView.as_view(), name="inquiry"),
     #書籍一覧ページ遷移用URL
-    path('book-list/', views.BookListView.as_view(), name="book_list"),
-    path('book-list-tag/<int:pk>/', views.BookListTagView.as_view(), name="book_list_tag"),
-    path('my-list/<int:status>', views.MyListView.as_view(), name="my_list"),
+    path('book-list-from-search/', views.BookListFromSearchView.as_view(), name="book_list_from_search"),
+    path('book-list-from-tag/<int:pk>/', views.BookListFromTagView.as_view(), name="book_list_from_tag"),
+    path('book-list-from-custom/<slug:custom>', views.BookListFromCustomView.as_view(), name="book_list_from_custom"),
     #書籍詳細ページ遷移用URL
     path('book-detail/<int:pk>/', views.BookDetailView.as_view(), name="book_detail"),
     #マイページ遷移用URL
