@@ -1,12 +1,33 @@
 from accounts.models import CustomUser
 from django.db import models
 
+class Category(models.Model):
+    """書籍カテゴリモデル"""
+    name = models.CharField(verbose_name='カテゴリ名', max_length=50)
+    class Meta:
+        verbose_name_plural='Category'
+
+    def __str__(self):
+        return self.name
+
+class SubCategory(models.Model):
+    """書籍サブカテゴリ"""
+    name = models.CharField(verbose_name='サブカテゴリ名', max_length=50)
+    category = models.ForeignKey(Category, verbose_name='カテゴリ', on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name_plural='SubCategory'
+
+    def __str__(self):
+        return self.name
+
 class Book(models.Model):
     """書籍モデル"""
     title = models.CharField(verbose_name='タイトル', max_length=50)
     author = models.CharField(verbose_name='著者', max_length=30)
     description = models.TextField(verbose_name='概要', blank=True, null=True)
     thumbnail_image = models.ImageField(verbose_name='サムネイル画像', blank=True, null=True)
+    sub_category = models.ForeignKey(SubCategory, verbose_name='サブカテゴリ', on_delete=models.CASCADE)
     amazon_url = models.URLField(verbose_name='Amzazonリンク', blank=True, null=True)
     rakuten_url = models.URLField(verbose_name='Rakutenリンク', blank=True, null=True)
     created_at = models.DateTimeField(verbose_name='作成日時', auto_now_add=True)
