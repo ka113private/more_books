@@ -1,3 +1,4 @@
+import json
 import logging
 
 from django.urls import reverse_lazy
@@ -6,13 +7,15 @@ from django.views import generic
 from .forms import InquiryForm, TagAddForm, BookshelfAddForm, ProfileEditForm, StatusChangeForm
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from .models import Book, FavoriteBook, BookTag, TagLike ,Tag, Bookshelf, CustomUser
+from .models import Book, FavoriteBook, BookTag, TagLike ,Tag, Bookshelf, CustomUser, SubCategory
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from django.db.models import Q, Count
+from django.core import serializers
 
 logger = logging.getLogger(__name__)
 NUM_BOOKS_TO_DISPLAY = 6 #一覧で表示する際の書籍の数
+RECOMMEND_BOOKS = {}
 
 class IndexView(generic.TemplateView):
     """インデックスページ用View"""
@@ -270,37 +273,45 @@ class RecommendListView(LoginRequiredMixin, generic.ListView):
     model = Book
     template_name = 'recommend_list.html'
 
-    def get_queryset(self):
-        #　書籍の人気順リストを表示
-        my_books = Bookshelf.objects.filter(user=self.request.user).values('book')
-        popular_books = Book.objects\
-            .annotate(favorite_count=Count('favoritebook'))\
-            .order_by('-favorite_count')\
-            [:NUM_BOOKS_TO_DISPLAY]
-        return popular_books
-
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        #　新着の書籍：Bookモデルを最新順として取得
-        new_books = Book.objects.order_by('-created_at')[:NUM_BOOKS_TO_DISPLAY]
-        context['new_books'] = new_books
-        #　自分がいいねした書籍タグをタグ名でまとめ、タグごとのいいね数を降順に並べる
-        my_taglikes = TagLike.objects.filter(user=self.request.user)\
-            .select_related()\
-            .values('booktag__tag')\
-            .annotate(count=Count('booktag__pk'))\
+        #「知見を深める」を選択した場合：ログインユーザーの興味があるサブカテゴリに属する人気の本を取得
+        #my本棚にある書籍の一覧を取得
+        my_book_id_list = Bookshelf.objects.filter(user=self.request.user)\
+            .values_list('book_id')
+        my_books = Book.objects.filter(id__in=my_book_id_list)
+        #my本棚において書籍数が一番多いサブカテゴリを取得
+        my_top_category = my_books.values('sub_category')\
+            .annotate(count=Count('sub_category'))\
             .order_by('-count')\
-            [:NUM_BOOKS_TO_DISPLAY]
-        recommend_dic = {}
-        # いいねしたタグが付けられている書籍のlistを作成
-        for taglike_dic in my_taglikes:
-            tag = Tag.objects.get(pk=taglike_dic['booktag__tag'])
-            booktags = BookTag.objects.filter(tag=tag).order_by('-created_at')
-            related_books = []
-            for booktag in booktags:
-                related_books.append(booktag.book)
-            recommend_dic[tag.name] = related_books
-        context['recommend_dic'] = recommend_dic
+            .first()
+        #おすすめ書籍(該当のサブカテゴリに属する書籍でお気に入りへの追加数（＝人気）が多く、ログインユーザーがmy本棚に追加していない書籍)のQuerySetを返す。
+        book_id_list = FavoriteBook.objects.filter(book__sub_category=my_top_category['sub_category'])\
+            .values('book_id').annotate(count=Count('book_id'))\
+            .order_by('-count')\
+            .exclude(book__id__in=my_book_id_list)\
+            .values_list('book_id')
+        recommend_books_owned_category = Book.objects.filter(id__in=book_id_list)
+        #prm = {"param1": "test１", "param2": "test２"}
+        #context['recommend_books_owned_category'] = json.dumps(prm)
+        if(len(list(recommend_books_owned_category)) != 0):
+            context['exists'] = True
+            context['recommend_books_owned_category'] = json.dumps(serializers.serialize("json", list(recommend_books_owned_category)), ensure_ascii=False)#Json内で日本語を扱う場合はensure_asciiはFalseにする。
+        else:
+            context['exists'] = False
+        """
+        #「知見を広げる」を選択した場合：ログインユーザーがこれまで読んだことのないサブカテゴリに属する人気の本を取得
+        my_categories = my_books.values('sub_category')\
+            .annotate(count=Count('sub_category'))\
+            .order_by('-count')\
+            .values_list('sub_category')
+        book_id_list = FavoriteBook.objects.values('book_id').annotate(count=Count('book_id'))\
+            .order_by('-count')\
+            .exclude(book__sub_category__in=my_categories)\
+            .values_list('book_id')
+        recommend_books_unowned_categories = Book.objects.filter(id__in=book_id_list)
+        context['recommend_books_unowned_categories'] = recommend_books_unowned_categories
+        """
         return context
 
 class MybooksListView(LoginRequiredMixin, generic.ListView):
@@ -360,3 +371,28 @@ def like_for_tag(request):
     context['like_for_tag_count'] = TagLike.objects.filter(booktag=booktag).count()
 
     return JsonResponse(context)
+
+def add_mybooks(request):
+    #postメソッドのbodyに格納されているのはjsonなので、変換をかける
+    print(request)
+    print(request.body)
+    print(type(request.body))
+    data = json.loads(request.body)
+    print(data)
+    recommend_books_owned_category = request.POST.get('recommend_books_owned_category')
+    #「読みたい」ボタンが押下されたため、該当の書籍（recommend_books_owned_categoryの先頭の本）をBookshelfに登録
+    print(recommend_books_owned_category)
+    book = get_object_or_404(Book, pk=recommend_books_owned_category.first.pk)
+    Bookshelf.objects.create(book=book, user=request.user, status='読みたい')
+    recommend_books_owned_category.pop(book)
+    context['next_books']=recommend_books_owned_category
+
+    return JsonResponse(context)
+
+def not_add_mybooks(request):
+    book_pk = request.POST.get('book_pk')
+    book = get_object_or_404(Book, pk=book_pk)
+    Bookshelf.objects.create(book=book, user=request.user, status='読みたい')
+
+    RECOMMEND_BOOKS.pop(book_pk)
+    context['next_book']=RECOMMEND_BOOKS.first()

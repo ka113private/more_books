@@ -1,7 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse_lazy, reverse
-from ..models import Book, Tag, BookTag
+from ..models import Book, Tag, BookTag, Category, SubCategory, Bookshelf, FavoriteBook
 from ..views import BookDetailView
 
 class LoggedInTestCase(TestCase):
@@ -20,12 +20,47 @@ class LoggedInTestCase(TestCase):
         # テスト用ユーザーでログインする
         self.client.login(email=self.test_user.email, password=self.password)
 
+    def createModelSetup(self):
+        """テスト実行前のモデル作成"""
+        # カテゴリ作成
+        self.categoryX = Category.objects.create(name='CategoryA')
+        self.categoryY = Category.objects.create(name='CategoryB')
+        # サブカテゴリ作成
+        self.subcategoryA = SubCategory.objects.create(name='subcategory1', category=self.categoryX)
+        self.subcategoryB = SubCategory.objects.create(name='subcategory2', category=self.categoryX)
+        self.subcategoryC = SubCategory.objects.create(name='subcategory3', category=self.categoryY)
+        self.subcategoryD = SubCategory.objects.create(name='subcategory4', category=self.categoryY)
+        # 書籍作成
+        self.book1 = Book.objects.create(title='Book1', author='Author1', description='Description1',
+                                         sub_category=self.subcategoryA)
+        self.book2 = Book.objects.create(title='Book2', author='Author2', description='Description2',
+                                         sub_category=self.subcategoryA)
+        self.book3 = Book.objects.create(title='Book3', author='Author3', description='Description3',
+                                         sub_category=self.subcategoryA)
+        self.book4 = Book.objects.create(title='Book4', author='Author4', description='Description4',
+                                         sub_category=self.subcategoryA)
+        self.book5 = Book.objects.create(title='Book5', author='Author5', description='Description5',
+                                         sub_category=self.subcategoryA)
+        self.book6 = Book.objects.create(title='Book6', author='Author6', description='Description6',
+                                         sub_category=self.subcategoryA)
+        self.book7 = Book.objects.create(title='Book7', author='Author7', description='Description7',
+                                         sub_category=self.subcategoryB)
+        self.book8 = Book.objects.create(title='Book8', author='Author8', description='Description8',
+                                         sub_category=self.subcategoryB)
+        self.book9 = Book.objects.create(title='Book9', author='Author9', description='Description9',
+                                         sub_category=self.subcategoryC)
+        self.book10 = Book.objects.create(title='Book10', author='Author10', description='Description10',
+                                         sub_category=self.subcategoryD)
+        # ユーザー作成
+        self.user1 = get_user_model().objects.create_user(username='user1', email='test@gmail.com', password='user1')
+        self.user2 = get_user_model().objects.create_user(username='user2', email='test@gmail.com', password='user2')
+        self.user3 = get_user_model().objects.create_user(username='user3', email='test@gmail.com', password='user3')
+
 class TestBookListFromSearchView(LoggedInTestCase):
     """BookListFromSearchView用のテストクラス"""
     def setUp(self):
         self.loginSetUp()
-        self.book1= Book.objects.create(title='Book1', author='Author1', description='Description1')
-        self.book2 = Book.objects.create(title='Book2', author='Author2', description='Description2')
+        self.createModelSetup()
         self.url = reverse('books:book_list_from_search')
 
     def test_book_list_from_search(self):
@@ -62,9 +97,7 @@ class TestBookListFromSearchView(LoggedInTestCase):
 class TestBookListFromTagView(LoggedInTestCase):
     def setUp(self):
         self.loginSetUp()
-        self.book1 = Book.objects.create(title='Book1', author='Author1', description='Description1')
-        self.book2 = Book.objects.create(title='Book2', author='Author2', description='Description2')
-        self.book3 = Book.objects.create(title='Book3', author='Author3', description='Description3')
+        self.createModelSetup()
         self.tag1 = Tag.objects.create(name='Tag1')
         self.booktag1 = BookTag.objects.create(book=self.book1, tag=self.tag1)
         self.booktag2 = BookTag.objects.create(book=self.book2, tag=self.tag1)
@@ -84,24 +117,22 @@ class TestBookListFromTagView(LoggedInTestCase):
         response = self.client.get(url)
         self.assertEqual(response.status_code, 404)
 
-
-
 class TestBookDetailView(LoggedInTestCase):
     """BookDetailView用のテストクラス"""
 
     def setUp(self):
         self.loginSetUp()
-        self.book = Book.objects.create(title='Book', author='Author', description='Description')
-        self.url = reverse('books:book_detail',  kwargs={'pk': self.book.pk})
+        self.createModelSetup()
+        self.url = reverse('books:book_detail',  kwargs={'pk': self.book1.pk})
 
     def test_book_detail_view(self):
         "書籍詳細ページが正しく表示されることを検証する"
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'book_detail.html')
-        self.assertContains(response, self.book.title)
-        self.assertContains(response, self.book.author)
-        self.assertContains(response, self.book.description)
+        self.assertContains(response, self.book1.title)
+        self.assertContains(response, self.book1.author)
+        self.assertContains(response, self.book1.description)
 
     def test_book_detail_view_with_invalid_id(self):
         "不適切な書籍idを指定して書籍詳細ページにアクセスすると失敗することを検証する"
@@ -114,15 +145,53 @@ class TestTagAddView(LoggedInTestCase):
 
     def setUp(self):
         self.loginSetUp()
-        self.book = Book.objects.create(title='Book', author='Author', description='Description')
+        self.createModelSetup()
 
     def test_add_tag_success(self):
         """タグ追加処理が成功することを検証する"""
         params = {'name':'テストタグ'}
-        response = self.client.post(reverse_lazy('books:tag_add', kwargs={'pk':self.book.pk}), params)
-        self.assertRedirects(response, reverse_lazy('books:book_detail', kwargs={'pk':self.book.pk}), status_code=302, target_status_code=200)
+        response = self.client.post(reverse_lazy('books:tag_add', kwargs={'pk':self.book1.pk}), params)
+        self.assertRedirects(response, reverse_lazy('books:book_detail', kwargs={'pk':self.book1.pk}), status_code=302, target_status_code=200)
         # タグがデータベースに登録されたか確認
         self.assertEqual(Tag.objects.filter(name=params['name']).count(), 1)
         # 書籍タグがデータベースに追加されたか確認
         tag = Tag.objects.get(name=params['name'])
-        self.assertEqual(BookTag.objects.filter(book=self.book, tag=tag).count(), 1)
+        self.assertEqual(BookTag.objects.filter(book=self.book1, tag=tag).count(), 1)
+
+class TestRecommendListView(LoggedInTestCase):
+    """RecommendListView用のテストクラス"""
+    def setUp(self):
+        self.loginSetUp()
+        self.createModelSetup()
+        self.bookshelf1 = Bookshelf.objects.create(user=self.test_user, book=self.book1, status='読書中')
+        self.bookshelf2 = Bookshelf.objects.create(user=self.test_user, book=self.book7, status='読書中')
+        self.favoritebook1 = FavoriteBook.objects.create(user=self.user1, book=self.book1)
+        self.favoritebook1 = FavoriteBook.objects.create(user=self.user1, book=self.book2)
+        self.favoritebook2 = FavoriteBook.objects.create(user=self.user2, book=self.book2)
+        self.favoritebook3 = FavoriteBook.objects.create(user=self.user3, book=self.book2)
+        self.favoritebook4 = FavoriteBook.objects.create(user=self.user1, book=self.book3)
+        self.favoritebook5 = FavoriteBook.objects.create(user=self.user2, book=self.book3)
+        self.favoritebook6 = FavoriteBook.objects.create(user=self.user3, book=self.book4)
+        self.favoritebook7 = FavoriteBook.objects.create(user=self.user1, book=self.book5)
+        self.favoritebook7 = FavoriteBook.objects.create(user=self.user1, book=self.book7)
+        self.url = reverse('books:recommend')
+
+    def test_recommend_list(self):
+        """ユーザーへのおすすめ書籍が正しく取得できることを検証する"""
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'recommend_list.html')
+        self.assertContains(response, self.book2.title)
+        self.assertContains(response, self.book3.title)
+        self.assertContains(response, self.book4.title)
+        self.assertContains(response, self.book5.title)
+        # 同一サブカテゴリーだが、お気に入りに追加している人がいないので、responseには含まれないことを確認。
+        self.assertNotContains(response, self.book6.title)
+        # 別のサブカテゴリーなのでresponseには含まれないことを確認。
+        self.assertNotContains(response, self.book7.title)
+        self.assertNotContains(response, self.book8.title)
+        self.assertNotContains(response, self.book9.title)
+        self.assertNotContains(response, self.book10.title)
+
+
+
