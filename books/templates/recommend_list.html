@@ -1,78 +1,31 @@
 {% extends 'base.html' %}
+
 {% load static %}
 
-{% block title %}本を探す{% endblock %}
+{% block title %}人生を変える本に出会おう。More Books!{% endblock %}
 
-{% block active_recommend %}active{% endblock %}
-
-{% block head %}
-<link href="{% static 'css/shop-item-gh-pages.css' %}" rel="stylesheet">
+{% block header %}
+<header class="masthead">
+    <div class="container position-relative">
+        <div class="row justify-content-center">
+            <div class="col-xl-6">
+                <div class="text-center text-white">
+                    <h1 class="mb-5">本を探してみよう！</h1>
+                    <a type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#recommend-books-owned-category-select-modal">
+                        知見を深める
+                        <i class="far fa-solid fa-magnifying-glass"></i>
+                    </a>
+                    <a type="button" class="btn btn-primary btn-lg">
+                        知見を広げる
+                        <i class="far fa-solid fa-magnifying-glass"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+{% include 'recommend_books_owned_category_modal.html' %}
 {% endblock %}
 
 {% block contents %}
-<section>
-    <div class="container px-4 px-lg-5 my-5">
-        <div class="row gx-4 gx-lg-5 align-items-center">
-            <p class="h2">話題の書籍
-                <a href="{% url 'books:book_list_from_custom' 'popular'%}">
-                    <i class="fas fa-solid fa-angle-right"></i>
-                </a>
-            </p>
-             <div class="container-fluid">
-                 <div class="row flex-nowrap">
-                     {% for book in book_list %}
-                     <div class="col-2">
-                         <div class="card">
-                          <a href="{% url 'books:book_detail' book.pk%}">
-                              <!-- Thumnail image-->
-                              <img class="card-img-top" src="../media/{{ book.thumbnail_image }}" alt="..." />
-                          </a>
-                         </div>
-                     </div>
-                     {% endfor %}
-                 </div>
-             </div>
-        </div>
-        <div class="row gx-4 gx-lg-5 align-items-center">
-            <p class="h2">新着の書籍
-                <a href="{% url 'books:book_list_from_custom' 'new_arrivals'%}">
-                    <i class="fas fa-solid fa-angle-right"></i>
-                </a>
-            </p>
-             <div class="container-fluid">
-                 <div class="row flex-nowrap">
-                     {% for book in new_books %}
-                     <div class="col-2">
-                         <div class="card">
-                          <a href="{% url 'books:book_detail' book.pk%}">
-                              <!-- Thumnail image-->
-                              <img class="card-img-top" src="../media/{{ book.thumbnail_image }}" alt="..." />
-                          </a>
-                         </div>
-                     </div>
-                     {% endfor %}
-                 </div>
-             </div>
-        </div>
-        {% for key, value in recommend_dic.items %}
-        <div class="row my-5 gx-4 gx-lg-5 align-items-center">
-            <p class="h2">「#{{ key }}」が好きなあなたへ</p>
-             <div class="container-fluid">
-                 <div class="row flex-nowrap">
-                     {% for book in value %}
-                     <div class="col-2">
-                             <div class="card">
-                                 <a href="{% url 'books:book_detail' book.pk%}">
-                                     <!-- Thumnail image-->
-                                     <img class="card-img-top" src="../media/{{ book.thumbnail_image }}" alt="..." />
-                                 </a>
-                             </div>
-                     </div>
-                     {% endfor %}
-                 </div>
-             </div>
-        </div>
-        {% endfor %}
-    </div>
-</section>
 {% endblock %}
