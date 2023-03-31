@@ -279,9 +279,9 @@ class RecommendListView(LoginRequiredMixin, generic.ListView):
         #my本棚にある書籍の一覧を取得
         my_book_id_list = Bookshelf.objects.filter(user=self.request.user)\
             .values_list('book_id')
-        my_books = Book.objects.filter(id__in=my_book_id_list)
+        my_book_list = Book.objects.filter(id__in=my_book_id_list)
         #my本棚において書籍数が一番多いサブカテゴリを取得
-        my_top_category = my_books.values('sub_category')\
+        my_top_category = my_book_list.values('sub_category')\
             .annotate(count=Count('sub_category'))\
             .order_by('-count')\
             .first()
@@ -292,11 +292,13 @@ class RecommendListView(LoginRequiredMixin, generic.ListView):
             .exclude(book__id__in=my_book_id_list)\
             .values_list('book_id')
         recommend_books_owned_category = Book.objects.filter(id__in=book_id_list)
-        #prm = {"param1": "test１", "param2": "test２"}
-        #context['recommend_books_owned_category'] = json.dumps(prm)
-        if(len(list(recommend_books_owned_category)) != 0):
+        recommend_books_owned_category_list = list(recommend_books_owned_category.values())
+        count = len(recommend_books_owned_category_list)
+        if(count != 0):
             context['exists'] = True
-            context['recommend_books_owned_category'] = json.dumps(serializers.serialize("json", list(recommend_books_owned_category)), ensure_ascii=False)#Json内で日本語を扱う場合はensure_asciiはFalseにする。
+            recommend_books_owned_category_json = JsonResponse({'books': recommend_books_owned_category_list})
+            context['recommend_books_owned_category'] = recommend_books_owned_category_json.content.decode('utf-8')
+            #context['recommend_books_owned_category'] = json.dumps(serializers.serialize("json", list(recommend_books_owned_category)), ensure_ascii=False)#Json内で日本語を扱う場合はensure_asciiはFalseにする。
         else:
             context['exists'] = False
         """
@@ -373,20 +375,22 @@ def like_for_tag(request):
     return JsonResponse(context)
 
 def add_mybooks(request):
+    context = {
+        'user': request.user.username
+    }
     #postメソッドのbodyに格納されているのはjsonなので、変換をかける
-    print(request)
-    print(request.body)
-    print(type(request.body))
-    data = json.loads(request.body)
-    print(data)
-    recommend_books_owned_category = request.POST.get('recommend_books_owned_category')
-    #「読みたい」ボタンが押下されたため、該当の書籍（recommend_books_owned_categoryの先頭の本）をBookshelfに登録
-    print(recommend_books_owned_category)
-    book = get_object_or_404(Book, pk=recommend_books_owned_category.first.pk)
+    json_data = json.loads(request.body)
+    book_list = json_data['books']
+    #先頭の書籍についてBookshelfテーブルにstatus「読みたい」として登録する。登録後listから削除する
+    book = get_object_or_404(Book, pk=book_list[0]["id"])
     Bookshelf.objects.create(book=book, user=request.user, status='読みたい')
-    recommend_books_owned_category.pop(book)
-    context['next_books']=recommend_books_owned_category
-
+    book_list.pop(0)
+    if( len(book_list) != 0):
+        book_list_json = JsonResponse({'books': book_list})
+        context['next_books']=book_list_json.content.decode('utf-8')
+        context['exists']= True
+    else:
+        context['exists'] = False
     return JsonResponse(context)
 
 def not_add_mybooks(request):

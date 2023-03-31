@@ -32,6 +32,10 @@ urlpatterns = [
     #書籍へのお気に入り非同期処理URL
     path('favorite-for-book', views.favorite_for_book, name="favorite_for_book"),
     #書籍タグへのいいね非同期処理URL
-    path('like-for-tag', views.like_for_tag, name="like_for_tag")
+    path('like-for-tag', views.like_for_tag, name="like_for_tag"),
+    #おすすめ書籍をmy本棚に追加する際に非同期処理URL
+    path('add-mybooks', views.add_mybooks, name="add_mybooks"),
+    #おすすめ書籍をmy本棚に追加しない際に非同期処理URL
+    path('not-add-mybooks', views.not_add_mybooks, name="not_add_mybooks")
 
 ]
