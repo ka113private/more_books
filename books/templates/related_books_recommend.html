@@ -1,4 +1,4 @@
-<div class="modal fade" id="recommend-books-owned-category-select-modal" tabindex="-1" aria-labelledby="RecommendBooksOwnedCategorySelectModalLabel" aria-hidden="true">
+<div class="modal fade" id="related-books-recommend-modal" tabindex="-1" aria-labelledby="RelatedBooksRecommendLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
@@ -31,8 +31,8 @@
     var thumbnailImage = document.getElementById('thumbnail-image');
     var bookElement = document.createElement('div');
 
-    {% if exists  %}
-        var bookList = JSON.parse('{{ recommend_books_owned_category | escapejs}}');//エスケープ文字を無視して、JSONデータからリストを取得する。
+    {% if related_books_exists  %}
+        var bookList = JSON.parse('{{ related_books | escapejs}}');//エスケープ文字を無視して、JSONデータからリストを取得する。
         var firstbook = bookList.books[0];//リストの先頭オブジェクトを取得する。
         bookElement.innerHTML = `<h6>${firstbook.title}</h6><p>${firstbook.author}</p>`;
         footerContainer.innerHTML  = `<button class="btn btn-primary" id="add-mybooks" >読みたい</button><button class="btn btn-secondary" id="not-add-mybooks" >興味ない</button>`
