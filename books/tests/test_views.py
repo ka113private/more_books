@@ -158,29 +158,41 @@ class TestTagAddView(LoggedInTestCase):
         tag = Tag.objects.get(name=params['name'])
         self.assertEqual(BookTag.objects.filter(book=self.book1, tag=tag).count(), 1)
 
-class TestRecommendListView(LoggedInTestCase):
-    """RecommendListView用のテストクラス"""
+class TestExplorationView(LoggedInTestCase):
+    """ExplorationView用のテストクラス"""
+    def setUp(self):
+        self.loginSetUp()
+        self.createModelSetup()
+        self.url = reverse('books:exploration')
+
+    def test_book_exploration(self):
+        """ユーザーへのrecommendページが正しく取得できることを検証する"""
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'book_exploration.html')
+
+class TestGetRelatedBooks(LoggedInTestCase):
+    """get_related_booksメソッドテストクラス"""
     def setUp(self):
         self.loginSetUp()
         self.createModelSetup()
         self.bookshelf1 = Bookshelf.objects.create(user=self.test_user, book=self.book1, status='読書中')
         self.bookshelf2 = Bookshelf.objects.create(user=self.test_user, book=self.book7, status='読書中')
         self.favoritebook1 = FavoriteBook.objects.create(user=self.user1, book=self.book1)
-        self.favoritebook1 = FavoriteBook.objects.create(user=self.user1, book=self.book2)
-        self.favoritebook2 = FavoriteBook.objects.create(user=self.user2, book=self.book2)
-        self.favoritebook3 = FavoriteBook.objects.create(user=self.user3, book=self.book2)
-        self.favoritebook4 = FavoriteBook.objects.create(user=self.user1, book=self.book3)
-        self.favoritebook5 = FavoriteBook.objects.create(user=self.user2, book=self.book3)
-        self.favoritebook6 = FavoriteBook.objects.create(user=self.user3, book=self.book4)
-        self.favoritebook7 = FavoriteBook.objects.create(user=self.user1, book=self.book5)
-        self.favoritebook7 = FavoriteBook.objects.create(user=self.user1, book=self.book7)
-        self.url = reverse('books:recommend')
+        self.favoritebook2 = FavoriteBook.objects.create(user=self.user1, book=self.book2)
+        self.favoritebook3 = FavoriteBook.objects.create(user=self.user2, book=self.book2)
+        self.favoritebook4 = FavoriteBook.objects.create(user=self.user3, book=self.book2)
+        self.favoritebook5 = FavoriteBook.objects.create(user=self.user1, book=self.book3)
+        self.favoritebook6 = FavoriteBook.objects.create(user=self.user2, book=self.book3)
+        self.favoritebook7 = FavoriteBook.objects.create(user=self.user3, book=self.book4)
+        self.favoritebook8 = FavoriteBook.objects.create(user=self.user1, book=self.book5)
+        self.favoritebook9 = FavoriteBook.objects.create(user=self.user1, book=self.book7)
+        self.url = reverse('books:get_related_books')
 
-    def test_recommend_list(self):
+    def test_get_related_books(self):
         """ユーザーへのおすすめ書籍が正しく取得できることを検証する"""
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'recommend_list.html')
         self.assertContains(response, self.book2.title)
         self.assertContains(response, self.book3.title)
         self.assertContains(response, self.book4.title)
@@ -193,5 +205,24 @@ class TestRecommendListView(LoggedInTestCase):
         self.assertNotContains(response, self.book9.title)
         self.assertNotContains(response, self.book10.title)
 
+class TestGetNewBooks(LoggedInTestCase):
+    """get_new_booksメソッドテストクラス"""
+    def setUp(self):
+        self.loginSetUp()
+        self.createModelSetup()
+        self.bookshelf1 = Bookshelf.objects.create(user=self.test_user, book=self.book1, status='読書中')
+        self.bookshelf2 = Bookshelf.objects.create(user=self.test_user, book=self.book7, status='読書中')
+        self.favoritebook1 = FavoriteBook.objects.create(user=self.user1, book=self.book9)
+        self.url = reverse('books:get_new_books')
 
-
+    def test_get_new_books(self):
+        """ユーザーへのおすすめ書籍が正しく取得できることを検証する"""
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, self.book9.title)
+        # リクエストユーザーが登録していないサブカテゴリーだが、お気に入りに追加している人がいないので、responseには含まれないことを確認。
+        self.assertNotContains(response, self.book10.title)
+        # リクエストユーザーが登録しているサブカテゴリーなのでresponseには含まれないことを確認。
+        self.assertNotContains(response, self.book1.title)
+        self.assertNotContains(response, self.book2.title)
+        self.assertNotContains(response, self.book7.title)

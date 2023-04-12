@@ -35,7 +35,7 @@
                     <a class="navbar-brand" href="{% url 'books:index' %}">More Books!</a>
                     <ul class="navbar-nav me-auto" >
                         <li class="nav-item">
-                            <a class="nav-link {% block active_recommend %}{% endblock %}" href="{% url 'books:recommend' %}">本を探す</a>
+                            <a class="nav-link {% block active_exploration %}{% endblock %}" href="{% url 'books:exploration' %}">本を探す</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link {% block active_mybooks %}{% endblock %}" href="{% url 'books:mybooks' %}">My本棚</a>
@@ -111,5 +111,8 @@
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/4.0.0/mdb.min.js"></script>
     {% block extrajs %}{% endblock %}
     -->
+    <script  type="text/javascript">
+    {% block javascript %}{% endblock %}
+    </script>
     </body>
 </html>

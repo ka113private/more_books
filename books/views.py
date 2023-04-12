@@ -268,71 +268,10 @@ class FeedbackView(LoginRequiredMixin, generic.UpdateView):
         #★mybooksページに遷移させたい。
         return render(request, 'index.html')
 
-class RecommendListView(LoginRequiredMixin, generic.ListView):
+class ExplorationView(LoginRequiredMixin, generic.TemplateView):
     """ユーザーへのおすすめの書籍を一覧表示するView"""
     model = Book
-    template_name = 'recommend_list.html'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        # 「知見を深める」を選択した場合の書籍を取得
-        related_books = self.get_related_books()
-        related_books_list = list(related_books.values())
-        if(len(related_books_list) != 0):
-            context['related_books_exists'] = True
-            related_books_list_json = JsonResponse({'books': related_books_list})
-            context['related_books'] = related_books_list_json.content.decode('utf-8')
-        else:
-            context['related_books_exists'] = False
-
-        # 「知見を広げる」を選択した場合の書籍を取得
-        new_books = self.get_new_books()
-        new_books_list = list(new_books.values())
-        if(len(new_books_list) != 0):
-            context['new_books_exists'] = True
-            new_books_list_json = JsonResponse({'books': new_books_list})
-            context['new_books'] = new_books_list_json.content.decode('utf-8')
-        else:
-            context['new_books_exists'] = False
-        return context
-
-    def get_related_books(self):
-        # 「知見を深める」を選択した場合：ログインユーザーの興味があるサブカテゴリに属する人気の本を取得
-        # my本棚にある書籍の一覧を取得
-        library_id_list = Bookshelf.objects.filter(user=self.request.user) \
-            .values_list('book_id')
-        library_list = Book.objects.filter(id__in=library_id_list)
-        # my本棚において書籍数が一番多いサブカテゴリを取得
-        my_top_category = library_list.values('sub_category') \
-            .annotate(count=Count('sub_category')) \
-            .order_by('-count') \
-            .first()
-        # おすすめ書籍(該当のサブカテゴリに属する書籍でお気に入りへの追加数（＝人気）が多く、ログインユーザーがmy本棚に追加していない書籍)のQuerySetを返す。
-        book_id_list = FavoriteBook.objects.filter(book__sub_category=my_top_category['sub_category']) \
-            .values('book_id').annotate(count=Count('book_id')) \
-            .order_by('-count') \
-            .exclude(book__id__in=library_id_list) \
-            .values_list('book_id')
-        related_books = Book.objects.filter(id__in=book_id_list)
-        return related_books
-
-    def get_new_books(self):
-        # 「知見を広げる」を選択した場合：ログインユーザーがこれまで読んだことのないサブカテゴリに属する人気の本を取得
-        #  本棚にある書籍の全てのサブカテゴリを取得
-        library_id_list = Bookshelf.objects.filter(user=self.request.user) \
-            .values_list('book_id')
-        library_list = Book.objects.filter(id__in=library_id_list)
-        my_categories = library_list.values('sub_category') \
-            .annotate(count=Count('sub_category')) \
-            .order_by('-count') \
-            .values_list('sub_category')
-        book_id_list = FavoriteBook.objects.values('book_id').annotate(count=Count('book_id')) \
-            .order_by('-count') \
-            .exclude(book__sub_category__in=my_categories) \
-            .values_list('book_id')
-        new_books = Book.objects.filter(id__in=book_id_list)
-        return new_books
-
+    template_name = 'book_exploration.html'
 
 class MybooksListView(LoginRequiredMixin, generic.ListView):
     """ユーザーのmy本棚を表示するView"""
@@ -412,9 +351,75 @@ def add_mybooks(request):
     return JsonResponse(context)
 
 def not_add_mybooks(request):
-    book_pk = request.POST.get('book_pk')
-    book = get_object_or_404(Book, pk=book_pk)
-    Bookshelf.objects.create(book=book, user=request.user, status='読みたい')
+    context = {
+        'user': request.user.username
+    }
+    # postメソッドのbodyに格納されているのはjsonなので、変換をかける
+    json_data = json.loads(request.body)
+    book_list = json_data['books']
+    #データベースに登録せずに先頭の書籍をlistから削除する
+    book_list.pop(0)
+    if (len(book_list) != 0):
+        book_list_json = JsonResponse({'books': book_list})
+        context['next_books'] = book_list_json.content.decode('utf-8')
+        context['exists'] = True
+    else:
+        context['exists'] = False
+    return JsonResponse(context)
 
-    RECOMMEND_BOOKS.pop(book_pk)
-    context['next_book']=RECOMMEND_BOOKS.first()
+def get_related_books(request):
+    # 「知見を深める」を選択した場合：ログインユーザーの興味があるサブカテゴリに属する人気の本を取得
+    context = {
+        'user': request.user.username
+    }
+    # my本棚にある書籍の一覧を取得
+    library_id_list = Bookshelf.objects.filter(user=request.user) \
+        .values_list('book_id')
+    library_list = Book.objects.filter(id__in=library_id_list)
+    # my本棚において書籍数が一番多いサブカテゴリを取得
+    my_top_category = library_list.values('sub_category') \
+        .annotate(count=Count('sub_category')) \
+        .order_by('-count') \
+        .first()
+    # おすすめ書籍(該当のサブカテゴリに属する書籍でお気に入りへの追加数（＝人気）が多く、ログインユーザーがmy本棚に追加していない書籍)のQuerySetを返す。
+    book_id_list = FavoriteBook.objects.filter(book__sub_category=my_top_category['sub_category']) \
+        .values('book_id').annotate(count=Count('book_id')) \
+        .order_by('-count') \
+        .exclude(book__id__in=library_id_list) \
+        .values_list('book_id')
+    related_books = Book.objects.filter(id__in=book_id_list)
+    related_books_list = list(related_books.values())
+    if (len(related_books_list) != 0):
+        context['recommend_exists'] = True
+        related_books_list_json = JsonResponse({'books': related_books_list})
+        context['recommend_books'] = related_books_list_json.content.decode('utf-8')
+    else:
+        context['recommend_exists'] = False
+    return JsonResponse(context)
+
+def get_new_books(request):
+    # 「知見を広げる」を選択した場合：ログインユーザーがこれまで読んだことのないサブカテゴリに属する人気の本を取得
+    context = {
+        'user': request.user.username
+    }
+    #  本棚にある書籍の全てのサブカテゴリを取得
+    library_id_list = Bookshelf.objects.filter(user=request.user) \
+        .values_list('book_id')
+    library_list = Book.objects.filter(id__in=library_id_list)
+    my_categories = library_list.values('sub_category') \
+        .annotate(count=Count('sub_category')) \
+        .order_by('-count') \
+        .values_list('sub_category')
+    book_id_list = FavoriteBook.objects.values('book_id').annotate(count=Count('book_id')) \
+        .order_by('-count') \
+        .exclude(book__sub_category__in=my_categories) \
+        .values_list('book_id')
+    new_books = Book.objects.filter(id__in=book_id_list)
+    new_books_list = list(new_books.values())
+    if (len(new_books_list) != 0):
+        context['recommend_exists'] = True
+        new_books_list_json = JsonResponse({'books': new_books_list})
+        context['recommend_books'] = new_books_list_json.content.decode('utf-8')
+    else:
+        context['recommend_exists'] = False
+    return JsonResponse(context)

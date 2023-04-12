@@ -26,7 +26,7 @@ urlpatterns = [
     #プロフィール編集フォームの入力結果処理URL
     path('profile-edit/<int:pk>', views.ProfileEditView.as_view(), name="profile_edit"),
     #本を探すページ遷移用URL
-    path('recommend', views.RecommendListView.as_view(), name="recommend"),
+    path('exploration', views.ExplorationView.as_view(), name="exploration"),
     #My本棚ページ遷移用URL
     path('mybooks', views.MybooksListView.as_view(), name="mybooks"),
     #書籍へのお気に入り非同期処理URL
@@ -36,6 +36,11 @@ urlpatterns = [
     #おすすめ書籍をmy本棚に追加する際に非同期処理URL
     path('add-mybooks', views.add_mybooks, name="add_mybooks"),
     #おすすめ書籍をmy本棚に追加しない際に非同期処理URL
-    path('not-add-mybooks', views.not_add_mybooks, name="not_add_mybooks")
+    path('not-add-mybooks', views.not_add_mybooks, name="not_add_mybooks"),
+    #おすすめ書籍(知見を深める)の取得（非同期処理）URL
+    path('get-related-books', views.get_related_books, name="get_related_books"),
+    #おすすめ書籍(知見を広げる)の取得（非同期処理）URL
+    path('get-new-books', views.get_new_books, name="get_new_books")
+
 
 ]
