@@ -299,6 +299,9 @@ class MybooksListView(LoginRequiredMixin, generic.ListView):
 def favorite_for_book(request):
     """書籍へのお気に入り処理"""
     book_pk = request.POST.get('book_pk')#POSTメソッドのbodyに格納されているbook_pk（辞書型）を取得
+    context = {
+        'user': request.user.username
+    }
     book = get_object_or_404(Book, pk=book_pk)
     favoriteBook= FavoriteBook.objects.filter(book=book, user=request.user)
 
