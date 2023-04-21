@@ -20,8 +20,11 @@
                     <!-- To make this form functional, sign up at-->
                     <!-- https://startbootstrap.com/solution/contact-forms-->
                     <!-- to get an API token!-->
+                    <!--
                     <form class="form-subscribe" id="contactForm" data-sb-form-api-token="API_TOKEN">
+                    -->
                         <!-- Email address input-->
+                        <!--
                         <div class="row">
                             <div class="col">
                                 <input class="form-control form-control-lg" id="emailAddress" type="email" placeholder="Email Address" data-sb-validations="required,email" />
@@ -30,10 +33,12 @@
                             </div>
                             <div class="col-auto"><button class="btn btn-primary btn-lg disabled" id="submitButton" type="submit">Submit</button></div>
                         </div>
+                        -->
                         <!-- Submit success message-->
                         <!---->
                         <!-- This is what your users will see when the form-->
                         <!-- has successfully submitted-->
+                        <!--
                         <div class="d-none" id="submitSuccessMessage">
                             <div class="text-center mb-3">
                                 <div class="fw-bolder">Form submission successful!</div>
@@ -41,12 +46,18 @@
                                 <a class="text-white" href="https://startbootstrap.com/solution/contact-forms">https://startbootstrap.com/solution/contact-forms</a>
                             </div>
                         </div>
+                        -->
                         <!-- Submit error message-->
                         <!---->
                         <!-- This is what your users will see when there is-->
                         <!-- an error submitting the form-->
+                        <!--
                         <div class="d-none" id="submitErrorMessage"><div class="text-center text-danger mb-3">Error sending message!</div></div>
                     </form>
+                    -->
+                    <a type="button" class="btn btn-outline-light btn-lg" href="{% url 'books:exploration' %}">
+                        新しい本と出会う
+                    </a>
                 </div>
             </div>
         </div>
@@ -55,31 +66,6 @@
 {% endblock %}
 
 {% block contents %}
-<section>
-    <div class="container px-4 px-lg-5 my-5">
-        <div class="row gx-4 gx-lg-5 align-items-center">
-            <p class="h2">新着の書籍
-                <a href="{% url 'books:book_list_from_custom' 'new_arrivals'%}">
-                    <i class="fas fa-solid fa-angle-right"></i>
-                </a>
-            </p>
-             <div class="container-fluid">
-                 <div class="row flex-nowrap">
-                     {% for book in new_arrivals%}
-                     <div class="col-2">
-                         <div class="card">
-                          <a href="{% url 'books:book_detail' book.pk%}">
-                              <!-- Thumnail image-->
-                              <img class="card-img-top" src="../media/{{ book.thumbnail_image }}" alt="..." />
-                          </a>
-                         </div>
-                     </div>
-                     {% endfor %}
-                 </div>
-             </div>
-        </div>
-    </div>
-</section>
  <section class="features-icons bg-light text-center">
  <p class="h1">About MoreBooks!</p>
     <div class="container">

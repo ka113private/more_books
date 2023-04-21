@@ -21,14 +21,6 @@ class IndexView(generic.TemplateView):
     """インデックスページ用View"""
     template_name = "index.html"
 
-    def get_context_data(self, **kwargs):
-
-        context = super().get_context_data(**kwargs)
-        new_arrivals = Book.objects.order_by('-created_at')[:NUM_BOOKS_TO_DISPLAY]
-        context['new_arrivals'] = new_arrivals
-
-        return context
-
 class InquiryView(generic.FormView):
     """問い合わせページ用View"""
     template_name = "inquiry.html"
@@ -272,6 +264,13 @@ class ExplorationView(LoginRequiredMixin, generic.TemplateView):
     """ユーザーへのおすすめの書籍を一覧表示するView"""
     model = Book
     template_name = 'book_exploration.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        new_arrivals = Book.objects.order_by('-created_at')[:NUM_BOOKS_TO_DISPLAY]
+        context['new_arrivals'] = new_arrivals
+
+        return context
 
 class MybooksListView(LoginRequiredMixin, generic.ListView):
     """ユーザーのmy本棚を表示するView"""
