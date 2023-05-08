@@ -23,8 +23,8 @@ class SubCategory(models.Model):
 
 class Book(models.Model):
     """書籍モデル"""
-    title = models.CharField(verbose_name='タイトル', max_length=50)
-    author = models.CharField(verbose_name='著者', max_length=30)
+    title = models.CharField(verbose_name='タイトル', max_length=200)
+    author = models.CharField(verbose_name='著者', max_length=100)
     description = models.TextField(verbose_name='概要', blank=True, null=True)
     thumbnail_image = models.ImageField(verbose_name='サムネイル画像', blank=True, null=True)
     sub_category = models.ForeignKey(SubCategory, verbose_name='サブカテゴリ', on_delete=models.CASCADE)
