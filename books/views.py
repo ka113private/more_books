@@ -14,7 +14,10 @@ from django.db.models import Q, Count
 from django.core import serializers
 
 logger = logging.getLogger(__name__)
-NUM_BOOKS_TO_DISPLAY = 6 #一覧で表示する際の書籍の数
+NUM_BOOKS_TO_DISPLAY = 6 #インデックスページで表示する際の書籍の数
+NUM_BOOKS_TO_DISPLAY_LISTPAGE = 20 #一覧ページで表示する際の書籍の数
+NUM_BOOKS_SEARCH = 400 #検索する書籍の書籍の数
+
 RECOMMEND_BOOKS = {}
 
 class IndexView(generic.TemplateView):
@@ -37,6 +40,7 @@ class BookListFromSearchView(LoginRequiredMixin, generic.ListView):
     """一覧ページ用View"""
     model = Book
     template_name = 'book_list.html'
+    paginate_by = NUM_BOOKS_TO_DISPLAY_LISTPAGE
 
     def get_queryset(self, **kwargs):
         queryset = Book.objects.order_by('-created_at')
@@ -46,7 +50,7 @@ class BookListFromSearchView(LoginRequiredMixin, generic.ListView):
             #★タグ検索もできるようにする
             queryset = queryset.filter(
                 Q(title__icontains=query)|Q(author__icontains=query)|Q(description__icontains=query)
-            )
+            )[:NUM_BOOKS_SEARCH]
         return queryset
 
     def get_context_data(self, **kwargs):
@@ -62,6 +66,7 @@ class BookListFromTagView(LoginRequiredMixin, generic.ListView):
     """タグボタンを押下したときに遷移する一覧ページ用View"""
     model = Book
     template_name = 'book_list.html'
+    paginate_by = NUM_BOOKS_TO_DISPLAY_LISTPAGE
 
     def get_queryset(self, **kwargs):
         tag_pk = self.kwargs['pk']
@@ -83,23 +88,24 @@ class BookListFromCustomView(LoginRequiredMixin, generic.ListView):
     """カスタム書籍一覧ページ用のView"""
     model = Book
     template_name = 'book_list.html'
+    paginate_by = NUM_BOOKS_TO_DISPLAY_LISTPAGE
 
     def get_queryset(self, **kwargs):
         self.custom = self.kwargs['custom']
         book_list = Book.objects.all()
         if (self.custom == 'new_arrivals'):
-            book_list = book_list.order_by('-created_at')
+            book_list = book_list.order_by('-created_at')[:NUM_BOOKS_SEARCH]
         elif (self.custom == 'popular'):
             book_list = book_list.annotate(favorite_count=Count('favoritebook'))\
-                .order_by('-favorite_count')
+                .order_by('-favorite_count')[:NUM_BOOKS_SEARCH]
         return book_list
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         if (self.custom == 'new_arrivals'):
-            context['query'] = '新着の書籍'
+            context['query'] = '新着書籍'
         elif (self.custom == 'popular'):
-            context['query'] = '人気の書籍'
+            context['query'] = '人気書籍'
         return context
 
 class BookDetailView(LoginRequiredMixin, generic.DetailView):
@@ -269,6 +275,9 @@ class ExplorationView(LoginRequiredMixin, generic.TemplateView):
         context = super().get_context_data(**kwargs)
         new_arrivals = Book.objects.order_by('-created_at')[:NUM_BOOKS_TO_DISPLAY]
         context['new_arrivals'] = new_arrivals
+        popular = Book.objects.annotate(favorite_count=Count('favoritebook')) \
+                        .order_by('-favorite_count')[:NUM_BOOKS_TO_DISPLAY]
+        context['popular'] = popular
 
         return context
 
