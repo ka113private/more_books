@@ -56,6 +56,33 @@ class LoggedInTestCase(TestCase):
         self.user2 = get_user_model().objects.create_user(username='user2', email='test@gmail.com', password='user2')
         self.user3 = get_user_model().objects.create_user(username='user3', email='test@gmail.com', password='user3')
 
+class TestIndexView(LoggedInTestCase):
+    """IndexView用のテストクラス"""
+    def setUp(self):
+        self.loginSetUp()
+        self.createModelSetup()
+        self.url = reverse('books:index')
+
+    def test_index_page(self):
+        """インデックスページが正しく表示されることを確認する。"""
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed('index.html')
+
+class TestInquiryView(LoggedInTestCase):
+    """InquiryView用のテストクラス"""
+
+    def setUp(self):
+        self.loginSetUp()
+        self.createModelSetup()
+        self.url = reverse('books:inquiry')
+
+    def test_index_page(self):
+        """問い合わせページが正しく表示されることを確認する。"""
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed('inquiry.html')
+
 class TestBookListFromSearchView(LoggedInTestCase):
     """BookListFromSearchView用のテストクラス"""
     def setUp(self):
@@ -64,7 +91,7 @@ class TestBookListFromSearchView(LoggedInTestCase):
         self.url = reverse('books:book_list_from_search')
 
     def test_book_list_from_search(self):
-        """書籍詳細ページが正しく表示されることを確認する。"""
+        """検索クエリにより書籍一覧ページが正しく表示されることを確認する。"""
         #書籍タイトルが検索対象に入っているか
         params = {'query': 'Book'}
         response = self.client.get(self.url, params)
@@ -95,6 +122,7 @@ class TestBookListFromSearchView(LoggedInTestCase):
         self.assertNotContains(response, self.book2.title)
 
 class TestBookListFromTagView(LoggedInTestCase):
+    """BookListFromTagView用のテストクラス"""
     def setUp(self):
         self.loginSetUp()
         self.createModelSetup()
@@ -103,6 +131,7 @@ class TestBookListFromTagView(LoggedInTestCase):
         self.booktag2 = BookTag.objects.create(book=self.book2, tag=self.tag1)
 
     def test_book_list_from_tag(self):
+        """タグにより書籍一覧ページが正しく表示されることを確認する。"""
         #tag1というタグがついている書籍が正しく取得できているか。
         url = reverse('books:book_list_from_tag', kwargs={'pk': self.tag1.pk})
         response = self.client.get(url)
@@ -113,6 +142,7 @@ class TestBookListFromTagView(LoggedInTestCase):
         self.assertNotContains(response, self.book3.title)
 
     def test_book_list_from_tag_with_invalid_id(self):
+        """不適切なタグidを指定して書籍詳細ページにアクセスすると失敗することを検証する"""
         url = reverse('books:book_list_from_tag', kwargs={'pk': 999999})
         response = self.client.get(url)
         self.assertEqual(response.status_code, 404)
