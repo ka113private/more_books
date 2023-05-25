@@ -11,9 +11,9 @@
 <section>
     <div class="container px-4 px-lg-5 mt-5">
         {% if query == "" %}
-        <h3>すべての一覧：</h3>
+        <h3>すべての一覧：{{ count }}冊</h3>
         {% else %}
-        <h3>{{ query }}の一覧：</h3>
+        <h3>{{ query }}の一覧：{{ count }}冊</h3>
         {% endif %}
         <div class="row gx-4 gx-lg-5">
             {% for book in book_list %}

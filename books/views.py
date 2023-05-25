@@ -41,9 +41,11 @@ class BookListFromSearchView(LoginRequiredMixin, generic.ListView):
     model = Book
     template_name = 'book_list.html'
     paginate_by = NUM_BOOKS_TO_DISPLAY_LISTPAGE
+    count = 0
 
     def get_queryset(self, **kwargs):
         queryset = Book.objects.order_by('-created_at')
+        self.count = queryset.count()
         #検索機能
         query = self.request.GET.get('query')
         if query:
@@ -51,6 +53,7 @@ class BookListFromSearchView(LoginRequiredMixin, generic.ListView):
             queryset = queryset.filter(
                 Q(title__icontains=query)|Q(author__icontains=query)|Q(description__icontains=query)
             )[:NUM_BOOKS_SEARCH]
+            self.count = queryset.count()
         return queryset
 
     def get_context_data(self, **kwargs):
@@ -59,6 +62,7 @@ class BookListFromSearchView(LoginRequiredMixin, generic.ListView):
         context['query'] = query
         #検索結果の表示や選択したタグに紐づく書籍の表示をする際にhtml表示を少し変えるためにどのビューから生成されたのか判定するために以下を設定
         context['view_from'] = 'BookListFromSearchView'
+        context['count'] = self.count
 
         return context
 

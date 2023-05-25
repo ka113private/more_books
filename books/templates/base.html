@@ -40,13 +40,11 @@
                         <li class="nav-item">
                             <a class="nav-link {% block active_mybooks %}{% endblock %}" href="{% url 'books:mybooks' %}">My本棚</a>
                         </li>
-                        <!--
-                        <form class="d-flex" action="{% url 'books:book_list_from_search' %}" method="get">
-                             <input class="form-control me-2" type="search" name="query" placeholder="Search" aria-label="Search">
-                             <button class="btn btn-outline-success" type="submit">Search</button>
-                        </form>
-                        -->
                     </ul>
+                    <form class="d-flex" action="{% url 'books:book_list_from_search' %}" method="get">
+                         <input class="form-control form-control-sm me-2" size="45" type="search" name="query" placeholder="書籍を検索" aria-label="Search">
+                         <button class="btn btn-outline-success btn-sm" type="submit">Search</button>
+                    </form>
                     <ul class="navbar-nav ms-auto">
                         <li class="nav-item">
                             <a class="nav-link {% block active_inquiry %}{% endblock %}" href="{% url 'books:inquiry' %}">お問い合わせ</a>
