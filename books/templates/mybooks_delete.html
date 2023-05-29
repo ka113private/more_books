@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}確認画面{% endblock %}
+
+{% block head %}
+<link href="{% static 'css/shop-item-gh-pages.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block contents %}
+<section>
+    <div class="container px-4 px-lg-5 my-5">
+        <div class="row gx-4 gx-lg-5 align-items-center">
+            <p>削除すると元に戻すことはできません。よろしいでしょうか？ "{{ object.book.title }}"?</p>
+
+            <form method="post" action="{% url 'books:status_delete' object.pk %}">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-danger">削除</button>
+              <a href="{% url 'books:mybooks' %}" class="btn btn-secondary">キャンセル</a>
+            </form>
+        </div>
+    </div>
+</section>
+{% endblock %}

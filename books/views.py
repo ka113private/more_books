@@ -16,7 +16,7 @@ from django.core import serializers
 logger = logging.getLogger(__name__)
 NUM_BOOKS_TO_DISPLAY = 6 #インデックスページで表示する際の書籍の数
 NUM_BOOKS_TO_DISPLAY_LISTPAGE = 20 #一覧ページで表示する際の書籍の数
-NUM_BOOKS_SEARCH = 400 #検索する書籍の書籍の数
+NUM_BOOKS_SEARCH = 1000 #検索する書籍の書籍の数
 
 RECOMMEND_BOOKS = {}
 
@@ -71,12 +71,14 @@ class BookListFromTagView(LoginRequiredMixin, generic.ListView):
     model = Book
     template_name = 'book_list.html'
     paginate_by = NUM_BOOKS_TO_DISPLAY_LISTPAGE
+    count = 0
 
     def get_queryset(self, **kwargs):
         tag_pk = self.kwargs['pk']
         tag = get_object_or_404(Tag, pk=tag_pk)
         book_pk_list = BookTag.objects.filter(tag=tag).values_list('book', flat=True)
         book_list = Book.objects.filter(pk__in=list(book_pk_list))
+        self.count = book_list.count()
         return book_list
 
     def get_context_data(self, **kwargs):
@@ -85,7 +87,7 @@ class BookListFromTagView(LoginRequiredMixin, generic.ListView):
         tag = Tag.objects.get(pk=tag_pk)
         context['query'] = "#" + tag.name
         context['view_from']='BookListFromTagView'
-
+        context['count'] = self.count
         return context
 
 class BookListFromCustomView(LoginRequiredMixin, generic.ListView):
@@ -110,6 +112,7 @@ class BookListFromCustomView(LoginRequiredMixin, generic.ListView):
             context['query'] = '新着書籍'
         elif (self.custom == 'popular'):
             context['query'] = '人気書籍'
+        context['count'] = NUM_BOOKS_SEARCH
         return context
 
 class BookDetailView(LoginRequiredMixin, generic.DetailView):
@@ -231,21 +234,26 @@ class StatusChangeView(LoginRequiredMixin, generic.UpdateView):
         return reverse_lazy('books:mybooks')
 
     def form_valid(self, form):
-        #削除ボタンが押下された場合
-        if "btn_delete" in self.request.POST:
-            bookshelf = form.save(commit=False)
-            target = Bookshelf.objects.get(pk=bookshelf.pk)
-            target.delete()
-            messages.success(self.request, '本棚から削除しました')
-        else:
-            bookshelf = form.save(commit=False)
-            target = Bookshelf.objects.get(pk=bookshelf.pk)
-            if (target.status=="読みたい"):
-                bookshelf.status = "読書中"
-            elif (target.status=="読書中"):
-                bookshelf.status = "読了"
-            bookshelf.save()
+        bookshelf = form.save(commit=False)
+        target = Bookshelf.objects.get(pk=bookshelf.pk)
+        if (target.status=="読みたい"):
+            bookshelf.status = "読書中"
+        elif (target.status=="読書中"):
+            bookshelf.status = "読了"
+        bookshelf.save()
         return super().form_valid(form)
+
+class StatusDeleteView(LoginRequiredMixin, generic.DeleteView):
+    """MyBooksの削除view"""
+    model = Bookshelf
+    template_name = 'mybooks_delete.html'
+
+    def get_success_url(self):
+        return reverse_lazy('books:mybooks')
+
+    def delete(self, request, *args, **kwargs):
+        messages.success(self.request, 'my本棚から書籍を削除しました。')
+        return super().delete(request, *args, **kwargs)
 
 class FeedbackView(LoginRequiredMixin, generic.UpdateView):
     """読了の際にユーザーの読書の感想をタグいいねでフィードバックしてもらうView"""

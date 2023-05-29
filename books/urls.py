@@ -21,6 +21,8 @@ urlpatterns = [
     path('mybooks-add/<int:pk>', views.MybooksAddView.as_view(), name="mybooks_add"),
     #My本棚の書籍のステータスを変更するフォームの入力結果処理URL
     path('status-change/<int:pk>', views.StatusChangeView.as_view(), name="status_change"),
+    #My本棚の書籍削除するフォームの入力結果処理URL
+    path('status-delete/<int:pk>', views.StatusDeleteView.as_view(), name="status_delete"),
     #読了書籍の感想を記入するフォームの入力結果処理URL
     path('feedback/<int:pk>', views.FeedbackView.as_view(), name="feedback"),
     #プロフィール編集フォームの入力結果処理URL
