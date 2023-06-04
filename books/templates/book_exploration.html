@@ -1,0 +1,177 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}人生を変える本に出会おう。More Books!{% endblock %}
+
+{% block header %}
+<header class="masthead_exploration">
+    <div class="container position-relative">
+        <div class="row justify-content-center">
+            <div class="col-xl-6">
+                <div class="text-center text-white">
+                    <h1 class="mb-5">本と出会ってみよう！</h1>
+                    <a type="button" class="btn btn-outline-light btn-lg" id="btn_related_books" data-toggle="modal" data-target="#recommend-modal">
+                        知見を深める
+                        <i class="far fa-solid fa-magnifying-glass"></i>
+                    </a>
+                    <a type="button" class="btn btn-outline-light btn-lg" id="btn_new_books" data-toggle="modal" data-target="#recommend-modal">
+                        知見を広げる
+                        <i class="far fa-solid fa-magnifying-glass"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+{% include 'recommend_modal.html' %}
+{% endblock %}
+{% block contents %}
+<section>
+    <div class="container px-4 px-lg-5 my-5">
+        <div class="row gx-4 gx-lg-5 align-items-center">
+            <p class="h2">新着の書籍
+                <a href="{% url 'books:book_list_from_custom' 'new_arrivals'%}">
+                    <i class="fas fa-solid fa-angle-right"></i>
+                </a>
+            </p>
+             <div class="container-fluid">
+                 <div class="row flex-nowrap">
+                     {% for book in new_arrivals%}
+                     <div class="col-2">
+                         <div class="card">
+                          <a href="{% url 'books:book_detail' book.pk%}">
+                              <!-- Thumnail image-->
+                              <img class="card-img-top" src="../media/{{ book.thumbnail_image }}" alt="..." />
+                          </a>
+                         </div>
+                     </div>
+                     {% endfor %}
+                 </div>
+             </div>
+            <br>
+            <p class="h2">人気の書籍
+                <a href="{% url 'books:book_list_from_custom' 'popular'%}">
+                    <i class="fas fa-solid fa-angle-right"></i>
+                </a>
+            </p>
+             <div class="container-fluid">
+                 <div class="row flex-nowrap">
+                     {% for book in popular%}
+                     <div class="col-2">
+                         <div class="card">
+                          <a href="{% url 'books:book_detail' book.pk%}">
+                              <!-- Thumnail image-->
+                              <img class="card-img-top" src="../media/{{ book.thumbnail_image }}" alt="..." />
+                          </a>
+                         </div>
+                     </div>
+                     {% endfor %}
+                 </div>
+             </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+{% block javascript %}
+
+    var bookContainer = document.getElementById('book_detail');
+    var thumbnailImage = document.getElementById('thumbnail_image');
+    var bookElement = document.createElement('div');
+    var btnAddMybooks = document.getElementById('add_mybooks');
+    var btnNotAddMybooks = document.getElementById('not_add_mybooks');
+    var btnClose = document.getElementById('close');
+
+    document.getElementById('btn_related_books').addEventListener('click', e => {
+        const url = '{% url "books:get_related_books" %}';
+        e.preventDefault();
+        getRecommendBooks(url)
+    });
+
+    document.getElementById('btn_new_books').addEventListener('click', e => {
+        const url = '{% url "books:get_new_books" %}';
+        e.preventDefault();
+        getRecommendBooks(url)
+    });
+
+    <!-- レコメンド書籍リストをサーバから取得する -->
+    function getRecommendBooks(url){
+        fetch(url, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json; charset=utf-8',
+                'X-CSRFToken': '{{ csrf_token }}',
+                },
+            }).then(response => {
+                return response.json();
+            }).then(data => {
+                if(data.recommend_exists){
+                    bookList = JSON.parse(data.recommend_books);//JSONデータからリストを取得する。
+                    var next_book = bookList.books[0];//リストの先頭オブジェクトを取得する。
+                    bookElement.innerHTML = `<h6>${next_book.title}</h6><p>${next_book.author}</p>`;
+                    bookContainer.appendChild(bookElement);
+                    thumbnailImage.src = './../media/' + next_book.thumbnail_image;
+                    btnAddMybooks.style.display = 'inline'
+                    btnNotAddMybooks.style.display = 'inline'
+                    btnClose.style.display = 'none'
+                }else{
+                    bookElement.innerHTML = `<p>おすすめできる本は他にございません。しばらく時間がたってからまたお試しください。</p>`;
+                    bookContainer.appendChild(bookElement);
+                    thumbnailImage.src = './../media/static/sorry.png';
+                    btnAddMybooks.style.display = 'none'
+                    btnNotAddMybooks.style.display = 'none'
+                    btnClose.style.display = 'inline'
+                }
+        }).catch(error => {
+            console.log(error);
+        });
+    }
+
+    <!-- 「読みたい」を押した場合（Ajax）-->
+    document.getElementById('add_mybooks').addEventListener('click', e => {
+        const jsonData = JSON.stringify(bookList);
+        const url = '{% url "books:add_mybooks" %}';
+        e.preventDefault();
+        fetchData(url, jsonData)
+    });
+
+    <!-- 「興味ない」を押した場合（Ajax）-->
+    document.getElementById('not_add_mybooks').addEventListener('click', e => {
+        const jsonData = JSON.stringify(bookList);
+        const url = '{% url "books:not_add_mybooks" %}';
+        e.preventDefault();
+        fetchData(url, jsonData)
+    });
+
+    <!-- レコメンド書籍リストをviewに渡す処理 -->
+    function fetchData(url, data){
+        fetch(url, {
+            method: 'POST',
+            body: data,
+            headers: {
+                'Content-Type': 'application/json; charset=utf-8',
+                'X-CSRFToken': '{{ csrf_token }}',
+                },
+            }).then(response => {
+                return response.json();
+            }).then(data => {
+                if(data.exists){
+                    bookList = JSON.parse(data.next_books);//JSONデータからリストを取得する。
+                    var next_book = bookList.books[0];//リストの先頭オブジェクトを取得する。
+                    bookElement.innerHTML = `<h6>${next_book.title}</h6><p>${next_book.author}</p>`;
+                    thumbnailImage.src = './../media/' + next_book.thumbnail_image;
+                    btnAddMybooks.style.display = 'inline'
+                    btnNotAddMybooks.style.display = 'inline'
+                    btnClose.style.display = 'none'
+                }else{
+                    bookElement.innerHTML = `<p>おすすめできる本は他にございません。しばらく時間がたってからまたお試しください。</p>`;
+                    thumbnailImage.src = './../media/static/sorry.png';
+                    btnAddMybooks.style.display = 'none'
+                    btnNotAddMybooks.style.display = 'none'
+                    btnClose.style.display = 'inline'
+                }
+        }).catch(error => {
+            console.log(error);
+        });
+    }
+{% endblock %}

@@ -7,12 +7,18 @@
         <meta name="description" content="" />
         <meta name="author" content="" />
         <title>{% block title %}{% endblock %}</title>
+        <!-- jQuery -->
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <!-- Favicon-->
         <link rel="icon" type="image/x-icon" href="{% static 'assets/favicon.ico'%}" />
         <!-- Bootstrap icons-->
         <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" type="text/css" />
         <!-- Google fonts-->
         <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic,700italic" rel="stylesheet" type="text/css" />
+        <!-- FontAwesome -->
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/6.3.0/css/font-awesome.min.css" />
+        <link rel="stylesheet" href="https://kit.fontawesome.com/98db6029bd.css" crossorigin="anonymous">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" rel="stylesheet" />
         <!-- Core theme CSS (includes Bootstrap)-->
         <link href="{% static 'css/landing-page-gh-pages.css' %}" rel="stylesheet" />
         <!-- My style -->
@@ -24,17 +30,63 @@
     <body>
         <div id = "wrapper">
             <!-- Navigation-->
-            <nav class="navbar navbar-light bg-light static-top">
-                <div class="container">
-                    <a class="navbar-brand" href="{% url 'books:index' %">More Books!</a>
-                    <a class="navbar-brand" href="#">本を探す</a>
-                    <a class="navbar-brand" href="#">お問い合わせ</a>
-                    <a class="btn btn-primary" href="#">Sign Up</a>
-                    <a class="btn btn-primary" href="#">Log In</a>
+            <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                <div class="container-fluid">
+                    <a class="navbar-brand" href="{% url 'books:index' %}">More Books!</a>
+                    <ul class="navbar-nav me-auto" >
+                        <li class="nav-item">
+                            <a class="nav-link {% block active_exploration %}{% endblock %}" href="{% url 'books:exploration' %}">本と出会う</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {% block active_mybooks %}{% endblock %}" href="{% url 'books:mybooks' %}">My本棚</a>
+                        </li>
+                    </ul>
+                    <form class="d-flex" action="{% url 'books:book_list_from_search' %}" method="get">
+                         <input class="form-control form-control-sm me-2" size="45" type="search" name="query" placeholder="書籍を検索" aria-label="Search">
+                         <button class="btn btn-outline-success btn-sm" type="submit">Search</button>
+                    </form>
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item">
+                            <a class="nav-link {% block active_inquiry %}{% endblock %}" href="{% url 'books:inquiry' %}">お問い合わせ</a>
+                        </li>
+                        {% if user.is_authenticated %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'account_logout' %}">Log Out</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'books:mypage' user.pk%}">
+                                <div style="width: 25px; height: 25px; overflow: hidden; border-radius: 50%;">
+                                    <img src="../../media/{{ user.profile_image }}" style="width: 100%; height: 100%; object-fit: cover;">
+                                 </div>
+                            </a>
+                        </li>
+                        {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link {% block active_signup %}{% endblock %}" href="{% url 'account_signup' %}">Sign Up</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {% block active_login %}{% endblock %}" href="{% url 'account_login' %}">Log In</a>
+                        </li>
+                        {% endif %}
+                    </ul>
                 </div>
             </nav>
 
             {% block header %}{% endblock %}
+
+            {% if messages %}
+            <div class="container my-div-style">
+                <div class="row">
+                    <ul class="messages" style="list-style: none">
+                        {% for message in messages %}
+                        <li {% if message.tags %} class="{{ message.tags }}" {% endif %}>
+                            {{ message }}
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+            {% endif %}
 
             {% block contents %}{% endblock %}
 
@@ -50,7 +102,18 @@
             </footer>
 
             <!-- Bootstrap core jS -->
+            <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+            <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
             <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
         </div>
+    <!-- MDB
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/4.0.0/mdb.min.js"></script>
+    {% block extrajs %}{% endblock %}
+    -->
+    <script  type="text/javascript">
+    {% block javascript %}{% endblock %}
+    </script>
     </body>
 </html>

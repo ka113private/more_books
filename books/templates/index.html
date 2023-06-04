@@ -20,8 +20,11 @@
                     <!-- To make this form functional, sign up at-->
                     <!-- https://startbootstrap.com/solution/contact-forms-->
                     <!-- to get an API token!-->
+                    <!--
                     <form class="form-subscribe" id="contactForm" data-sb-form-api-token="API_TOKEN">
+                    -->
                         <!-- Email address input-->
+                        <!--
                         <div class="row">
                             <div class="col">
                                 <input class="form-control form-control-lg" id="emailAddress" type="email" placeholder="Email Address" data-sb-validations="required,email" />
@@ -30,10 +33,12 @@
                             </div>
                             <div class="col-auto"><button class="btn btn-primary btn-lg disabled" id="submitButton" type="submit">Submit</button></div>
                         </div>
+                        -->
                         <!-- Submit success message-->
                         <!---->
                         <!-- This is what your users will see when the form-->
                         <!-- has successfully submitted-->
+                        <!--
                         <div class="d-none" id="submitSuccessMessage">
                             <div class="text-center mb-3">
                                 <div class="fw-bolder">Form submission successful!</div>
@@ -41,12 +46,18 @@
                                 <a class="text-white" href="https://startbootstrap.com/solution/contact-forms">https://startbootstrap.com/solution/contact-forms</a>
                             </div>
                         </div>
+                        -->
                         <!-- Submit error message-->
                         <!---->
                         <!-- This is what your users will see when there is-->
                         <!-- an error submitting the form-->
+                        <!--
                         <div class="d-none" id="submitErrorMessage"><div class="text-center text-danger mb-3">Error sending message!</div></div>
                     </form>
+                    -->
+                    <a type="button" class="btn btn-outline-light btn-lg" href="{% url 'books:exploration' %}">
+                        新しい本と出会う
+                    </a>
                 </div>
             </div>
         </div>
@@ -56,27 +67,31 @@
 
 {% block contents %}
  <section class="features-icons bg-light text-center">
+ <p class="h1">About MoreBooks!</p>
     <div class="container">
         <div class="row">
             <div class="col-lg-4">
                 <div class="features-icons-item mx-auto mb-5 mb-lg-0 mb-lg-3">
-                    <div class="features-icons-icon d-flex"><i class="bi-window m-auto text-primary"></i></div>
-                    <h3>Fully Responsive</h3>
-                    <p class="lead mb-0">This theme will look great on any device, no matter the size!</p>
+                    <div class="features-icons-icon d-flex">
+                        <i class="fas fa-solid fa-book m-auto text-primary"></i></div>
+                    <h3>好みに応じた書籍の提案</h3>
+                    <p class="lead mb-0">これまで読んだ書籍や自身の好みに応じた書籍を提案します！</p>
                 </div>
             </div>
             <div class="col-lg-4">
                 <div class="features-icons-item mx-auto mb-5 mb-lg-0 mb-lg-3">
-                    <div class="features-icons-icon d-flex"><i class="bi-layers m-auto text-primary"></i></div>
-                    <h3>Bootstrap 5 Ready</h3>
-                    <p class="lead mb-0">Featuring the latest build of the new Bootstrap 5 framework!</p>
+                    <div class="features-icons-icon d-flex">
+                        <i class="fas fa-heart m-auto text-primary"></i></div>
+                    <h3>簡単書籍レビュー</h3>
+                    <p class="lead mb-0">タグをいいねすることにより、簡単に手軽に書籍レビューができます！</p>
                 </div>
             </div>
             <div class="col-lg-4">
                 <div class="features-icons-item mx-auto mb-0 mb-lg-3">
-                    <div class="features-icons-icon d-flex"><i class="bi-terminal m-auto text-primary"></i></div>
-                    <h3>Easy to Use</h3>
-                    <p class="lead mb-0">Ready to use with your own content, or customize the source files!</p>
+                    <div class="features-icons-icon d-flex">
+                        <i class="fas fa-solid fa-layer-group m-auto text-primary"></i></div>
+                    <h3>自分だけの本棚</h3>
+                    <p class="lead mb-0">自分だけの本棚に読みたい書籍やこれまで読んだ書籍を管理できます！</p>
                 </div>
             </div>
         </div>

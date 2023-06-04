@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}検索結果{% endblock %}
+
+{% block head %}
+<link href="{% static 'css/shop-homepage-gh-pages.css' %}" rel="stylesheet" xmlns="http://www.w3.org/1999/html">
+{% endblock %}
+
+{% block contents %}
+<section>
+    <div class="container px-4 px-lg-5 mt-5">
+        {% if query == "" %}
+        <h3>すべての一覧：{{ count }}冊</h3>
+        {% else %}
+        <h3>{{ query }}の一覧：{{ count }}冊</h3>
+        {% endif %}
+        <div class="row gx-4 gx-lg-5">
+            {% for book in book_list %}
+            <div class="col-md-3">
+                <!--12を割った数字の数が列数になる -->
+                <div class="col mb-5">
+                <div class="card">
+                    <a href="{% url 'books:book_detail' book.pk%}">
+                    <!-- Thumnail image-->
+                        {% if view_from == 'BookListFromTagView'%}
+                            <img class="card-img-top" src="../../media/{{ book.thumbnail_image }}" alt="..." />
+                        {% else %}
+                            <img class="card-img-top" src="../media/{{ book.thumbnail_image }}" alt="..." />
+                        {% endif %}
+                    </a>
+                    <!-- Book details-->
+                    <div class="card-body p-4">
+                        <div class="text-center">
+                            <!-- Product name-->
+                            <h5 class="fw-bolder">{{ book.title }}</h5>
+                            <!-- BookAuthor-->
+                            {{ book.author }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+            {% endfor %}
+
+            <!-- ページネーション処理 -->
+            {% if is_paginated %}
+                <ul class="pagination">
+                    <!-- 前のページへのリンク -->
+                    {% if page_obj.has_previous %}
+                        <li class="page_item">
+                            <a class="page-link" href="?page={{ page_obj.previous_page_number }}">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+                    {% endif %}
+
+                    <!-- ページ数表示 -->
+                    {% for page_num in page_obj.paginator.page_range %}
+                        {% if page_obj.number == page_num %}
+                            <li class="page-item active">
+                                <a class="page-link" href="#">{{ page_num }}</a>
+                            </li>
+                        {% else %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ page_num }}">{{ page_num }}</a>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+
+                    <!-- 次のページへのリンク -->
+                    {% if page_obj.has_next %}
+                        <li class="page_item">
+                            <a class="page-link" href="?page={{ page_obj.next_page_number }}">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                    {% endif %}
+                </ul>
+            {% endif %}
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,946 @@
+	[
+	{
+		"model":	"books.subcategory",
+		"pk":	"1",
+		"fields":	{"name": "文芸作品", "category": "1"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"2",
+		"fields":	{"name": "歴史・時代小説", "category": "1"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"3",
+		"fields":	{"name": "経済・社会小説", "category": "1"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"4",
+		"fields":	{"name": "ミステリー・サスペンス・ハードボイルド", "category": "1"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"5",
+		"fields":	{"name": "SF・ホラー・ファンタジー", "category": "1"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"6",
+		"fields":	{"name": "エッセー・随筆", "category": "1"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"7",
+		"fields":	{"name": "古典", "category": "1"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"8",
+		"fields":	{"name": "哲学・思想", "category": "2"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"9",
+		"fields":	{"name": "倫理学・道徳", "category": "2"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"10",
+		"fields":	{"name": "宗教", "category": "2"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"11",
+		"fields":	{"name": "心理学", "category": "2"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"12",
+		"fields":	{"name": "文化人類学・民俗学", "category": "2"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"13",
+		"fields":	{"name": "言語学", "category": "2"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"14",
+		"fields":	{"name": "教育学", "category": "2"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"15",
+		"fields":	{"name": "政治", "category": "3"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"16",
+		"fields":	{"name": "外交・国際関係", "category": "3"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"17",
+		"fields":	{"name": "軍事", "category": "3"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"18",
+		"fields":	{"name": "法律", "category": "3"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"19",
+		"fields":	{"name": "社会学", "category": "3"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"20",
+		"fields":	{"name": "福祉", "category": "3"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"21",
+		"fields":	{"name": "環境・エコロジー", "category": "3"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"22",
+		"fields":	{"name": "自伝・伝記", "category": "4"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"23",
+		"fields":	{"name": "思想・社会", "category": "4"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"24",
+		"fields":	{"name": "事件・犯罪", "category": "4"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"25",
+		"fields":	{"name": "歴史・地理・旅行記", "category": "4"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"26",
+		"fields":	{"name": "ビジネス・経済", "category": "4"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"27",
+		"fields":	{"name": "科学", "category": "4"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"28",
+		"fields":	{"name": "アート・エンターテイメント", "category": "4"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"29",
+		"fields":	{"name": "歴史学", "category": "5"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"30",
+		"fields":	{"name": "日本史", "category": "5"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"31",
+		"fields":	{"name": "世界史", "category": "5"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"32",
+		"fields":	{"name": "考古学", "category": "5"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"33",
+		"fields":	{"name": "地理 地域研究", "category": "5"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"34",
+		"fields":	{"name": "地図", "category": "5"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"35",
+		"fields":	{"name": "経営戦略", "category": "6"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"36",
+		"fields":	{"name": "マーケティング・セールス", "category": "6"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"37",
+		"fields":	{"name": "経理・アカウンティング", "category": "6"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"38",
+		"fields":	{"name": "金融・ファイナンス", "category": "6"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"39",
+		"fields":	{"name": "オペレーションズ", "category": "6"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"40",
+		"fields":	{"name": "マネジメント・人材管理", "category": "6"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"41",
+		"fields":	{"name": "統計学・数学", "category": "6"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"42",
+		"fields":	{"name": "一般・投資読み物", "category": "7"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"43",
+		"fields":	{"name": "株式投資・投資信託", "category": "7"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"44",
+		"fields":	{"name": "不動産投資", "category": "7"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"45",
+		"fields":	{"name": "債券・為替・外貨預金", "category": "7"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"46",
+		"fields":	{"name": "銀行・金融業", "category": "7"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"47",
+		"fields":	{"name": "証券・金融市場", "category": "7"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"48",
+		"fields":	{"name": "年金・保険", "category": "7"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"49",
+		"fields":	{"name": "数学", "category": "8"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"50",
+		"fields":	{"name": "物理学", "category": "8"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"51",
+		"fields":	{"name": "化学", "category": "8"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"52",
+		"fields":	{"name": "宇宙学・天文学", "category": "8"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"53",
+		"fields":	{"name": "生物・バイオテクノロジー", "category": "8"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"54",
+		"fields":	{"name": "工学", "category": "8"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"55",
+		"fields":	{"name": "電気・通信", "category": "8"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"56",
+		"fields":	{"name": "医学一般", "category": "9"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"57",
+		"fields":	{"name": "基礎医学", "category": "9"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"58",
+		"fields":	{"name": "臨床医学一般", "category": "9"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"59",
+		"fields":	{"name": "臨床内科", "category": "9"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"60",
+		"fields":	{"name": "臨床外科", "category": "9"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"61",
+		"fields":	{"name": "産科・婦人科学", "category": "9"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"62",
+		"fields":	{"name": "小児科学", "category": "9"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"63",
+		"fields":	{"name": "入門書", "category": "10"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"64",
+		"fields":	{"name": "プログラミング", "category": "10"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"65",
+		"fields":	{"name": "アプリケーション", "category": "10"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"66",
+		"fields":	{"name": "OS", "category": "10"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"67",
+		"fields":	{"name": "Web作成・開発", "category": "10"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"68",
+		"fields":	{"name": "ネットワーク", "category": "10"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"69",
+		"fields":	{"name": "データベース", "category": "10"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"70",
+		"fields":	{"name": "写真", "category": "11"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"71",
+		"fields":	{"name": "絵画", "category": "11"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"72",
+		"fields":	{"name": "彫刻・工芸", "category": "11"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"73",
+		"fields":	{"name": "作品集", "category": "11"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"74",
+		"fields":	{"name": "建築", "category": "11"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"75",
+		"fields":	{"name": "住宅建築・家づくり", "category": "11"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"76",
+		"fields":	{"name": "デザイン", "category": "11"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"77",
+		"fields":	{"name": "自己啓発", "category": "12"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"78",
+		"fields":	{"name": "常識・マナー", "category": "12"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"79",
+		"fields":	{"name": "素材・デザイン集", "category": "12"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"80",
+		"fields":	{"name": "一般マナー・心得", "category": "12"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"81",
+		"fields":	{"name": "スピーチ・話し方", "category": "12"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"82",
+		"fields":	{"name": "手紙・文章の書き方", "category": "12"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"83",
+		"fields":	{"name": "ペン字", "category": "12"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"84",
+		"fields":	{"name": "手芸・クラフト", "category": "13"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"85",
+		"fields":	{"name": "車・バイク", "category": "13"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"86",
+		"fields":	{"name": "鉄道", "category": "13"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"87",
+		"fields":	{"name": "カメラ・ビデオ", "category": "13"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"88",
+		"fields":	{"name": "オーディオ・ビジュアル", "category": "13"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"89",
+		"fields":	{"name": "占い", "category": "13"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"90",
+		"fields":	{"name": "パズル・ゲーム", "category": "13"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"91",
+		"fields":	{"name": "野球", "category": "14"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"92",
+		"fields":	{"name": "サッカー・フットサル", "category": "14"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"93",
+		"fields":	{"name": "ゴルフ", "category": "14"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"94",
+		"fields":	{"name": "マラソン・ランニング", "category": "14"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"95",
+		"fields":	{"name": "テニス", "category": "14"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"96",
+		"fields":	{"name": "アイススケート", "category": "14"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"97",
+		"fields":	{"name": "筋力トレーニング・ストレッチ", "category": "14"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"98",
+		"fields":	{"name": "キャンプ", "category": "15"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"99",
+		"fields":	{"name": "登山・ハイキング", "category": "15"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"100",
+		"fields":	{"name": "自転車・サイクリング", "category": "15"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"101",
+		"fields":	{"name": "釣り", "category": "15"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"102",
+		"fields":	{"name": "カヌー・カヤック", "category": "15"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"103",
+		"fields":	{"name": "クライミング・ボルダリング", "category": "15"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"104",
+		"fields":	{"name": "学生の就職", "category": "16"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"105",
+		"fields":	{"name": "法律関連", "category": "16"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"106",
+		"fields":	{"name": "ビジネス関連", "category": "16"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"107",
+		"fields":	{"name": "事務関連", "category": "16"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"108",
+		"fields":	{"name": "コンピュータ・情報処理", "category": "16"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"109",
+		"fields":	{"name": "医療・看護", "category": "16"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"110",
+		"fields":	{"name": "建築・土木", "category": "16"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"111",
+		"fields":	{"name": "クッキング・レシピ", "category": "17"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"112",
+		"fields":	{"name": "ワイン・お酒", "category": "17"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"113",
+		"fields":	{"name": "住まい・インテリア", "category": "17"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"114",
+		"fields":	{"name": "ガーデニング", "category": "17"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"115",
+		"fields":	{"name": "ペット", "category": "17"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"116",
+		"fields":	{"name": "美容・ダイエット", "category": "17"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"117",
+		"fields":	{"name": "恋愛・結婚・離婚", "category": "17"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"118",
+		"fields":	{"name": "妊娠・出産・子育て", "category": "17"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"119",
+		"fields":	{"name": "海外旅行", "category": "18"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"120",
+		"fields":	{"name": "国内旅行", "category": "18"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"121",
+		"fields":	{"name": "時刻表", "category": "18"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"122",
+		"fields":	{"name": "シティマップ", "category": "18"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"123",
+		"fields":	{"name": "ロードマップ", "category": "18"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"124",
+		"fields":	{"name": "英語", "category": "19"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"125",
+		"fields":	{"name": "日本語", "category": "19"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"126",
+		"fields":	{"name": "韓国・朝鮮語", "category": "19"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"127",
+		"fields":	{"name": "中国語", "category": "19"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"128",
+		"fields":	{"name": "フランス語", "category": "19"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"129",
+		"fields":	{"name": "スペイン語・ポルトガル語", "category": "19"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"130",
+		"fields":	{"name": "ドイツ語・ゲルマン諸語", "category": "19"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"131",
+		"fields":	{"name": "幼児教育", "category": "20"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"132",
+		"fields":	{"name": "小学教科書・参考書", "category": "20"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"133",
+		"fields":	{"name": "中学教科書・参考書", "category": "20"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"134",
+		"fields":	{"name": "高校教科書・参考書", "category": "20"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"135",
+		"fields":	{"name": "大学・大学院", "category": "20"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"136",
+		"fields":	{"name": "専門学校受験・ガイド", "category": "20"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"137",
+		"fields":	{"name": "海外留学対策", "category": "20"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"138",
+		"fields":	{"name": "絵本", "category": "21"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"139",
+		"fields":	{"name": "読み物(児童文学)", "category": "21"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"140",
+		"fields":	{"name": "ノンフィクション・伝記", "category": "21"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"141",
+		"fields":	{"name": "実用・工作・趣味", "category": "21"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"142",
+		"fields":	{"name": "学習", "category": "21"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"143",
+		"fields":	{"name": "図鑑・事典・年鑑", "category": "21"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"144",
+		"fields":	{"name": "学習まんが", "category": "21"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"145",
+		"fields":	{"name": "コミック", "category": "22"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"146",
+		"fields":	{"name": "ライトノベル", "category": "22"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"147",
+		"fields":	{"name": "ボーイズラブコミック", "category": "22"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"148",
+		"fields":	{"name": "ボーイズラブノベルス", "category": "22"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"149",
+		"fields":	{"name": "イラスト集・オフィシャルブック", "category": "22"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"150",
+		"fields":	{"name": "コミック・アニメ研究", "category": "22"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"151",
+		"fields":	{"name": "ゲーム攻略本", "category": "23"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"152",
+		"fields":	{"name": "リプレイノベル", "category": "23"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"153",
+		"fields":	{"name": "ファンブック", "category": "23"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"154",
+		"fields":	{"name": "TRPG・カードゲーム", "category": "23"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"155",
+		"fields":	{"name": "タレント写真集", "category": "24"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"156",
+		"fields":	{"name": "タレント本", "category": "24"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"157",
+		"fields":	{"name": "映画", "category": "24"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"158",
+		"fields":	{"name": "音楽", "category": "24"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"159",
+		"fields":	{"name": "ステージ・ダンス", "category": "24"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"160",
+		"fields":	{"name": "落語・寄席・演芸", "category": "24"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"161",
+		"fields":	{"name": "演劇・舞台", "category": "24"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"162",
+		"fields":	{"name": "文学・評論", "category": "25"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"163",
+		"fields":	{"name": "思想・人文", "category": "25"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"164",
+		"fields":	{"name": "政治・社会", "category": "25"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"165",
+		"fields":	{"name": "歴史・地理", "category": "25"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"166",
+		"fields":	{"name": "ビジネス・経済", "category": "25"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"167",
+		"fields":	{"name": "音楽・映画・テレビ・芸能", "category": "26"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"168",
+		"fields":	{"name": "女性ファッション・ライフスタイル", "category": "26"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"169",
+		"fields":	{"name": "コミック・アニメ・BL", "category": "26"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"170",
+		"fields":	{"name": "スポーツ", "category": "26"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"171",
+		"fields":	{"name": "ビジネス・経済・経営・投資", "category": "26"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"172",
+		"fields":	{"name": "男性ファッション・ライフスタイル", "category": "26"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"173",
+		"fields":	{"name": "クルマ・バイク・乗り物", "category": "26"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"174",
+		"fields":	{"name": "健康・生活情報", "category": "26"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"175",
+		"fields":	{"name": "クラシック", "category": "27"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"176",
+		"fields":	{"name": "J-POP", "category": "27"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"177",
+		"fields":	{"name": "洋楽", "category": "27"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"178",
+		"fields":	{"name": "ジャズ", "category": "27"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"179",
+		"fields":	{"name": "ヴォーカル", "category": "27"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"180",
+		"fields":	{"name": "ワールド", "category": "27"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"181",
+		"fields":	{"name": "アニメ＆ゲーム音楽", "category": "27"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"182",
+		"fields":	{"name": "少年コミック", "category": "28"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"183",
+		"fields":	{"name": "青年コミック", "category": "28"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"184",
+		"fields":	{"name": "少女コミック", "category": "28"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"185",
+		"fields":	{"name": "女性コミック", "category": "28"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"186",
+		"fields":	{"name": "ライトノベル", "category": "28"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"187",
+		"fields":	{"name": "BL(ボーイズラブ)", "category": "28"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"188",
+		"fields":	{"name": "文学・評論", "category": "28"}
+	}	,
+	{
+		"model":	"books.subcategory",
+		"pk":	"189",
+		"fields":	{"name": "絵本・児童書", "category": "28"}
+	}]

@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}My本棚{% endblock %}
+
+{% block active_mybooks %}active{% endblock %}
+
+{% block head %}
+<link href="{% static 'css/shop-item-gh-pages.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block contents %}
+<section>
+    <div class="container px-4 px-lg-5 my-5">
+        <div class="row gx-4 gx-lg-5 align-items-center">
+            <!--　タブ部分 -->
+            <ul class="nav nav-tabs mb-3" id="myTab" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button type="button" class="nav-link active" id="want-tab" data-bs-toggle="tab" data-bs-target="#want-tab-pane" role="tab" aria-controls="want-tab-pane" aria-selected="true">読みたい</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button type="button" class="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#reading-tab-pane" role="tab" aria-controls="reading-tab-pane" aria-selected="false">読書中</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button type="button" class="nav-link" id="disabled-tab" data-bs-toggle="tab" data-bs-target="#read-tab-pane" role="tab" aria-controls="read-tab-pane" aria-selected="false">読了</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button type="button" class="nav-link" id="favorite-tab" data-bs-toggle="tab" data-bs-target="#favorite-tab-pane" role="tab" aria-controls="favorite-tab-pane" aria-selected="false">お気に入り</button>
+                </li>
+            </ul>
+            <!--　パネル部分 -->
+            <div class="row">
+                <div class="tab-content">
+                    <div id="myTabContent" class="tab-content">
+                        <div class="tab-pane fade show active" id="want-tab-pane" role="tabpanel" aria-labelledby="want-tab" tabindex="0">
+                            <div class="row gx-4 gx-lg-5">
+                            {% for mybook in mybooks_want %}
+                            <div class="col-2">
+                                <div class="card">
+                                    <a data-toggle="modal" data-target="#want-modal-{{ mybook.book.pk }}">
+                                        <img class="card-img-top" src="../media/{{ mybook.book.thumbnail_image }}" alt="..." />
+                                    </a>
+                                </div>
+                            </div>
+                            {% include 'want_modal.html' %}
+                            {% endfor %}
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="reading-tab-pane" role="tabpanel" aria-labelledby="reading-tab" tabindex="0">
+                            <div class="row gx-4 gx-lg-5">
+                            {% for mybook in mybooks_reading %}
+                            <div class="col-2">
+                                <div class="card">
+                                    <a data-toggle="modal" data-target="#reading-modal-{{ mybook.book.pk }}">
+                                        <img class="card-img-top" src="../media/{{ mybook.book.thumbnail_image }}" alt="..." />
+                                    </a>
+                                </div>
+                            </div>
+                            {% include 'reading_modal.html' %}
+                            {% endfor %}
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="read-tab-pane" role="tabpanel" aria-labelledby="read-tab" tabindex="0">
+                            <div class="row gx-4 gx-lg-5">
+                            {% for mybook in mybooks_read %}
+                            <div class="col-2">
+                                <div class="card">
+                                    <a data-toggle="modal" data-target="#read-modal-{{ mybook.book.pk }}">
+                                        <img class="card-img-top" src="../media/{{ mybook.book.thumbnail_image }}" alt="..." />
+                                    </a>
+                                </div>
+                            </div>
+                            {% include 'read_modal.html' %}
+                            {% endfor %}
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="favorite-tab-pane" role="tabpanel" aria-labelledby="favorite-tab" tabindex="0">
+                            <div class="row gx-4 gx-lg-5">
+                            {% for mybook in favorite_books %}
+                            <div class="col-2">
+                                <div class="card">
+                                    <a href="{% url 'books:book_detail' mybook.book.pk%}">
+                                        <img class="card-img-top" src="../media/{{ mybook.book.thumbnail_image }}" alt="..." />
+                                    </a>
+                                </div>
+                            </div>
+                            {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+{% endblock %}
+
