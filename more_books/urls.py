@@ -19,7 +19,8 @@ from django.contrib.staticfiles.urls import static
 from . import settings_common, settings_dev
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    #path('admin/', admin.site.urls),
+    path('admin_control/', admin.site.urls),
     path('', include('books.urls')),
     path('accounts/', include('allauth.urls')),
 ]
