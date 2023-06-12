@@ -27,4 +27,4 @@ jobs:
         pip install -r requirements.txt
     - name: Run Tests
       run: |
-        python manage.py test --setings more_books.settings_dev
+        python manage.py test --settings more_books.settings_dev
