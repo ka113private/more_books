@@ -6,17 +6,16 @@ from django.shortcuts import render
 from django.views import generic
 from .forms import InquiryForm, TagAddForm, BookshelfAddForm, ProfileEditForm, StatusChangeForm
 from django.contrib import messages
-from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from .models import Book, FavoriteBook, BookTag, TagLike ,Tag, Bookshelf, CustomUser, SubCategory
+from django.contrib.auth.mixins import LoginRequiredMixin
+from .models import Book, FavoriteBook, BookTag, TagLike ,Tag, Bookshelf, CustomUser
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from django.db.models import Q, Count
-from django.core import serializers
 
 logger = logging.getLogger(__name__)
-NUM_BOOKS_TO_DISPLAY = 6 #インデックスページで表示する際の書籍の数
-NUM_BOOKS_TO_DISPLAY_LISTPAGE = 20 #一覧ページで表示する際の書籍の数
-NUM_BOOKS_SEARCH = 1000 #検索する書籍の書籍の数
+NUM_BOOKS_TO_DISPLAY = 6 # インデックスページで表示する際の書籍の数
+NUM_BOOKS_TO_DISPLAY_LISTPAGE = 20 # 一覧ページで表示する際の書籍の数
+NUM_BOOKS_SEARCH = 1000 # 検索する書籍の書籍の数
 
 RECOMMEND_BOOKS = {}
 
@@ -51,7 +50,7 @@ class BookListFromSearchView(LoginRequiredMixin, generic.ListView):
         if query:
             #★タグ検索もできるようにする
             queryset = queryset.filter(
-                Q(title__icontains=query)|Q(author__icontains=query)|Q(description__icontains=query)
+                Q(title__icontains=query) | Q(author__icontains=query) | Q(description__icontains=query)
             )[:NUM_BOOKS_SEARCH]
             self.count = queryset.count()
         return queryset
@@ -60,7 +59,7 @@ class BookListFromSearchView(LoginRequiredMixin, generic.ListView):
         context = super().get_context_data(**kwargs)
         query = self.request.GET.get('query')
         context['query'] = query
-        #検索結果の表示や選択したタグに紐づく書籍の表示をする際にhtml表示を少し変えるためにどのビューから生成されたのか判定するために以下を設定
+        # 検索結果の表示や選択したタグに紐づく書籍の表示をする際にhtml表示を少し変えるためにどのビューから生成されたのか判定するために以下を設定
         context['view_from'] = 'BookListFromSearchView'
         context['count'] = self.count
 
@@ -139,12 +138,12 @@ class BookDetailView(LoginRequiredMixin, generic.DetailView):
                 tag_islike_dic[booktag] = (False, like_count)
         context['tag_islike_dic'] = tag_islike_dic
 
-        #ログインユーザーが本棚に書籍を追加しているかどうか
+        # ログインユーザーが本棚に書籍を追加しているかどうか
         if Bookshelf.objects.filter(book=self.object, user=self.request.user).exists():
             context['is_add_bookshelf'] = True
         else:
             context['is_add_bookshelf'] = False
-        #モーダル用フォーム
+        # モーダル用フォーム
         context['tag_add_form'] = TagAddForm
         return context
 
@@ -155,7 +154,7 @@ class MyPageView(LoginRequiredMixin, generic.DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        #プロフィール画像編集フォーム
+        # プロフィール画像編集フォーム
         context['profile_edit_form']=ProfileEditForm
 
         return context
@@ -206,7 +205,7 @@ class MybooksAddView(LoginRequiredMixin, generic.CreateView):
         pk = self.kwargs['pk']
         bookshelf.user = self.request.user
         bookshelf.book = Book.objects.get(pk=pk)
-        bookshelf.status = "読みたい" #読みたい状態(未読)として登録する
+        bookshelf.status = "読みたい" # 読みたい状態(未読)として登録する
         bookshelf.save()
         messages.success(self.request, '本棚に書籍を追加しました。')
 
@@ -318,7 +317,7 @@ class MybooksListView(LoginRequiredMixin, generic.ListView):
 
 def favorite_for_book(request):
     """書籍へのお気に入り処理"""
-    book_pk = request.POST.get('book_pk')#POSTメソッドのbodyに格納されているbook_pk（辞書型）を取得
+    book_pk = request.POST.get('book_pk')# POSTメソッドのbodyに格納されているbook_pk（辞書型）を取得
     context = {
         'user': request.user.username
     }
@@ -336,7 +335,7 @@ def favorite_for_book(request):
 
 def like_for_tag(request):
     """書籍タグへのいいね処理"""
-    booktag_pk = request.POST.get('booktag_pk')#POSTメソッドのbodyに格納されているbooktag_pk（辞書型）を取得
+    booktag_pk = request.POST.get('booktag_pk')# POSTメソッドのbodyに格納されているbooktag_pk（辞書型）を取得
     context = {
         'user':request.user.username
     }
@@ -365,7 +364,7 @@ def add_mybooks(request):
     book = get_object_or_404(Book, pk=book_list[0]["id"])
     Bookshelf.objects.create(book=book, user=request.user, status='読みたい')
     book_list.pop(0)
-    if( len(book_list) != 0):
+    if (len(book_list) != 0):
         book_list_json = JsonResponse({'books': book_list})
         context['next_books']=book_list_json.content.decode('utf-8')
         context['exists']= True
@@ -380,7 +379,7 @@ def not_add_mybooks(request):
     # postメソッドのbodyに格納されているのはjsonなので、変換をかける
     json_data = json.loads(request.body)
     book_list = json_data['books']
-    #データベースに登録せずに先頭の書籍をlistから削除する
+    # データベースに登録せずに先頭の書籍をlistから削除する
     book_list.pop(0)
     if (len(book_list) != 0):
         book_list_json = JsonResponse({'books': book_list})
@@ -421,7 +420,7 @@ def get_related_books(request):
     return JsonResponse(context)
 
 def get_new_books(request):
-    # 「知見を広げる」を選択した場合：ログインユーザーがこれまで読んだことのないサブカテゴリに属する人気の本を取得
+    #「知見を広げる」を選択した場合：ログインユーザーがこれまで読んだことのないサブカテゴリに属する人気の本を取得
     context = {
         'user': request.user.username
     }
