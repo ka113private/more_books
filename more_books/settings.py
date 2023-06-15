@@ -1,6 +1,6 @@
 import os
-
 from .settings_common import *
+
 
 #　本番環境用にセキュリティキーを生成し、環境変数から読み込む
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
@@ -39,34 +39,34 @@ LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
 
-    #ロガーの設定
+    # ロガーの設定
     'loggers': {
-        #Djangoが利用するロガー
+        # Djangoが利用するロガー
         'django': {
             'handlers': ['file'],
             'level': 'INFO',
         },
-        #booksアプリケーションが利用するロガー
+        # booksアプリケーションが利用するロガー
         'books': {
             'handlers': ['file'],
             'level': 'INFO',
         },
     },
 
-    #ハンドラの設定
+    # ハンドラの設定
     'handlers': {
         'file': {
             'level': 'INFO',
             'class': 'logging.handlers.TimedRotatingFileHandler',
             'filename': os.path.join(BASE_DIR, 'logs/django.log'),
             'formatter': 'prod',
-            'when': 'D', #ログローテーション（新しいファイルへの切り替え）間隔の単位(D=日）
-            'interval': 1, #ログローテーション間隔
-            'backupCount': 7, #保存しておくログファイル数
+            'when': 'D', # ログローテーション（新しいファイルへの切り替え）間隔の単位(D=日）
+            'interval': 1, # ログローテーション間隔
+            'backupCount': 7, # 保存しておくログファイル数
         },
     },
 
-    #フォーマッタの設定
+    # フォーマッタの設定
     'formatters': {
         'prod':{
             'format': '\t'.join([

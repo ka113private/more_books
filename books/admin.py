@@ -1,5 +1,13 @@
 from django.contrib import admin
-from .models import Book, Tag, TagLike, BookTag, FavoriteBook, Bookshelf, Category, SubCategory
+from .models import (
+    Book,
+    Tag,
+    TagLike,
+    BookTag,
+    FavoriteBook,
+    Bookshelf,
+    Category,
+    SubCategory)
 # Register your models here.
 
 admin.site.register(Book)

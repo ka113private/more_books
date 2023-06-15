@@ -2,7 +2,6 @@ from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse_lazy, reverse
 from ..models import Book, Tag, BookTag, Category, SubCategory, Bookshelf, FavoriteBook
-from ..views import BookDetailView
 
 class LoggedInTestCase(TestCase):
     """各テストクラスで共通の事前準備処理をオーバライドした独自のTestCaseクラス"""
