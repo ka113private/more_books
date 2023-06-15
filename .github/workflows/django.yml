@@ -14,7 +14,19 @@ jobs:
       max-parallel: 4
       matrix:
         python-version: [3.7, 3.8, 3.9]
-
+    
+# サービスコンテナには`localhost:<port>`または`127.0.0.1:<port>`で接続可能
+    services:
+      postgres:
+        image: postgres
+        # refer: https://hub.docker.com/_/postgres
+        env:
+          POSTGRES_PASSWORD: password
+          POSTGRES_USER: test
+          POSTGRES_DB: postgres
+        ports:
+          - 5432:5432
+          
     steps:
     - uses: actions/checkout@v3
     - name: Set up Python ${{ matrix.python-version }}
