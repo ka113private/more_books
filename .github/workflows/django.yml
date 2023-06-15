@@ -15,18 +15,18 @@ jobs:
       matrix:
         python-version: [3.7, 3.8, 3.9]
     
-# サービスコンテナには`localhost:<port>`または`127.0.0.1:<port>`で接続可能
     services:
       postgres:
         image: postgres
-        # refer: https://hub.docker.com/_/postgres
         env:
-          POSTGRES_PASSWORD: password
-          POSTGRES_USER: test
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
           POSTGRES_DB: postgres
         ports:
-          - 5432:5432
-          
+        - 5432:5432
+        # needed because the postgres container does not provide a healthcheck
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+
     steps:
     - uses: actions/checkout@v3
     - name: Set up Python ${{ matrix.python-version }}
@@ -40,3 +40,7 @@ jobs:
     - name: Run Tests
       run: |
         python manage.py test --settings more_books.settings_dev
+      env:
+        DB_HOST: 127.0.0.1
+        DB_PASSWORD: postgres
+        DB_USER: postgres
