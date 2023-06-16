@@ -46,3 +46,6 @@ jobs:
         DB_HOST: 127.0.0.1
         DB_PASSWORD: postgres
         DB_USER: postgres
+    - name: Lint with flake8
+      run: |
+        flake8 . --max-complexity=10 --max-line-length=90
