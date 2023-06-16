@@ -49,18 +49,18 @@ jobs:
     - name: Lint with flake8
       run: |
         flake8 . --max-complexity=10 --max-line-length=90
-    - name: Deployment
-      run: |
-        echo "$SECRET_KEY" > secret_key
-        chmod 600 secret_key
-        ssh -oStrictHostKeyChecking=no ${SERVER_USER}@${SERVER_HOST} -i secret_key "
-        cd venv_more_books/more_books &&
-        git pull &&
-        source ../bin/activete &&
-        pkill gunicorn &&
-        gunicorn --bind 127.0.0.1:8000 more_books.wsgi -D &&
-        "
-      env:
-        SECRET_KEY: ${{ secrets.SECRET_KEY }}
-        SERVER_USER: ${{ secrets.SERVER_USER }}
-        SERVER_HOST: ${{ secrets.SERVER_HOST }}
+    # - name: Deployment
+    #  run: |
+    #    echo "$SECRET_KEY" > secret_key
+    #    chmod 600 secret_key
+    #    ssh -oStrictHostKeyChecking=no ${SERVER_USER}@${SERVER_HOST} -i secret_key "
+    #    cd venv_more_books/more_books &&
+    #    git pull &&
+    #    source ../bin/activete &&
+    #    pkill gunicorn &&
+    #    gunicorn --bind 127.0.0.1:8000 more_books.wsgi -D &&
+    #    "
+    #  env:
+    #    SECRET_KEY: ${{ secrets.SECRET_KEY }}
+    #    SERVER_USER: ${{ secrets.SERVER_USER }}
+    #    SERVER_HOST: ${{ secrets.SERVER_HOST }}
