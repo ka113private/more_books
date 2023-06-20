@@ -49,18 +49,21 @@ ECサイトで書籍が購入でき、便利になったからこそ、少し強
 #### 想定しているビジネスモデル
 
 ## 使用技術
-- 言語:Python3.8
-- フレームワーク:Django3.2.10
+- 言語:Python3.7.1
+- フレームワーク:Django3.2.16
 - データベース:PostgreSQL15
 - Webサーバー:Nginx
-- アプリケーションサーバー:Gunicorn
+- APサーバー:Gunicorn
 - インフラ:AWS
     - VPC
     - EC2(Web/APサーバー、DBサーバー)
     - Route53
+- コード管理：github
 - CICD:GithubActions
 - SSL対応:Let’s Encrypt
 
+
+![](../../../../component.png)
 ## 機能
 
 
