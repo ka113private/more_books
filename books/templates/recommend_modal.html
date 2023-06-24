@@ -1,10 +1,11 @@
 <div class="modal fade" id="recommend-modal" tabindex="-1" aria-labelledby="RecommendLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
-            <div class="modal-header">
+            <!-- <div class="modal-header">
                 <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
-            </div>
+            </div>-->
             <div class="modal-body">
+                <!--
                 <div class="container">
                     <div class="row">
                         <div class="col-md-6">
@@ -17,10 +18,23 @@
                         </div>
                     </div>
                 </div>
+                -->
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <img class="card-img-top" id="thumbnail_image" src="" alt="">
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="modal-footer" id="modal_footer">
-                <button class="btn btn-primary" id="add_mybooks" >読みたい</button><button class="btn btn-secondary" id="not_add_mybooks" >興味ない</button>
-                <button class="btn btn-secondary" id="close" data-dismiss="modal" aria-label="Close">閉じる</button>`
+                    <button class="btn btn-danger" id="not_add_mybooks" >　　　　興味ない
+                        <i class="fa-regular fa-thumbs-down"></i>　　　
+                    </button>
+                    <button class="btn btn-success" id="add_mybooks" >　　　　読みたい
+                        <i class="fa-regular fa-thumbs-up"></i>　　　
+                    </button>
+                    <!-- <button class="btn btn-secondary" id="close" data-dismiss="modal" aria-label="Close">閉じる</button>` -->
             </div>
         </div>
     </div>
