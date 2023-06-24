@@ -1,7 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse_lazy, reverse
-from ..models import Book, Tag, BookTag, Category, SubCategory, Bookshelf, FavoriteBook
+from ..models import Book, Tag, BookTag, Category, SubCategory, Bookshelf
 
 class LoggedInTestCase(TestCase):
     """各テストクラスで共通の事前準備処理をオーバライドした独自のTestCaseクラス"""
@@ -45,11 +45,10 @@ class LoggedInTestCase(TestCase):
         self.book7 = Book.objects.create(title='Book7', author='Author7', description='Description7',
                                          sub_category=self.subcategoryB)
         self.book8 = Book.objects.create(title='Book8', author='Author8', description='Description8',
-                                         sub_category=self.subcategoryB)
-        self.book9 = Book.objects.create(title='Book9', author='Author9', description='Description9',
                                          sub_category=self.subcategoryC)
-        self.book10 = Book.objects.create(title='Book10', author='Author10', description='Description10',
+        self.book9 = Book.objects.create(title='Book9', author='Author9', description='Description9',
                                          sub_category=self.subcategoryD)
+
         # ユーザー作成
         self.user1 = get_user_model().objects.create_user(username='user1', email='test@gmail.com', password='user1')
         self.user2 = get_user_model().objects.create_user(username='user2', email='test@gmail.com', password='user2')
@@ -225,7 +224,6 @@ class TestGetRelatedBooks(LoggedInTestCase):
         self.assertNotContains(response, self.book7.title)
         self.assertNotContains(response, self.book8.title)
         self.assertNotContains(response, self.book9.title)
-        self.assertNotContains(response, self.book10.title)
 
 class TestGetNewBooks(LoggedInTestCase):
     """get_new_booksメソッドテストクラス"""
@@ -242,8 +240,9 @@ class TestGetNewBooks(LoggedInTestCase):
         response = self.client.get(self.url)
         print(response)
         self.assertEqual(response.status_code, 200)
+        self.assertContains(response, self.book8.title)
         self.assertContains(response, self.book9.title)
-        self.assertContains(response, self.book10.title)
         # リクエストユーザーが登録しているサブカテゴリーなのでresponseには含まれないことを確認。
+        self.assertNotContains(response, self.book1.title)
         self.assertNotContains(response, self.book2.title)
         self.assertNotContains(response, self.book7.title)

@@ -1,6 +1,5 @@
 import json
 import logging
-import random
 
 from django.urls import reverse_lazy
 from django.shortcuts import render
@@ -408,14 +407,14 @@ def get_related_books(request):
         .first()
 
     # おすすめ書籍(該当のサブカテゴリに属する書籍でログインユーザーがmy本棚に追加していないランダムな書籍)のQuerySetを返す。
-    if (favorite_category_dict != None):
+    if (len(favorite_category_dict) != 0):
         related_books = Book.objects.filter(sub_category=favorite_category_dict['sub_category']) \
                             .exclude(id__in=library_id_list)\
                             .order_by("?")[:NUM_RELATED_BOOKS]
     else:
         related_books = Book.objects.all().order_by("?")[:NUM_RELATED_BOOKS]
 
-    #　JsonResponseに格納する
+    # JsonResponseに格納する
     related_books_list = list(related_books.values())
     if (len(related_books_list) != 0):
         context['recommend_exists'] = True
@@ -438,13 +437,14 @@ def get_new_books(request):
         .annotate(count=Count('sub_category')) \
         .order_by('-count') \
         .values_list('sub_category')
-    print(my_categories)
+
+    # おすすめ書籍(ログインユーザーがmy本棚に追加していないサブカテゴリの書籍のうちランダムな書籍)のQuerySetを返す。
     new_books = Book.objects.all()\
                     .exclude(sub_category__in=my_categories) \
                     .order_by("?")[:NUM_RELATED_BOOKS]
-    print(new_books)
+
+    # 　JsonResponseに格納する
     new_books_list = list(new_books.values())
-    print(new_books_list)
     if (len(new_books_list) != 0):
         context['recommend_exists'] = True
         new_books_list_json = JsonResponse({'books': new_books_list})
