@@ -238,7 +238,6 @@ class TestGetNewBooks(LoggedInTestCase):
     def test_get_new_books(self):
         """ユーザーへのおすすめ書籍が正しく取得できることを検証する"""
         response = self.client.get(self.url)
-        print(response)
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, self.book8.title)
         self.assertContains(response, self.book9.title)
