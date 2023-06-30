@@ -1,7 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse_lazy, reverse
-from ..models import Book, Tag, BookTag, Category, SubCategory, Bookshelf, FavoriteBook
+from ..models import Book, Tag, BookTag, Category, SubCategory, Bookshelf
 
 class LoggedInTestCase(TestCase):
     """各テストクラスで共通の事前準備処理をオーバライドした独自のTestCaseクラス"""
@@ -45,11 +45,10 @@ class LoggedInTestCase(TestCase):
         self.book7 = Book.objects.create(title='Book7', author='Author7', description='Description7',
                                          sub_category=self.subcategoryB)
         self.book8 = Book.objects.create(title='Book8', author='Author8', description='Description8',
-                                         sub_category=self.subcategoryB)
-        self.book9 = Book.objects.create(title='Book9', author='Author9', description='Description9',
                                          sub_category=self.subcategoryC)
-        self.book10 = Book.objects.create(title='Book10', author='Author10', description='Description10',
+        self.book9 = Book.objects.create(title='Book9', author='Author9', description='Description9',
                                          sub_category=self.subcategoryD)
+
         # ユーザー作成
         self.user1 = get_user_model().objects.create_user(username='user1', email='test@gmail.com', password='user1')
         self.user2 = get_user_model().objects.create_user(username='user2', email='test@gmail.com', password='user2')
@@ -206,33 +205,25 @@ class TestGetRelatedBooks(LoggedInTestCase):
         self.loginSetUp()
         self.createModelSetup()
         self.bookshelf1 = Bookshelf.objects.create(user=self.test_user, book=self.book1, status='読書中')
-        self.bookshelf2 = Bookshelf.objects.create(user=self.test_user, book=self.book7, status='読書中')
-        self.favoritebook1 = FavoriteBook.objects.create(user=self.user1, book=self.book1)
-        self.favoritebook2 = FavoriteBook.objects.create(user=self.user1, book=self.book2)
-        self.favoritebook3 = FavoriteBook.objects.create(user=self.user2, book=self.book2)
-        self.favoritebook4 = FavoriteBook.objects.create(user=self.user3, book=self.book2)
-        self.favoritebook5 = FavoriteBook.objects.create(user=self.user1, book=self.book3)
-        self.favoritebook6 = FavoriteBook.objects.create(user=self.user2, book=self.book3)
-        self.favoritebook7 = FavoriteBook.objects.create(user=self.user3, book=self.book4)
-        self.favoritebook8 = FavoriteBook.objects.create(user=self.user1, book=self.book5)
-        self.favoritebook9 = FavoriteBook.objects.create(user=self.user1, book=self.book7)
+        self.bookshelf2 = Bookshelf.objects.create(user=self.test_user, book=self.book2, status='読書中')
+        self.bookshelf3 = Bookshelf.objects.create(user=self.test_user, book=self.book7, status='読書中')
         self.url = reverse('books:get_related_books')
 
     def test_get_related_books(self):
         """ユーザーへのおすすめ書籍が正しく取得できることを検証する"""
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, self.book2.title)
         self.assertContains(response, self.book3.title)
         self.assertContains(response, self.book4.title)
         self.assertContains(response, self.book5.title)
-        # 同一サブカテゴリーだが、お気に入りに追加している人がいないので、responseには含まれないことを確認。
-        self.assertNotContains(response, self.book6.title)
+        self.assertContains(response, self.book6.title)
+        # すでにmy本棚に登録済みなのでresponseには含まれないことを確認。
+        self.assertNotContains(response, self.book1.title)
+        self.assertNotContains(response, self.book2.title)
         # 別のサブカテゴリーなのでresponseには含まれないことを確認。
         self.assertNotContains(response, self.book7.title)
         self.assertNotContains(response, self.book8.title)
         self.assertNotContains(response, self.book9.title)
-        self.assertNotContains(response, self.book10.title)
 
 class TestGetNewBooks(LoggedInTestCase):
     """get_new_booksメソッドテストクラス"""
@@ -240,17 +231,16 @@ class TestGetNewBooks(LoggedInTestCase):
         self.loginSetUp()
         self.createModelSetup()
         self.bookshelf1 = Bookshelf.objects.create(user=self.test_user, book=self.book1, status='読書中')
-        self.bookshelf2 = Bookshelf.objects.create(user=self.test_user, book=self.book7, status='読書中')
-        self.favoritebook1 = FavoriteBook.objects.create(user=self.user1, book=self.book9)
+        self.bookshelf2 = Bookshelf.objects.create(user=self.test_user, book=self.book2, status='読書中')
+        self.bookshelf3 = Bookshelf.objects.create(user=self.test_user, book=self.book7, status='読書中')
         self.url = reverse('books:get_new_books')
 
     def test_get_new_books(self):
         """ユーザーへのおすすめ書籍が正しく取得できることを検証する"""
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
+        self.assertContains(response, self.book8.title)
         self.assertContains(response, self.book9.title)
-        # リクエストユーザーが登録していないサブカテゴリーだが、お気に入りに追加している人がいないので、responseには含まれないことを確認。
-        self.assertNotContains(response, self.book10.title)
         # リクエストユーザーが登録しているサブカテゴリーなのでresponseには含まれないことを確認。
         self.assertNotContains(response, self.book1.title)
         self.assertNotContains(response, self.book2.title)
