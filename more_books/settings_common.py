@@ -34,15 +34,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
     'books.apps.BooksConfig',
     'accounts.apps.AccountsConfig',
-    
     'django.contrib.sites',
     'allauth',
     'allauth.account',
     'django_bootstrap5',
-
     'django_ses'
 ]
 
@@ -86,6 +83,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'allauth.account.middleware.AccountMiddleware',
 ]
 
 ROOT_URLCONF = 'more_books.urls'
