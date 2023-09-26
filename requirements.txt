@@ -7,7 +7,7 @@ charset-normalizer==3.0.1
 cryptography==39.0.0
 defusedxml==0.7.1
 Django==3.2.16
-django-allauth==0.52.0
+django-allauth==0.56.1
 django-bootstrap5==22.2
 exceptiongroup==1.1.1
 flake8==5.0.4
@@ -18,7 +18,7 @@ mccabe==0.7.0
 oauthlib==3.2.2
 outcome==1.2.0
 Pillow==9.4.0
-psycopg2-binary==2.9.1
+psycopg2-binary==2.9.6
 pycodestyle==2.9.1
 pycparser==2.21
 pyflakes==2.5.0
@@ -38,3 +38,4 @@ typing_extensions==4.4.0
 urllib3==1.26.14
 wsproto==1.2.0
 zipp==3.15.0
+django-ses==3.5.0
