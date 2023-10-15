@@ -4,71 +4,46 @@
 
 {% block title %}人生を変える本に出会おう。More Books!{% endblock %}
 
-{% block header %}
-<header class="masthead">
-    <div class="container position-relative">
-        <div class="row justify-content-center">
-            <div class="col-xl-6">
-                <div class="text-center text-white">
-                    <!-- Page heading-->
-                    <h1 class="mb-5">人生を変える本に出会おう。More Books!</h1>
-                    <!-- Signup form-->
-                    <!-- * * * * * * * * * * * * * * *-->
-                    <!-- * * SB Forms Contact Form * *-->
-                    <!-- * * * * * * * * * * * * * * *-->
-                    <!-- This form is pre-integrated with SB Forms.-->
-                    <!-- To make this form functional, sign up at-->
-                    <!-- https://startbootstrap.com/solution/contact-forms-->
-                    <!-- to get an API token!-->
-                    <!--
-                    <form class="form-subscribe" id="contactForm" data-sb-form-api-token="API_TOKEN">
-                    -->
-                        <!-- Email address input-->
-                        <!--
-                        <div class="row">
-                            <div class="col">
-                                <input class="form-control form-control-lg" id="emailAddress" type="email" placeholder="Email Address" data-sb-validations="required,email" />
-                                <div class="invalid-feedback text-white" data-sb-feedback="emailAddress:required">Email Address is required.</div>
-                                <div class="invalid-feedback text-white" data-sb-feedback="emailAddress:email">Email Address Email is not valid.</div>
-                            </div>
-                            <div class="col-auto"><button class="btn btn-primary btn-lg disabled" id="submitButton" type="submit">Submit</button></div>
-                        </div>
-                        -->
-                        <!-- Submit success message-->
-                        <!---->
-                        <!-- This is what your users will see when the form-->
-                        <!-- has successfully submitted-->
-                        <!--
-                        <div class="d-none" id="submitSuccessMessage">
-                            <div class="text-center mb-3">
-                                <div class="fw-bolder">Form submission successful!</div>
-                                <p>To activate this form, sign up at</p>
-                                <a class="text-white" href="https://startbootstrap.com/solution/contact-forms">https://startbootstrap.com/solution/contact-forms</a>
-                            </div>
-                        </div>
-                        -->
-                        <!-- Submit error message-->
-                        <!---->
-                        <!-- This is what your users will see when there is-->
-                        <!-- an error submitting the form-->
-                        <!--
-                        <div class="d-none" id="submitErrorMessage"><div class="text-center text-danger mb-3">Error sending message!</div></div>
-                    </form>
-                    -->
-                    <a type="button" class="btn btn-outline-light btn-lg" href="{% url 'books:exploration' %}">
-                        新しい本と出会う
-                    </a>
-                </div>
+{% block contents %}
+<!-- hero section -->
+<section class="hero hero-index vh-100 d-flex align-items-center">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-7 mx-auto text-center">
+                <h1 class="display-4">人生を変える本に出会おう。</h1>
+                <h1 class="display-4">More Books!</h1>
+                <a type="button" class="btn-exploration btn btn-outline-light btn-lg pt-" href="{% url 'books:exploration' %}">
+                    新しい本と出会う
+                </a>
             </div>
         </div>
     </div>
-</header>
-{% endblock %}
+</section>
 
-{% block contents %}
- <section class="features-icons bg-light text-center">
- <p class="h1">About MoreBooks!</p>
+<!-- service section
+<section id="services" class="bg-light">
     <div class="container">
+        <div class="row">
+            <div class="col-md-8 mx-auto text-center">
+                <h6 class="text-primary">services</h6>
+                <h1>About MoreBooks!</h1>
+            </div>
+        </div>
+        <div class="row g-4">
+            <div class="col-lg-4 col-sm-6">
+                <div class="service card-effect">
+                    <div class="card-icon">
+                        <i class="fas fa-solid fa-book m-auto"></i>
+                    </div>
+                    <h5 class="mt-4 mb-2">Service</h5>
+                    <p>text text text text text <br>
+                        text text text text text text text <br>
+                        text text text text text text text <br>
+                        text text text text text text <br>
+                        text text text text text</p>
+                </div>
+            </div>
+        </div>
         <div class="row">
             <div class="col-lg-4">
                 <div class="features-icons-item mx-auto mb-5 mb-lg-0 mb-lg-3">
@@ -97,4 +72,5 @@
         </div>
     </div>
 </section>
+-->
 {% endblock %}

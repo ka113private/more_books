@@ -5,6 +5,104 @@
 {% block title %}人生を変える本に出会おう。More Books!{% endblock %}
 
 {% block header %}
+
+<!-- hero section -->
+<section class="hero hero-exploration vh-50 d-flex align-items-center">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-7 mx-auto text-center">
+                <h1 class="display-6">本と出会ってみよう！</h1>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="service">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-7 mx-auto text-center">
+                <!--　タブ部分 -->
+                <ul class="nav nav-tabs nav-fill" id="myTab" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button type="button" class="nav-link active" id="matching-tab" data-bs-toggle="tab" data-bs-target="#matching-tab-pane" role="tab" aria-controls="want-tab-pane" aria-selected="true">マッチング</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button type="button" class="nav-link" id="search-tab" data-bs-toggle="tab" data-bs-target="#search-tab-pane" role="tab" aria-controls="reading-tab-pane" aria-selected="false">　検索　</button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!--　パネル部分 -->
+        <div class="row">
+            <div class="tab-content">
+                <div id="myTabContent" class="tab-content">
+                    <div class="tab-pane fade show active" id="matching-tab-pane" role="tabpanel" aria-labelledby="matching-tab" tabindex="0">
+                        <div class="row">
+                            <div class="col-lg-4 col-sm-6">
+                                <div class="matching">
+                                    <a id="btn_new_books" data-toggle="modal" data-target="#recommend-modal">
+                                        <img src="./static/assets/img/matching-1.jpg" alt="">
+                                        <div class="overlay">
+                                            <h4 class="text-white">新たな世界へ</h4>
+                                            <h6 class="text-white">未だ見ぬ新たな世界へ飛び込んでみましょう</h6>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-sm-6">
+                                <div class="matching">
+                                    <a id="btn_related_books" data-toggle="modal" data-target="#recommend-modal">
+                                        <img src="./static/assets/img/matching-2.jpg" alt="">
+                                        <div class="overlay">
+                                            <h4 class="text-white">より高みへ</h4>
+                                            <h6 class="text-white">あなたをより高みに連れて行ってくれる本にきっと出会えます</h6>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-sm-6">
+                                <div class="matching">
+                                    <img src="./static/assets/img/matching-3.jpg" alt="">
+                                    <div class="overlay">
+                                        <h4 class="text-white">一期一会</h4>
+                                        <h6 class="text-white">今日はどんな本に出会えるでしょうか</h6>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="search-tab-pane" role="tabpanel" aria-labelledby="search-tab" tabindex="0">
+                        <div class="row d-flex justify-content-center">
+                            <div class="col-lg-4 col-sm-6">
+                                <form class="navbar-form" action="{% url 'books:book_list_from_search' %}" method="get">
+                                    <input class="form-control form-control-sm me-2" size="45" type="search" name="query" placeholder="書籍を検索" aria-label="Search">
+                                    <button class="btn btn-outline-success btn-sm" type="submit">Search</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <!--
+            <div class="col-sm-6">
+                <input id="matching" type="radio" name="TAB" class="tab-switch" checked="checked" />
+                    <label class="tab-label" for="matching">ボタン 1</label>
+                <div class="tab-content">
+                    コンテンツ 1
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <input id="search" type="radio" name="TAB" class="tab-switch"/>
+                    <label class="tab-label" for="search">ボタン 2</label>
+                <div class="tab-content">
+                    コンテンツ 2
+                </div>
+            </div>-->
+        </div>
+    </div>
+
+
+</section>
+<!--
 <header class="masthead_exploration">
     <div class="container position-relative">
         <div class="row justify-content-center">
@@ -24,6 +122,8 @@
         </div>
     </div>
 </header>
+
+-->
 {% include 'recommend_modal.html' %}
 {% endblock %}
 {% block contents %}

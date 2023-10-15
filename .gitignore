@@ -3,3 +3,5 @@
 media/
 backup/
 logs/
+.DS_Store
+more_books/.DS_Store
