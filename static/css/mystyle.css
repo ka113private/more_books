@@ -2,7 +2,7 @@
 :root{
     --primary: #0d6efd;
     --gray: #dee2e6;
-    --dark: #21252f;
+    --dark: #212529;
     --dark-gray: #7f7f7f;
     --white-gray: #f7f6f5;
     --box-shadow: 0 8px 22px rgba(0, 0, 0, 0.2);
@@ -16,11 +16,38 @@ body, #wrapper {
     min-height: 100vh;
 }
 
+h1,h2,h3,h4,h5,h6 {
+    color: white;
+    font-weight: bold;
+}
+
+p {
+    color: var(--dark-gray);
+    font-size: 20px;
+    line-height: 2em;
+}
+
+.btn {
+    border-radius: 100px;
+}
 
 .my-div-style{
     margin-top: 6rem;
 }
 
+.container {
+    margin-top: 150px;
+}
+
+.container-message {
+    background-color: transparent;
+    padding-top: 70px;
+    padding-left: 50px;
+    padding-right: 50px;
+    z-index: 5;
+    position: absolute;
+    width: 100%;
+}
 /*
 navigation bar
 */
@@ -62,7 +89,6 @@ hero section
 
 .hero-index{
     background-image: url("../assets/img/bg-masthead.jpg") ;
-    padding-top: 120px;
 }
 
 .hero-exploration{
@@ -175,10 +201,56 @@ footer
 */
 
 footer {
-    margin-top: auto;
+  position: sticky;
+  top: 100vh;
+  width: 100%;
 }
 
 footer.footer{
-    padding-top : 20px;
-    padding-bottom : 20px;
+    padding-top : 10px;
+    padding-bottom : 10px;
+}
+
+
+
+.content-aria{
+    background-color : white;
+    padding: 50px 0 ;
+    border-radius: 3px;
+    color: var(--dark-gray);
+}
+
+.content-aria > h2{
+    color: var(--dark-gray);
+    margin-bottom : 30px;
+}
+
+.content-aria > form{
+    margin : 20px 0;
+}
+
+.content-aria a{
+    color: var(--dark-gray);
+    border: none;
+    font-size: 15px;
+}
+
+.content-aria p{
+    font-size: 15px;
+}
+
+.field {
+    margin: 30px 0;
+    line-height: 2em;
+}
+
+.field > checkbox{
+
+}
+
+.field > input {
+    display: inline-block;
+    width: 100%;
+    border: none;
+    border-bottom: 1px solid var(--gray);
 }
