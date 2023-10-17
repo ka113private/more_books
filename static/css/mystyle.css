@@ -42,7 +42,24 @@ p {
     background-color: transparent;
     border-color: var(--primary);
     color: var(--primary);
+}
 
+.form-control {
+    display: block;
+    width: 100%;
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    background-clip: padding-box;
+    -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+    border-radius: 100px;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    background-color: var(--gray);
+    color: var(--dark-gray);
+    border: 1px solid transparent;
 }
 
 
@@ -51,6 +68,13 @@ p {
 }
 
 .container {
+}
+
+.container-hero {
+    margin-top: 80px;
+}
+
+.container-auth {
     margin-top: 150px;
 }
 
@@ -162,13 +186,14 @@ section
 service section
 */
 
-.matching {
+.category {
     position: relative;
     overflow: hidden;
-    border-radius: 500px;
+    border-radius: 3px;
+
 }
 
-.matching .overlay {
+.category .overlay {
     position: absolute;
     top: 0;
     left 0;
@@ -180,35 +205,17 @@ service section
     transition: all 0.4s ease;
 }
 
-.matching img{
+.category img{
     width: 100%;
     transition: all 0.4s ease;
 }
 
-.matching:hover .overlay{
+.category:hover .overlay{
     opacity: 1;
 }
 
-.matching:hover img{
+.category:hover img{
     transform: scale(1.1);
-}
-
-.form-control {
-    display: block;
-    width: 100%;
-    padding: 0.75rem 1rem;
-    font-size: 1rem;
-    font-weight: 400;
-    line-height: 1.5;
-    background-clip: padding-box;
-    -webkit-appearance: none;
-     -moz-appearance: none;
-          appearance: none;
-    border-radius: 0.25rem;
-    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-    background-color: var(--gray);
-    color: var(--dark-gray);
-    border: 1px solid transparent;
 }
 
 /*
@@ -318,4 +325,20 @@ modal
 
 .circle-unlike i{
     color: var(--unlike);
+}
+
+/*
+exploration
+*/
+.search-form{
+    display: flex;
+}
+
+.search-form i{
+    font-size: 20px;
+}
+
+.search-form button{
+    border: none;
+    background-color: transparent;
 }
