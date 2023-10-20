@@ -8,32 +8,38 @@
 {% endblock %}
 
 {% block contents %}
+
+<!-- hero section -->
+<section class="hero hero-list">
+    <div class="container-hero">
+        <div class="row d-flex">
+            <div class="col-sm-11 text-center mx-auto">
+                {% if query == "" %}
+                <h2>すべての一覧：{{ count }}冊</h2>
+                {% else %}
+                <h2>「{{ query }}」の一覧：{{ count }}冊</h2>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+
 <section>
     <div class="container px-4 px-lg-5 mt-5">
-        {% if query == "" %}
-        <h3>すべての一覧：{{ count }}冊</h3>
-        {% else %}
-        <h3>{{ query }}の一覧：{{ count }}冊</h3>
-        {% endif %}
-        <div class="row gx-4 gx-lg-5">
+        <div class="row gx-2 gx-lg-3">
             {% for book in book_list %}
-            <div class="col-md-3">
+            <div class="col-md-2">
                 <!--12を割った数字の数が列数になる -->
                 <div class="col mb-5">
                 <div class="card">
                     <a href="{% url 'books:book_detail' book.pk%}">
-                    <!-- Thumnail image-->
-                        {% if view_from == 'BookListFromTagView'%}
-                            <img class="card-img-top" src="../../media/{{ book.thumbnail_image }}" alt="..." />
-                        {% else %}
-                            <img class="card-img-top" src="../media/{{ book.thumbnail_image }}" alt="..." />
-                        {% endif %}
+                        <img class="card-img-top" src="../../media/{{ book.thumbnail_image }}" alt="..." />
                     </a>
                     <!-- Book details-->
                     <div class="card-body p-4">
-                        <div class="text-center">
+                        <div>
                             <!-- Product name-->
-                            <h5 class="fw-bolder">{{ book.title }}</h5>
+                            <h6 class="fw-bolder">{{ book.title }}</h6>
                             <!-- BookAuthor-->
                             {{ book.author }}
                         </div>

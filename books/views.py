@@ -14,7 +14,7 @@ from django.db.models import Q, Count
 
 logger = logging.getLogger(__name__)
 NUM_BOOKS_TO_DISPLAY = 6 # インデックスページで表示する際の書籍の数
-NUM_BOOKS_TO_DISPLAY_LISTPAGE = 20 # 一覧ページで表示する際の書籍の数
+NUM_BOOKS_TO_DISPLAY_LISTPAGE = 30 # 一覧ページで表示する際の書籍の数
 NUM_BOOKS_SEARCH = 1000 # 検索する書籍の書籍の数
 NUM_RELATED_BOOKS = 1000 # 提案する書籍の書籍の数
 
