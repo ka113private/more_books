@@ -136,6 +136,12 @@ hero section
     margin-bottom: 50px;
 }
 
+.hero-list{
+    background-image: url("../assets/img/bg-masthead-list.jpg") ;
+    padding: 50px;
+    margin-bottom: 50px;
+}
+
 .btn-exploration{
    margin-top: 40px;
 }
@@ -190,7 +196,6 @@ service section
     position: relative;
     overflow: hidden;
     border-radius: 3px;
-
 }
 
 .category .overlay {
@@ -341,4 +346,25 @@ exploration
 .search-form button{
     border: none;
     background-color: transparent;
+}
+
+/*
+list
+*/
+
+.card {
+    border: none;
+}
+
+.card-body h6{
+    color: var(--dark-gray);
+}
+
+.label-max{
+  display: block;
+  width: 14ch;
+  font-family: "Courier New", Consolas, monospace;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
