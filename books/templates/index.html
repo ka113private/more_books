@@ -18,7 +18,7 @@
                 <h1 class="display-4">More Books!</h1>
 
                 {% if user.is_authenticated %}
-                    <a type="button" class="btn-exploration btn btn-outline-light btn-lg" data-toggle="modal" data-target="#recommend-modal">
+                    <a type="button" class="btn-exploration btn btn-outline-light btn-lg" id="btn_related_books" data-toggle="modal" data-target="#recommend-modal">
                         新しい本と出会う
                     </a>
                 {% else %}
@@ -69,14 +69,14 @@
                     var next_book = bookList.books[0];//リストの先頭オブジェクトを取得する。
                     <!--bookElement.innerHTML = `<h6>${next_book.title}</h6><p>${next_book.author}</p>`;-->
                     <!--bookContainer.appendChild(bookElement);-->
-                    thumbnailImage.src = './../media/' + next_book.thumbnail_image;
+                    thumbnailImage.src = '../../media/' + next_book.thumbnail_image;
                     btnAddMybooks.style.display = 'inline'
                     btnNotAddMybooks.style.display = 'inline'
                     btnClose.style.display = 'none'
                 }else{
                     <!--bookElement.innerHTML = `<p>おすすめできる本は他にございません。しばらく時間がたってからまたお試しください。</p>`;-->
                     bookContainer.appendChild(bookElement);
-                    thumbnailImage.src = './../media/static/sorry.png';
+                    thumbnailImage.src = '../../media/static/sorry.png';
                     btnAddMybooks.style.display = 'none'
                     btnNotAddMybooks.style.display = 'none'
                     btnClose.style.display = 'inline'
@@ -118,13 +118,13 @@
                     bookList = JSON.parse(data.next_books);//JSONデータからリストを取得する。
                     var next_book = bookList.books[0];//リストの先頭オブジェクトを取得する。
                     <!--bookElement.innerHTML = `<h6>${next_book.title}</h6><p>${next_book.author}</p>`;-->
-                    thumbnailImage.src = './../media/' + next_book.thumbnail_image;
+                    thumbnailImage.src = '../../media/' + next_book.thumbnail_image;
                     btnAddMybooks.style.display = 'inline'
                     btnNotAddMybooks.style.display = 'inline'
                     btnClose.style.display = 'none'
                 }else{
                     <!--bookElement.innerHTML = `<p>おすすめできる本は他にございません。しばらく時間がたってからまたお試しください。</p>`;-->
-                    thumbnailImage.src = './../media/static/sorry.png';
+                    thumbnailImage.src = '../../media/static/sorry.png';
                     btnAddMybooks.style.display = 'none'
                     btnNotAddMybooks.style.display = 'none'
                     btnClose.style.display = 'inline'
