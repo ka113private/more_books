@@ -7,14 +7,14 @@ from django.views import generic
 from .forms import InquiryForm, TagAddForm, BookshelfAddForm, ProfileEditForm, StatusChangeForm
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .models import Book, FavoriteBook, BookTag, TagLike ,Tag, Bookshelf, CustomUser
+from .models import Book, FavoriteBook, BookTag, TagLike, Tag, Bookshelf, CustomUser, SubCategory
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from django.db.models import Q, Count
 
 logger = logging.getLogger(__name__)
 NUM_BOOKS_TO_DISPLAY = 6 # インデックスページで表示する際の書籍の数
-NUM_BOOKS_TO_DISPLAY_LISTPAGE = 20 # 一覧ページで表示する際の書籍の数
+NUM_BOOKS_TO_DISPLAY_LISTPAGE = 30 # 一覧ページで表示する際の書籍の数
 NUM_BOOKS_SEARCH = 1000 # 検索する書籍の書籍の数
 NUM_RELATED_BOOKS = 1000 # 提案する書籍の書籍の数
 
@@ -88,6 +88,27 @@ class BookListFromTagView(LoginRequiredMixin, generic.ListView):
         context['query'] = "#" + tag.name
         context['view_from']='BookListFromTagView'
         context['count'] = self.count
+        return context
+
+class BookListFromCategoryView(LoginRequiredMixin, generic.ListView):
+    """Categoryを押下したときに遷移する一覧ページ用View"""
+    model = Book
+    template_name = 'book_list.html'
+    paginate_by = NUM_BOOKS_TO_DISPLAY_LISTPAGE
+    count = 0
+    sub_category = None
+
+    def get_queryset(self, **kwargs):
+        queryset = super().get_queryset()
+        self.sub_category = get_object_or_404(SubCategory, pk=self.kwargs['pk'])
+        queryset = queryset.filter(sub_category=self.sub_category.pk)
+        self.count = queryset.count()
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['count'] = self.count
+        context['query'] = self.sub_category.name
         return context
 
 class BookListFromCustomView(LoginRequiredMixin, generic.ListView):

@@ -10,7 +10,8 @@ urlpatterns = [
     #書籍一覧ページ遷移用URL
     path('book-list-from-search/', views.BookListFromSearchView.as_view(), name="book_list_from_search"),
     path('book-list-from-tag/<int:pk>/', views.BookListFromTagView.as_view(), name="book_list_from_tag"),
-    path('book-list-from-custom/<slug:custom>', views.BookListFromCustomView.as_view(), name="book_list_from_custom"),
+    #path('book-list-from-custom/<slug:custom>', views.BookListFromCustomView.as_view(), name="book_list_from_custom"),
+    path('book-list-from-category/<int:pk>/', views.BookListFromCategoryView.as_view(), name="book_list_from_category"),
     #書籍詳細ページ遷移用URL
     path('book-detail/<int:pk>/', views.BookDetailView.as_view(), name="book_detail"),
     #マイページ遷移用URL
