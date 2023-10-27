@@ -1,17 +1,20 @@
 <div class="modal fade" id="tagAddModal-{{object.pk}}" tabindex="-1" aria-labelledby="tagAddModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
-            <form class="mt-5" action="{% url 'books:tag_add' book.pk %}" method="POST">
-                {% csrf_token %}
-                <div class="modal-header">
-                    <h5 class="modal-title" id="tagAddModalLabel">タグ追加</h5>
-                    <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
-                </div>
+            <div class="modal-close">
+                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="{% url 'books:tag_add' book.pk %}" method="POST">
                 <div class="modal-body">
                     <div class="row">
-                        {{ tag_add_form.name }}
-                    </div>
+                        <div class="col-9 mx-auto">
+                            <div class="field">
+                                {{ tag_add_form.name }}
+                            </div>
+                        </div>
+                    <div>
                 </div>
+                {% csrf_token %}
                 <div class="modal-footer">
                     <div class="d-grid gap-2 col-6 mx-auto">
                         <button class="btn btn-primary" type="submit" name="button">追加</button>

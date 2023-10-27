@@ -65,6 +65,7 @@ class TagAddForm(forms.ModelForm):
         super().__int__(*args, **kwargs)
         for field in self.field.values():
             field.widget.attrs['class'] = 'form-control'
+        self.fields['name'].initial = 'タグ'
 
 
 class BookshelfAddForm(forms.ModelForm):

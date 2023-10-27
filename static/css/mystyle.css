@@ -283,12 +283,28 @@ footer.footer{
 }
 
 /*
-modal
+modal common
 */
 
 .modal-footer{
     border-top: none;
 }
+
+.modal-close{
+    text-align: right;
+}
+
+.modal-content{
+    border: none;
+}
+
+.modal-content h2{
+    color: var(--dark-gray);
+}
+
+/*
+matching-modal
+*/
 
 .circle{
     width: 100px;
@@ -349,7 +365,7 @@ exploration
 }
 
 /*
-list
+list page
 */
 
 .card {
@@ -367,4 +383,47 @@ list
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
+}
+
+/*
+detail page
+*/
+
+.book-image {
+    position: relative;
+}
+
+.book-image > .favorite-icon{
+    position: absolute;
+    top: 10px;
+    left: 80%;
+    height: 40px;
+    width: 40px;
+    /*text-align: center;
+    background-color: var(--body);
+    border-radius: 100px;*/
+}
+
+.book-image i {
+    font-size: 30px;
+    background-color: var(--white-gray);
+    border-radius: 100px;
+}
+
+.detail h1{
+    color: var(--dark);
+}
+
+.tags-aria{
+    margin-top: 20px;
+}
+
+.tags-aria button{
+    padding: 0px;
+}
+
+.tag{
+    display: inline-block;
+    margin: 0 10px 5px 0;
+	line-height: 1;
 }
