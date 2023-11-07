@@ -9,6 +9,7 @@
 {% endblock %}
 
 {% block contents %}
+
 <!-- hero section -->
 <section class="hero hero-index vh-100 d-flex align-items-center">
     <div class="container">
@@ -33,24 +34,30 @@
 {% endblock %}
 
 {% block javascript %}
-
-    <!-- var bookContainer = document.getElementById('book_detail'); -->
     var thumbnailImage = document.getElementById('thumbnail_image');
-    var bookElement = document.createElement('div');
-    var btnAddMybooks = document.getElementById('add_mybooks');
-    var btnNotAddMybooks = document.getElementById('not_add_mybooks');
-    var btnClose = document.getElementById('close');
+    var btnLike = document.getElementById('btn_like');
+    var btnUnLike = document.getElementById('btn_unlike');
+    var btnRelatedBooks = document.getElementById('btn_related_books');
 
-    document.getElementById('btn_related_books').addEventListener('click', e => {
+    <!-- サーバから提案書籍リストを取得　-->
+    btnRelatedBooks.addEventListener('click', e => {
         const url = '{% url "books:get_related_books" %}';
         e.preventDefault();
         getRecommendBooks(url)
     });
 
-    document.getElementById('btn_new_books').addEventListener('click', e => {
-        const url = '{% url "books:get_new_books" %}';
+    btnLike.addEventListener('click', e => {
+        const jsonData = JSON.stringify(bookList);
+        const url = '{% url "books:add_mybooks" %}';
         e.preventDefault();
-        getRecommendBooks(url)
+        fetchData(url, jsonData);
+    });
+
+    btnUnLike.addEventListener('click', e => {
+        const jsonData = JSON.stringify(bookList);
+        const url = '{% url "books:not_add_mybooks" %}';
+        e.preventDefault();
+        fetchData(url, jsonData);
     });
 
     <!-- レコメンド書籍リストをサーバから取得する -->
@@ -67,40 +74,14 @@
                 if(data.recommend_exists){
                     bookList = JSON.parse(data.recommend_books);//JSONデータからリストを取得する。
                     var next_book = bookList.books[0];//リストの先頭オブジェクトを取得する。
-                    <!--bookElement.innerHTML = `<h6>${next_book.title}</h6><p>${next_book.author}</p>`;-->
-                    <!--bookContainer.appendChild(bookElement);-->
                     thumbnailImage.src = '../../media/' + next_book.thumbnail_image;
-                    btnAddMybooks.style.display = 'inline'
-                    btnNotAddMybooks.style.display = 'inline'
-                    btnClose.style.display = 'none'
                 }else{
-                    <!--bookElement.innerHTML = `<p>おすすめできる本は他にございません。しばらく時間がたってからまたお試しください。</p>`;-->
-                    bookContainer.appendChild(bookElement);
                     thumbnailImage.src = '../../media/static/sorry.png';
-                    btnAddMybooks.style.display = 'none'
-                    btnNotAddMybooks.style.display = 'none'
-                    btnClose.style.display = 'inline'
                 }
         }).catch(error => {
             console.log(error);
         });
     }
-
-    <!-- 「読みたい」を押した場合（Ajax）-->
-    document.getElementById('add_mybooks').addEventListener('click', e => {
-        const jsonData = JSON.stringify(bookList);
-        const url = '{% url "books:add_mybooks" %}';
-        e.preventDefault();
-        fetchData(url, jsonData)
-    });
-
-    <!-- 「興味ない」を押した場合（Ajax）-->
-    document.getElementById('not_add_mybooks').addEventListener('click', e => {
-        const jsonData = JSON.stringify(bookList);
-        const url = '{% url "books:not_add_mybooks" %}';
-        e.preventDefault();
-        fetchData(url, jsonData)
-    });
 
     <!-- レコメンド書籍リストをviewに渡す処理 -->
     function fetchData(url, data){
@@ -117,17 +98,9 @@
                 if(data.exists){
                     bookList = JSON.parse(data.next_books);//JSONデータからリストを取得する。
                     var next_book = bookList.books[0];//リストの先頭オブジェクトを取得する。
-                    <!--bookElement.innerHTML = `<h6>${next_book.title}</h6><p>${next_book.author}</p>`;-->
                     thumbnailImage.src = '../../media/' + next_book.thumbnail_image;
-                    btnAddMybooks.style.display = 'inline'
-                    btnNotAddMybooks.style.display = 'inline'
-                    btnClose.style.display = 'none'
                 }else{
-                    <!--bookElement.innerHTML = `<p>おすすめできる本は他にございません。しばらく時間がたってからまたお試しください。</p>`;-->
                     thumbnailImage.src = '../../media/static/sorry.png';
-                    btnAddMybooks.style.display = 'none'
-                    btnNotAddMybooks.style.display = 'none'
-                    btnClose.style.display = 'inline'
                 }
         }).catch(error => {
             console.log(error);

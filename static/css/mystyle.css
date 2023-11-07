@@ -306,6 +306,12 @@ modal common
 matching-modal
 */
 
+.matching-button {
+  border: none;
+  outline: none;
+  background: transparent;
+}
+
 .circle{
     width: 100px;
     height: 100px;
