@@ -11,26 +11,95 @@
 {% block contents %}
 
 <!-- hero section -->
-<section class="hero hero-index vh-100 d-flex align-items-center">
+{% if user.is_authenticated %}
+<section class="hero hero-index-afterauth vh-100 d-flex align-items-center">
     <div class="container">
         <div class="row">
-            <div class="col-lg-7 mx-auto text-center">
-                <h1 class="display-4">人生を変える本に出会おう。</h1>
-                <h1 class="display-4">More Books!</h1>
-
-                {% if user.is_authenticated %}
-                    <a type="button" class="btn-exploration btn btn-outline-light btn-lg" id="btn_related_books" data-toggle="modal" data-target="#recommend-modal">
-                        新しい本と出会う
-                    </a>
-                {% else %}
-                    <a type="button" class="btn-exploration btn btn-outline-light btn-lg" href="{% url 'account_login' %}">
-                        新しい本と出会う
-                    </a>
-                {% endif %}
+            <div class="index-afterauth-content col-md-7 mx-auto text-center">
+                <a type="button" class="btn-exploration btn btn-outline-light btn-lg" id="btn_related_books" data-toggle="modal" data-target="#recommend-modal">
+                    店主におすすめを聞いてみる
+                </a>
             </div>
         </div>
     </div>
 </section>
+<section class="service">
+    <div class="container">
+
+        <div class="row d-flex justify-content-center my-5">
+            <div class="col-lg-3 col-md-6 col-sm-12">
+                <div class="category">
+                    <a href="{% url 'books:book_list_from_category' 4 %}">
+                        <img src="./static/assets/img/mystery.jpg" alt="">
+                        <div class="overlay">
+                            <h4 class="text-white">ミステリー・サスペンス・ハードボイルド</h4>
+                            <h6 class="text-white">未だ見ぬ新たな世界へ飛び込んでみましょう</h6>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-12">
+                <div class="category">
+                    <a href="{% url 'books:book_list_from_category' 2 %}">
+                        <img src="./static/assets/img/history.jpg" alt="">
+                        <div class="overlay">
+                            <h4 class="text-white">歴史小説</h4>
+                            <h6 class="text-white">未だ見ぬ新たな世界へ飛び込んでみましょう</h6>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-12">
+                <div class="category">
+                    <a href="{% url 'books:book_list_from_category' 27 %}">
+                        <img src="./static/assets/img/science.jpg" alt="">
+                        <div class="overlay">
+                            <h4 class="text-white">科学</h4>
+                            <h6 class="text-white">未だ見ぬ新たな世界へ飛び込んでみましょう</h6>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-12">
+                <div class="category">
+                    <a href="{% url 'books:book_list_from_category' 28 %}">
+                        <img src="./static/assets/img/art.jpg" alt="">
+                        <div class="overlay">
+                            <h4 class="text-white">アート</h4>
+                            <h6 class="text-white">未だ見ぬ新たな世界へ飛び込んでみましょう</h6>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="row d-flex justify-content-center">
+            <div class="col-lg-6 col-sm-12">
+                <form class="search-form d-flex align-items-center" action="{% url 'books:book_list_from_search' %}" method="get">
+                    <input class="form-control form-control-sm me-2" size="45" type="search" name="query" placeholder="Search" aria-label="Search">
+                    <button type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% else %}
+
+<section class="hero hero-index-beforeauth vh-100 d-flex align-items-center">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-7 mx-auto text-center">
+                <h1 class="copy display-4">人生を変える本に出会おう。</h1>
+                <h1 class="copy display-4">More Books!</h1>
+                <a type="button" class="btn-exploration btn btn-outline-light btn-lg" href="{% url 'account_login' %}">
+                    新しい本と出会う
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endif %}
 {% endblock %}
 
 {% block javascript %}
