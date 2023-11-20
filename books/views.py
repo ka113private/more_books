@@ -273,7 +273,7 @@ class StatusDeleteView(LoginRequiredMixin, generic.DeleteView):
         return reverse_lazy('books:mybooks')
 
     def delete(self, request, *args, **kwargs):
-        messages.success(self.request, 'my本棚から書籍を削除しました。')
+        messages.success(self.request, '本棚から書籍を削除しました。')
         return super().delete(request, *args, **kwargs)
 
 class FeedbackView(LoginRequiredMixin, generic.UpdateView):

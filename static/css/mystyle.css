@@ -331,6 +331,29 @@ footer.footer{
 }
 
 /*
+Bookshlef
+*/
+.btn-delete{
+    position: absolute;
+    top: -1rem;
+    right: -1rem;
+    height: 30px
+    width: 30px
+    border-radius: 100px;
+    border: 2px solid var(--dark-gray);
+    background-color: white;
+}
+
+.delete-confirm h4{
+    color: var(--dark-gray);
+}
+
+.delete-confirm h6{
+    color: var(--dark);
+}
+
+
+/*
 modal common
 */
 
