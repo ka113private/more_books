@@ -365,8 +365,17 @@ modal common
     text-align: right;
 }
 
-.modal-content{
-    border: none;
+.modal-content-index{
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  pointer-events: auto;
+  background-color: transparent;
+  background-clip: padding-box;
+  border: none
+  border-radius: 0.3rem;
+  outline: 0;
 }
 
 .modal-content h2{
@@ -423,6 +432,13 @@ matching-modal
 
 .circle-unlike i{
     color: var(--unlike);
+}
+
+.card-img-top-modal
+{
+  width: 70%;
+  margin: auto;
+  display: block;
 }
 
 /*
