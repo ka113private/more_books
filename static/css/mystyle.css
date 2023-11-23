@@ -78,7 +78,7 @@ p {
 }
 
 section {
-    padding: 50px 0px;
+    padding-top: 20px;
 }
 
 @media screen and (max-width: 768px){
@@ -130,7 +130,6 @@ Hero
 .hero-index-beforeauth{
     background-position: center;
     background-size: cover;
-    background-attachment: fixed;
     position: relative;
     z-index: 2;
     background-image: url("../assets/img/bg-masthead-index-beforeauth-pc.jpg") ;
@@ -150,7 +149,6 @@ Hero
 .hero-index-afterauth{
     background-position: center;
     background-size: cover;
-    background-attachment: fixed;
     position: relative;
     z-index: 2;
     background-image: url("../assets/img/bg-masthead-index-afterauth-pc.jpg") ;
@@ -220,7 +218,55 @@ section
 }
 
 /*
-service section
+book-recommends section
+*/
+.recommend-image img{
+    width: 100%;
+}
+
+.recommend-comment {
+  position: relative;
+  display: inline-block;
+  margin-bottom: 1.5em;
+  padding: 7px 10px;
+  min-width: 120px;
+  max-width: 100%;
+  color: #555;
+  background: #e0edff;
+  border-radius: 15px;
+}
+
+.recommend-comment:before {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -15px;
+  border: 15px solid transparent;
+  border-top: 15px solid #e0edff;
+}
+
+.recommend-comment p {
+  font-size: 13px;
+  line-height: 1.5;
+  margin: 0;
+  padding: 0;
+}
+
+.owner{
+    text-align: center;
+}
+.owner-icon{
+  border-radius: 100px;
+  height: 40px;
+  width: 40px;
+}
+.owner-name{
+    font-size: 10px;
+}
+
+/*
+book-category section
 */
 
 .category {
