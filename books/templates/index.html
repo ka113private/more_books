@@ -23,17 +23,20 @@
         </div>
     </div>
 </section>
-<section class="service">
+<section class="book-categories">
     <div class="container">
-
-        <div class="row d-flex justify-content-center my-5">
+        <div class="section-title">
+                <div class="section-title-en">Book Category</div>
+                <div class="section-title-jp">カテゴリ一覧</div>
+        </div>
+        <div class="row d-flex justify-content-center my-5 gy-4">
             <div class="col-lg-3 col-md-6 col-sm-12">
                 <div class="category">
-                    <a href="{% url 'books:book_list_from_category' 4 %}">
-                        <img src="./static/assets/img/mystery.jpg" alt="">
+                    <a href="{% url 'books:book_list_from_category' 1 %}">
+                        <img src="./static/assets/img/cat_literature.jpg" alt="">
                         <div class="overlay">
-                            <h4 class="text-white">ミステリー・サスペンス・ハードボイルド</h4>
-                            <h6 class="text-white">未だ見ぬ新たな世界へ飛び込んでみましょう</h6>
+                            <div class="category-name-en">Literature</div>
+                            <div class="category-name-jp">文学・評論</div>
                         </div>
                     </a>
                 </div>
@@ -41,32 +44,164 @@
             <div class="col-lg-3 col-md-6 col-sm-12">
                 <div class="category">
                     <a href="{% url 'books:book_list_from_category' 2 %}">
-                        <img src="./static/assets/img/history.jpg" alt="">
+                        <img src="./static/assets/img/cat_thought.jpg" alt="">
                         <div class="overlay">
-                            <h4 class="text-white">歴史小説</h4>
-                            <h6 class="text-white">未だ見ぬ新たな世界へ飛び込んでみましょう</h6>
+                            <div class="category-name-en">Thought</div>
+                            <div class="category-name-jp">人文・思想</div>
                         </div>
                     </a>
                 </div>
             </div>
             <div class="col-lg-3 col-md-6 col-sm-12">
                 <div class="category">
-                    <a href="{% url 'books:book_list_from_category' 27 %}">
-                        <img src="./static/assets/img/science.jpg" alt="">
+                    <a href="{% url 'books:book_list_from_category' 3 %}">
+                        <img src="./static/assets/img/cat_society_politics.jpg" alt="">
                         <div class="overlay">
-                            <h4 class="text-white">科学</h4>
-                            <h6 class="text-white">未だ見ぬ新たな世界へ飛び込んでみましょう</h6>
+                            <div class="category-name-en">Society ＆ Politics</div>
+                            <div class="category-name-jp">社会・政治</div>
                         </div>
                     </a>
                 </div>
             </div>
             <div class="col-lg-3 col-md-6 col-sm-12">
                 <div class="category">
-                    <a href="{% url 'books:book_list_from_category' 28 %}">
-                        <img src="./static/assets/img/art.jpg" alt="">
+                    <a href="{% url 'books:book_list_from_category' 4 %}">
+                        <img src="./static/assets/img/cat_nonfiction.jpg" alt="">
                         <div class="overlay">
-                            <h4 class="text-white">アート</h4>
-                            <h6 class="text-white">未だ見ぬ新たな世界へ飛び込んでみましょう</h6>
+                            <div class="category-name-en">Non-Fiction</div>
+                            <div class="category-name-jp">ノンフィクション</div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-12">
+                <div class="category">
+                    <a href="{% url 'books:book_list_from_category' 5 %}">
+                        <img src="./static/assets/img/cat_history_geography.jpg" alt="">
+                        <div class="overlay">
+                            <div class="category-name-en">History ＆ Geography</div>
+                            <div class="category-name-jp">歴史・地理</div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-12">
+                <div class="category">
+                    <a href="{% url 'books:book_list_from_category' 6 %}">
+                        <img src="./static/assets/img/cat_business_economics.jpg" alt="">
+                        <div class="overlay">
+                            <div class="category-name-en">Business ＆ Economics</div>
+                            <div class="category-name-jp">ビジネス・経済</div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-12">
+                <div class="category">
+                    <a href="{% url 'books:book_list_from_category' 7 %}">
+                        <img src="./static/assets/img/cat_finance_management.jpg" alt="">
+                        <div class="overlay">
+                            <div class="category-name-en">Finance ＆ Management</div>
+                            <div class="category-name-jp">投資・金融・会社経営</div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-12">
+                <div class="category">
+                    <a href="{% url 'books:book_list_from_category' 8 %}">
+                        <img src="./static/assets/img/cat_science_technology.jpg" alt="">
+                        <div class="overlay">
+                            <div class="category-name-en">Science ＆ Technology</div>
+                            <div class="category-name-jp">科学・テクノロジー</div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-12">
+                <div class="category">
+                    <a href="{% url 'books:book_list_from_category' 9 %}">
+                        <img src="./static/assets/img/cat_medicine_pharmacy.jpg" alt="">
+                        <div class="overlay">
+                            <div class="category-name-en">Medicine ＆ Pharmacy</div>
+                            <div class="category-name-jp">医学・薬学・看護学・歯科学</div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-12">
+                <div class="category">
+                    <a href="{% url 'books:book_list_from_category' 10 %}">
+                        <img src="./static/assets/img/cat_computer_it.jpg" alt="">
+                        <div class="overlay">
+                            <div class="category-name-en">Computer ＆ IT</div>
+                            <div class="category-name-jp">コンピュータ・IT</div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-12">
+                <div class="category">
+                    <a href="{% url 'books:book_list_from_category' 11 %}">
+                        <img src="./static/assets/img/cat_art_architecture.jpg" alt="">
+                        <div class="overlay">
+                            <div class="category-name-en">Art ＆ Architecture</div>
+                            <div class="category-name-jp">アート・建築・デザイン</div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-12">
+                <div class="category">
+                    <a href="{% url 'books:book_list_from_category' 12 %}">
+                        <img src="./static/assets/img/cat_practical.jpg" alt="">
+                        <div class="overlay">
+                            <div class="category-name-en">Practical</div>
+                            <div class="category-name-jp">実用</div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-12">
+                <div class="category">
+                    <a href="{% url 'books:book_list_from_category' 13 %}">
+                        <img src="./static/assets/img/cat_hobby.jpg" alt="">
+                        <div class="overlay">
+                            <div class="category-name-en">Hobby</div>
+                            <div class="category-name-jp">趣味</div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-12">
+                <div class="category">
+                    <a href="{% url 'books:book_list_from_category' 14 %}">
+                        <img src="./static/assets/img/cat_sports.jpg" alt="">
+                        <div class="overlay">
+                            <div class="category-name-en">Sports</div>
+                            <div class="category-name-jp">スポーツ</div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-12">
+                <div class="category">
+                    <a href="{% url 'books:book_list_from_category' 15 %}">
+                        <img src="./static/assets/img/cat_outdoors.jpg" alt="">
+                        <div class="overlay">
+                            <div class="category-name-en">Outdoors</div>
+                            <div class="category-name-jp">アウトドア</div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-12">
+                <div class="category">
+                    <a href="{% url 'books:book_list_from_category' 16 %}">
+                        <img src="./static/assets/img/cat_qualification.jpg" alt="">
+                        <div class="overlay">
+                            <div class="category-name-en">Qualification</div>
+                            <div class="category-name-jp">資格・検定・就職</div>
                         </div>
                     </a>
                 </div>
