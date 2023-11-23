@@ -170,6 +170,9 @@ Hero
    margin-top: 40px;
 }
 
+.copy{
+        color: white;
+    }
 
 @media screen and (max-width: 768px){
 
