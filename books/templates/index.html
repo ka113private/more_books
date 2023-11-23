@@ -11,26 +11,298 @@
 {% block contents %}
 
 <!-- hero section -->
-<section class="hero hero-index vh-100 d-flex align-items-center">
+{% if user.is_authenticated %}
+<section class="hero hero-index-afterauth vh-100 d-flex align-items-center">
     <div class="container">
         <div class="row">
-            <div class="col-lg-7 mx-auto text-center">
-                <h1 class="display-4">人生を変える本に出会おう。</h1>
-                <h1 class="display-4">More Books!</h1>
-
-                {% if user.is_authenticated %}
-                    <a type="button" class="btn-exploration btn btn-outline-light btn-lg" id="btn_related_books" data-toggle="modal" data-target="#recommend-modal">
-                        新しい本と出会う
-                    </a>
-                {% else %}
-                    <a type="button" class="btn-exploration btn btn-outline-light btn-lg" href="{% url 'account_login' %}">
-                        新しい本と出会う
-                    </a>
-                {% endif %}
+            <div class="index-afterauth-content col-md-7 mx-auto text-center">
+                <a type="button" class="btn-exploration btn btn-outline-light btn-lg" id="btn_related_books" data-toggle="modal" data-target="#recommend-modal">
+                    店主におすすめを聞いてみる
+                </a>
             </div>
         </div>
     </div>
 </section>
+<section class="book-recommends">
+    <div class="container">
+        <div class="section-title">
+            <div class="section-title-en">Recommends</div>
+            <div class="section-title-jp">今月の店主のオススメ</div>
+        </div>
+        <div class="row d-flex justify-content-center my-5 gy-4">
+            <div class="col-lg-2 col-6">
+                <div class="recommend-image">
+                    <a href="{% url 'books:book_detail' 4863940920 %}">
+                        <img src="../../media/4863940920.png" alt="">
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-2 col-6">
+                <div class="recommend-comment">
+                    <p>
+                        「７つの習慣」は、成功への道標。自己管理、効果的なコミュニケーション、持続可能な成長を促進する原則が凝縮されています。
+                        主体性、計画力、協力心、相互理解、シナジー、バランスの７つの柱で構築され、読者を積極的な変革へと導きます。
+                        これはあなたの人生や仕事に革命をもたらすはずです。
+                    </p>
+                </div>
+                <div class="owner">
+                    <img class="owner-icon" src="./static/assets/img/owner-icon-chitti.jpg" alt="">
+                    <div class="owner-name">店主chitti</div>
+                </div>
+            </div>
+            <div class="col-lg-2 col-6">
+                <div class="recommend-image">
+                    <a href="{% url 'books:book_detail' 4761270438 %}">
+                        <img src="../../media/4761270438.png" alt="">
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-2 col-6">
+                <div class="recommend-comment">
+                    <p>
+                        様々な情報で溢れるこの世の中。それらの情報は一見すると仕事や日々の生活に役立つように思えますが、実はその多くは単なるノイズかもしれません。
+                        本書ではそのノイズをかき分けて本当に重要なことのみに注力することで最大の成果を上げるためのノウハウが詰まっています。
+                    </p>
+                </div>
+                <div class="owner">
+                    <img class="owner-icon" src="./static/assets/img/owner-icon-chitti.jpg" alt="">
+                    <div class="owner-name">店主chitti</div>
+                </div>
+            </div>
+            <div class="col-lg-2 col-6">
+                <div class="recommend-image">
+                    <a href="{% url 'books:book_detail' 4865014225 %}">
+                        <img src="../../media/4865014225.png" alt="">
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-2 col-6">
+                <div class="recommend-comment">
+                    <p>
+                        ニンテンドーDSやWiiといった誰もが知るゲームを生み出した任天堂の岩田聡社長が数々のインタビュー等で話されていた内容を編纂した一冊。
+                        ゲームを通じて人に楽しさや喜びを提供し続けた岩田社長の考えや姿勢、任天堂という大企業を成長させ続けることができた秘訣を知ることができます。
+                    </p>
+                </div>
+                <div class="owner">
+                    <img class="owner-icon" src="./static/assets/img/owner-icon-chitti.jpg" alt="">
+                    <div class="owner-name">店主chitti</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="book-categories">
+    <div class="container">
+        <div class="section-title">
+            <div class="section-title-en">Book Category</div>
+            <div class="section-title-jp">カテゴリ一覧</div>
+        </div>
+        <div class="row d-flex justify-content-center my-5 gy-4">
+            <div class="col-lg-3 col-md-6 col-sm-12">
+                <div class="category">
+                    <a href="{% url 'books:book_list_from_category' 1 %}">
+                        <img src="./static/assets/img/cat_literature.jpg" alt="">
+                        <div class="overlay">
+                            <div class="category-name-en">Literature</div>
+                            <div class="category-name-jp">文学・評論</div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-12">
+                <div class="category">
+                    <a href="{% url 'books:book_list_from_category' 2 %}">
+                        <img src="./static/assets/img/cat_thought.jpg" alt="">
+                        <div class="overlay">
+                            <div class="category-name-en">Thought</div>
+                            <div class="category-name-jp">人文・思想</div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-12">
+                <div class="category">
+                    <a href="{% url 'books:book_list_from_category' 3 %}">
+                        <img src="./static/assets/img/cat_society_politics.jpg" alt="">
+                        <div class="overlay">
+                            <div class="category-name-en">Society ＆ Politics</div>
+                            <div class="category-name-jp">社会・政治</div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-12">
+                <div class="category">
+                    <a href="{% url 'books:book_list_from_category' 4 %}">
+                        <img src="./static/assets/img/cat_nonfiction.jpg" alt="">
+                        <div class="overlay">
+                            <div class="category-name-en">Non-Fiction</div>
+                            <div class="category-name-jp">ノンフィクション</div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-12">
+                <div class="category">
+                    <a href="{% url 'books:book_list_from_category' 5 %}">
+                        <img src="./static/assets/img/cat_history_geography.jpg" alt="">
+                        <div class="overlay">
+                            <div class="category-name-en">History ＆ Geography</div>
+                            <div class="category-name-jp">歴史・地理</div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-12">
+                <div class="category">
+                    <a href="{% url 'books:book_list_from_category' 6 %}">
+                        <img src="./static/assets/img/cat_business_economics.jpg" alt="">
+                        <div class="overlay">
+                            <div class="category-name-en">Business ＆ Economics</div>
+                            <div class="category-name-jp">ビジネス・経済</div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-12">
+                <div class="category">
+                    <a href="{% url 'books:book_list_from_category' 7 %}">
+                        <img src="./static/assets/img/cat_finance_management.jpg" alt="">
+                        <div class="overlay">
+                            <div class="category-name-en">Finance ＆ Management</div>
+                            <div class="category-name-jp">投資・金融・会社経営</div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-12">
+                <div class="category">
+                    <a href="{% url 'books:book_list_from_category' 8 %}">
+                        <img src="./static/assets/img/cat_science_technology.jpg" alt="">
+                        <div class="overlay">
+                            <div class="category-name-en">Science ＆ Technology</div>
+                            <div class="category-name-jp">科学・テクノロジー</div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-12">
+                <div class="category">
+                    <a href="{% url 'books:book_list_from_category' 9 %}">
+                        <img src="./static/assets/img/cat_medicine_pharmacy.jpg" alt="">
+                        <div class="overlay">
+                            <div class="category-name-en">Medicine ＆ Pharmacy</div>
+                            <div class="category-name-jp">医学・薬学・看護学・歯科学</div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-12">
+                <div class="category">
+                    <a href="{% url 'books:book_list_from_category' 10 %}">
+                        <img src="./static/assets/img/cat_computer_it.jpg" alt="">
+                        <div class="overlay">
+                            <div class="category-name-en">Computer ＆ IT</div>
+                            <div class="category-name-jp">コンピュータ・IT</div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-12">
+                <div class="category">
+                    <a href="{% url 'books:book_list_from_category' 11 %}">
+                        <img src="./static/assets/img/cat_art_architecture.jpg" alt="">
+                        <div class="overlay">
+                            <div class="category-name-en">Art ＆ Architecture</div>
+                            <div class="category-name-jp">アート・建築・デザイン</div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-12">
+                <div class="category">
+                    <a href="{% url 'books:book_list_from_category' 12 %}">
+                        <img src="./static/assets/img/cat_practical.jpg" alt="">
+                        <div class="overlay">
+                            <div class="category-name-en">Practical</div>
+                            <div class="category-name-jp">実用</div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-12">
+                <div class="category">
+                    <a href="{% url 'books:book_list_from_category' 13 %}">
+                        <img src="./static/assets/img/cat_hobby.jpg" alt="">
+                        <div class="overlay">
+                            <div class="category-name-en">Hobby</div>
+                            <div class="category-name-jp">趣味</div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-12">
+                <div class="category">
+                    <a href="{% url 'books:book_list_from_category' 14 %}">
+                        <img src="./static/assets/img/cat_sports.jpg" alt="">
+                        <div class="overlay">
+                            <div class="category-name-en">Sports</div>
+                            <div class="category-name-jp">スポーツ</div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-12">
+                <div class="category">
+                    <a href="{% url 'books:book_list_from_category' 15 %}">
+                        <img src="./static/assets/img/cat_outdoors.jpg" alt="">
+                        <div class="overlay">
+                            <div class="category-name-en">Outdoors</div>
+                            <div class="category-name-jp">アウトドア</div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-12">
+                <div class="category">
+                    <a href="{% url 'books:book_list_from_category' 16 %}">
+                        <img src="./static/assets/img/cat_qualification.jpg" alt="">
+                        <div class="overlay">
+                            <div class="category-name-en">Qualification</div>
+                            <div class="category-name-jp">資格・検定・就職</div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="row d-flex justify-content-center">
+            <div class="col-lg-6 col-sm-12">
+                <form class="search-form d-flex align-items-center" action="{% url 'books:book_list_from_search' %}" method="get">
+                    <input class="form-control form-control-sm me-2" size="45" type="search" name="query" placeholder="Search" aria-label="Search">
+                    <button type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% else %}
+
+<section class="hero hero-index-beforeauth vh-100 d-flex align-items-center">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-7 mx-auto text-center">
+                <h1 class="copy display-4">人生を変える本に出会おう。</h1>
+                <h1 class="copy display-4">More Books!</h1>
+                <a type="button" class="btn-exploration btn btn-outline-light btn-lg" href="{% url 'account_login' %}">
+                    新しい本と出会う
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endif %}
 {% endblock %}
 
 {% block javascript %}
