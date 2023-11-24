@@ -11,10 +11,10 @@
 
 {% block contents %}
 <section>
-    <div class="container px-4 px-lg-5 mt-5">
+    <div class="container px-4 py-3 px-lg-5 mt-5">
         <div class="row gx-2 gx-lg-3 gy-4 align-items-center">
             {% for mybook in mybooks_want %}
-            <div class="col-md-2">
+            <div class="col-md-2 col-6">
                 <div class="card">
                     <a class="btn btn-delete" data-toggle="modal" data-target="#delete-modal-{{mybook.book.pk}}">
                         <i class="fa-solid fa-xmark"></i>
