@@ -1,21 +1,15 @@
 <div class="modal fade" id="delete-modal-{{mybook.book.pk}}" tabindex="-1" aria-labelledby="DeleteModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-md">
+    <div class="modal-dialog modal-dialog-centered modal-mobile">
         <div class="modal-content">
             <form class="mt-5" action="{% url 'books:status_delete' mybook.pk %}" method="POST">
                 {% csrf_token %}
                 <div class="modal-body">
                     <div class="container">
                         <div class="row">
-                            <div class="col-md-6">
+                            <p class="delete-confirm">本棚から削除しますか？</p>
+                            <div class="col-md-6 offset-md-3">
                                 <img class="card-img-top" src="../../media/{{ mybook.book.thumbnail_image }}" alt="">
                             </div>
-                            <div class="col-md-6">
-                                <div class="row delete-confirm">
-                                    <h4>{{ mybook.book.title }}</h4>
-                                    <p>{{ mybook.book.author }}</p>
-                                </div>
-                            </div>
-                            <p>本棚から削除してもよろしいですか？</p>
                         </div>
                     </div>
                 </div>

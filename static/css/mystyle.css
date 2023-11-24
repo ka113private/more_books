@@ -17,10 +17,11 @@
 
 body, #wrapper {
     background-color: var(--body);
+    color: var(--dark);
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-    color: var(--dark);
+    overflow-x: hidden;/* 横スクロール禁止 */
 }
 
 h1,h2,h3,h4,h5,h6 {
@@ -387,12 +388,9 @@ Bookshlef
     background-color: white;
 }
 
-.delete-confirm h4{
-    color: var(--dark-gray);
-}
-
-.delete-confirm h6{
-    color: var(--dark);
+.delete-confirm {
+    line-height: 1.5;
+    text-align: center;
 }
 
 
@@ -423,6 +421,13 @@ modal common
 
 .modal-content h2{
     color: var(--dark-gray);
+}
+
+@media screen and (max-width: 768px){
+    .modal-mobile {
+        max-width: 300px;
+        margin :0 auto;
+    }
 }
 
 /*
