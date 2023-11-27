@@ -17,6 +17,8 @@
 
 body, #wrapper {
     background-color: var(--body);
+    background-image: url("../assets/img/background-image.jpg");
+    background-attachment: fixed;
     color: var(--dark);
     display: flex;
     flex-direction: column;
@@ -84,7 +86,8 @@ section {
 
 @media screen and (max-width: 768px){
     .container-auth {
-        margin-top: 100px;
+        margin: 100px auto;
+        width: 90%;
     }
 }
 
@@ -115,8 +118,13 @@ section {
     margin-bottom: 0px;
 }
 
-.nav-link {
-    color: var(--dark-gray);
+.brand-copy{
+    font-size: 10px;
+    text-align :center;
+}
+
+.navbar-dark .navbar-nav .nav-link{
+    color: white;
 }
 
 /*
@@ -133,7 +141,7 @@ Hero
     background-size: cover;
     position: relative;
     z-index: 2;
-    background-image: url("../assets/img/bg-masthead-index-beforeauth-pc.jpg") ;
+    background-image: url("../assets/img/bg-masthead-index.jpg") ;
 }
 
 .hero-index-beforeauth::after {
@@ -152,7 +160,7 @@ Hero
     background-size: cover;
     position: relative;
     z-index: 2;
-    background-image: url("../assets/img/bg-masthead-index-afterauth-pc.jpg") ;
+    background-image: url("../assets/img/bg-masthead-index.jpg") ;
 }
 
 .hero-exploration{
@@ -175,6 +183,27 @@ Hero
     color: white;
 }
 
+.site-copy {
+    color: white;
+    font-size: 60px;
+}
+
+.site-title
+{
+    color: white;
+    font-size: 30px;
+    line-height: 1.5;
+    margin-top: 50px;
+}
+
+.eachTextAnime span{opacity: 0;}
+.eachTextAnime.appeartext span{ animation:text_anime_on 1s ease-out forwards; }
+@keyframes text_anime_on {
+	0% {opacity:0;}
+	100% {opacity:1;}
+}
+
+
 @media screen and (max-width: 768px){
 
     .hero {
@@ -184,10 +213,10 @@ Hero
         font-size: calc(1.475rem + 1vw);
     }
     .hero-index-beforeauth{
-        background-image: url("../assets/img/bg-masthead-index-beforeauth-mobile.jpg") ;
+        background-image: url("../assets/img/bg-masthead-index.jpg") ;
     }
     .hero-index-afterauth{
-        background-image: url("../assets/img/bg-masthead-index-afterauth-mobile.jpg") ;
+        background-image: url("../assets/img/bg-masthead-index.jpg") ;
     }
     .hero::after{
         background-color: transparent;
@@ -201,7 +230,7 @@ Hero
 section
 */
 .index-afterauth-content{
-    margin-top: 350px;
+    margin-top: 100px;
 }
 
 .section-title{
