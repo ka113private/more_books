@@ -15,7 +15,11 @@
 <section class="hero hero-index-afterauth vh-100 d-flex align-items-center">
     <div class="container">
         <div class="row">
-            <div class="index-afterauth-content col-md-7 mx-auto text-center">
+            <div class="index-afterauth-content col-10 offset-md-1">
+                <p class="eachTextAnime site-copy">人生を_変える本に_出会おう。</p>
+                <p class="eachTextAnime site-title">本とめぐり逢う本屋_More Books!</p>
+            </div>
+            <div class="col-7 mx-auto text-center my-6">
                 <a type="button" class="btn-exploration btn btn-outline-light btn-lg" id="btn_related_books" data-toggle="modal" data-target="#recommend-modal">
                     店主におすすめを聞いてみる
                 </a>
@@ -288,12 +292,14 @@
 
 {% else %}
 
-<section class="hero hero-index-beforeauth vh-100 d-flex align-items-center">
+<section class="hero hero-index-afterauth vh-100 d-flex align-items-center">
     <div class="container">
         <div class="row">
-            <div class="col-md-7 mx-auto text-center">
-                <h1 class="copy display-4">人生を変える本に出会おう。</h1>
-                <h1 class="copy display-4">More Books!</h1>
+            <div class="index-afterauth-content col-10 offset-md-1">
+                <p class="eachTextAnime site-copy">人生を_変える本に_出会おう。</p>
+                <p class="eachTextAnime site-title">本とめぐり逢う本屋_More Books!</p>
+            </div>
+            <div class="col-7 mx-auto text-center my-6">
                 <a type="button" class="btn-exploration btn btn-outline-light btn-lg" href="{% url 'account_login' %}">
                     新しい本と出会う
                 </a>
@@ -306,6 +312,7 @@
 {% endblock %}
 
 {% block javascript %}
+{% if user.is_authenticated %}
     var thumbnailImage = document.getElementById('thumbnail_image');
     var btnLike = document.getElementById('btn_like');
     var btnUnLike = document.getElementById('btn_unlike');
@@ -378,4 +385,45 @@
             console.log(error);
         });
     }
+{% endif %}
+
+// eachTextAnimeにappeartextというクラス名を付ける定義
+function EachTextAnimeControl() {
+  $('.eachTextAnime').each(function () {
+    var elemPos = $(this).offset().top - 50;
+    var scroll = $(window).scrollTop();
+    var windowHeight = $(window).height();
+    if (scroll >= elemPos - windowHeight) {
+      $(this).addClass("appeartext");
+
+    } else {
+      $(this).removeClass("appeartext");
+    }
+  });
+}
+
+// 画面が読み込まれたらすぐに動かしたい場合の記述
+$(window).on('load', function () {
+  //spanタグを追加する
+  var element = $(".eachTextAnime");
+  element.each(function () {
+    var text = $(this).text();
+    var textbox = "";
+    text.split('').forEach(function (t, i) {
+      if (t !== "_") {
+        if (i < 10) {
+          textbox += '<span style="animation-delay:.' + i + 's;">' + t + '</span>';
+        } else {
+          var n = i / 10;
+          textbox += '<span style="animation-delay:' + n + 's;">' + t + '</span>';
+        }
+      } else {
+        textbox += '<br>'
+      }
+    });
+    $(this).html(textbox);
+  });
+
+  EachTextAnimeControl();/* アニメーション用の関数を呼ぶ*/
+});// ここまで画面が読み込まれたらすぐに動かしたい場合の記述
 {% endblock %}
