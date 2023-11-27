@@ -144,6 +144,7 @@ Hero
     background-image: url("../assets/img/bg-masthead-index.jpg") ;
 }
 
+/*
 .hero-index-beforeauth::after {
     content: "";
     position: absolute;
@@ -154,6 +155,7 @@ Hero
     background-color: rgba(0, 0, 0, 0.5);
     z-index: -1;
 }
+*/
 
 .hero-index-afterauth{
     background-position: center;
@@ -187,6 +189,13 @@ Hero
     color: white;
     font-size: 60px;
 }
+@media screen and (max-width: 768px){
+    .site-copy {
+        color: white;
+        font-size: 60px;
+        line-height: 1.5;
+    }
+}
 
 .site-title
 {
@@ -194,6 +203,14 @@ Hero
     font-size: 30px;
     line-height: 1.5;
     margin-top: 50px;
+}
+@media screen and (max-width: 768px){
+    .site-title{
+        color: white;
+        font-size: 25px;
+        line-height: 1.3;
+        margin-top: 50px;
+    }
 }
 
 .eachTextAnime span{opacity: 0;}
@@ -229,8 +246,14 @@ Hero
 /*
 section
 */
-.index-afterauth-content{
+
+.index-content{
     margin-top: 100px;
+}
+@media screen and (max-width: 768px){
+    .index-content{
+        margin-top: 50px;
+    }
 }
 
 .section-title{
