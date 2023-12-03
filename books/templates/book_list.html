@@ -13,11 +13,11 @@
 <section class="hero hero-list">
     <div class="container-hero">
         <div class="row d-flex">
-            <div class="col-sm-11 text-center mx-auto">
+            <div class="col-11 text-center mx-auto">
                 {% if query == "" %}
-                <h2>すべての一覧：{{ count }}冊</h2>
+                <div class="list-title">すべての一覧：{{ count }}冊</div>
                 {% else %}
-                <h2>「{{ query }}」の一覧：{{ count }}冊</h2>
+                <div class="list-title">「{{ query }}」の一覧：{{ count }}冊</div>
                 {% endif %}
             </div>
         </div>
@@ -51,36 +51,26 @@
 
             <!-- ページネーション処理 -->
             {% if is_paginated %}
-                <ul class="pagination">
+                <ul class="page-nations">
                     <!-- 前のページへのリンク -->
                     {% if page_obj.has_previous %}
-                        <li class="page_item">
-                            <a class="page-link" href="?page={{ page_obj.previous_page_number }}">
-                                <span aria-hidden="true">&laquo;</span>
+                            <a class="page-nation" href="?page={{ page_obj.previous_page_number }}">
+                                <
                             </a>
-                        </li>
                     {% endif %}
 
                     <!-- ページ数表示 -->
                     {% for page_num in page_obj.paginator.page_range %}
                         {% if page_obj.number == page_num %}
-                            <li class="page-item active">
-                                <a class="page-link" href="#">{{ page_num }}</a>
-                            </li>
-                        {% else %}
-                            <li class="page-item">
-                                <a class="page-link" href="?page={{ page_num }}">{{ page_num }}</a>
-                            </li>
+                            <a class="page-nation" href="#">{{ page_num }}</a>
                         {% endif %}
                     {% endfor %}
 
                     <!-- 次のページへのリンク -->
                     {% if page_obj.has_next %}
-                        <li class="page_item">
-                            <a class="page-link" href="?page={{ page_obj.next_page_number }}">
-                                <span aria-hidden="true">&raquo;</span>
+                            <a class="page-nation" href="?page={{ page_obj.next_page_number }}">
+                                >
                             </a>
-                        </li>
                     {% endif %}
                 </ul>
             {% endif %}
