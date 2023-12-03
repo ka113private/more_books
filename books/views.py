@@ -24,6 +24,10 @@ class IndexView(generic.TemplateView):
     """インデックスページ用View"""
     template_name = "index.html"
 
+class AboutUsView(generic.TemplateView):
+    """インデックスページ用View"""
+    template_name = "about_us.html"
+
 class InquiryView(generic.FormView):
     """問い合わせページ用View"""
     template_name = "inquiry.html"

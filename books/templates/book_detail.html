@@ -12,50 +12,9 @@
     <div class="container px-4 px-lg-5 my-5">
         <div class="row gx-4 gx-lg-5 align-items-center">
             <div class="book-image col-md-4 mt-5">
-                <img class="card-img-top mb-md-0" src="../../media/{{ object.thumbnail_image }}" alt="..." />
-                <!-- 書籍お気に入り機能 -->
-                <div class="favorite-icon">
-                    {% if is_user_favorite_book %}
-                        <button type="button" id="ajax-favorite-book" style="border:none;background:none">
-                            <i class="fas fa-star text-warning" id="favorite-for-book-icon"></i>
-                        </button>
-                    {% else %}
-                        <button type="button" id="ajax-favorite-book" style="border:none;background:none">
-                            <i class="far fa-star text-warning" id="favorite-for-book-icon"></i>
-                        </button>
-                    {% endif %}
-                    <!-- 書籍に対するお気に入り（Ajax）-->
-                    <script type="text/javascript">
-                        document.getElementById('ajax-favorite-book').addEventListener('click', e => {
-                            e.preventDefault();
-                            const url = '{% url "books:favorite_for_book" %}';
-                            fetch(url, {
-                                method: 'POST',
-                                body: 'book_pk={{object.pk}}',
-                                headers: {
-                                    'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
-                                    'X-CSRFToken': '{{ csrf_token }}',
-                                    },
-                                }).then(response => {
-                                    return response.json();
-                                }).then(response => {
-                            const icon = document.getElementById('favorite-for-book-icon')
-                            // 作成した場合は星をお気に入り状態にする
-                            if (response.method == 'create'){
-                                icon.classList.remove('far')
-                                icon.classList.add('fas')
-                                icon.id = 'favorite-for-book-icon'
-                            } else {
-                                icon.classList.remove('fas')
-                                icon.classList.add('far')
-                                icon.id = 'favorite-for-book-icon'
-                            }
-                            }).catch(error => {
-                          console.log(error);
-                        });
-                      });
-                    </script>
-                </div>
+                <a href="{{ object.amazon_url }}">
+                    <img class="card-img-top mb-md-0" src="../../media/{{ object.thumbnail_image }}" alt="..." />
+                </a>
             </div>
             <div class="col-md-8">
                 <div class="d-flex justify-content-end">
