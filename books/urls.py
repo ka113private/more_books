@@ -5,6 +5,8 @@ app_name = 'books'
 urlpatterns = [
     # トップページ遷移用URL
     path('', views.IndexView.as_view(), name="index"),
+    # MoreBooks紹介用ページ遷移用URL
+    path('about-us/', views.AboutUsView.as_view(), name="about_us"),
     #問い合わせページ遷移用URL
     path('inquiry/', views.InquiryView.as_view(), name="inquiry"),
     #書籍一覧ページ遷移用URL

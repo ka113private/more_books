@@ -424,6 +424,50 @@ footer.footer{
 }
 
 /*
+-------------------------------------------------------
+MoreBooksとはページ
+-------------------------------------------------------
+*/
+.about-us{
+    background-position: center;
+    background-size: cover;
+    position: relative;
+    z-index: 2;
+    background-image: url("../assets/img/bg-masthead-index.jpg") ;
+}
+
+.about-title{
+    color: white;
+    font-size: 50px;
+}
+.about-message{
+    color: white;
+    line-height: 2.5;
+    font-size: 17px;
+}
+
+.about-owners{
+    align-items: flex-end;
+    display: flex;
+    padding-bottom :20px;
+}
+
+.about-owner{
+    text-align: center;
+    display: inline-block;
+    margin-left: 50px;
+}
+.about-owner-icon{
+  border-radius: 100px;
+  height: 130px;
+  width: 130px;
+}
+.about-owner-name{
+    color: white;
+    font-size: 15px;
+}
+
+/*
 Bookshlef
 */
 .btn-delete{

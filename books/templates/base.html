@@ -46,6 +46,9 @@
                             </ul>
                             <ul class="navbar-nav ms-auto">
                                 <li class="nav-item">
+                                    <a class="nav-link {% block active_about_us %}{% endblock %}" href="{% url 'books:about_us' %}">More Books!とは</a>
+                                </li>
+                                <li class="nav-item">
                                     <a class="nav-link {% block active_inquiry %}{% endblock %}" href="{% url 'books:inquiry' %}">お問い合わせ</a>
                                 </li>
                                 <li class="nav-item">
@@ -54,6 +57,9 @@
                             </ul>
                         {% else %}
                             <ul class="navbar-nav ms-auto">
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{% url 'books:about_us' %}">More Books!とは</a>
+                                </li>
                                 <li class="nav-item">
                                     <a class="nav-link {% block active_login %}{% endblock %}" href="{% url 'account_login' %}">Login</a>
                                 </li>
