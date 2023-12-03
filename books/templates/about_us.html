@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}More Booksとは{% endblock %}
+
+{% block active_about_us %}active{% endblock %}
+
+{% block head %}
+<link href="{% static 'css/shop-item-gh-pages.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block contents %}
+<section class="about-us vh-100">
+    <div class="container">
+        <div class="row my-5">
+            <div class="col-7 offset-1">
+                <div class="about-title my-5">本とめぐり逢う。</div>
+                <div class="about-message">
+                    コロナ禍や情報技術の発展により、<br>
+                    街の本屋よりもインターネットで本を買うことが多くなったこのご時世。<br>
+                    <br>
+                    ワンクリックで本を買えるのはとても便利ですが、<br>
+                    街の本屋で本を買う時のように<br>
+                    お目当ての本以外の本と出会うことが減ったのではないでしょうか。<br>
+                    <br>
+                    More Books!は「本を検索する」のではなく、<br>「本とめぐり逢う」ことを大切にしている本屋です。<br>
+                    <br>
+                    さあ、あなたも人生を変える素敵な本に出会ってみませんか。<br>
+                </div>
+            </div>
+            <div class="about-owners col-3">
+                <div class="about-owner">
+                    <img class="about-owner-icon" src="../static/assets/img/owner-icon-chitti.jpg" alt="">
+                    <div class="about-owner-name">店主chitti</div>
+                </div>
+                <div class="about-owner">
+                    <img class="about-owner-icon" src="../static/assets/img/owner-icon-chitti.jpg" alt="">
+                    <div class="about-owner-name">副店主ryo</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
