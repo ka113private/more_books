@@ -160,6 +160,10 @@ Hero
 }
 
 .hero-list{
+    background-position: center;
+    background-size: cover;
+    position: relative;
+    color: white;
     background-image: url("../assets/img/bg-masthead-list.jpg") ;
     padding: 50px;
     margin-bottom: 50px;
@@ -599,9 +603,14 @@ exploration
 }
 
 /*
-list page
+-------------------------------------------------------
+listページ
+-------------------------------------------------------
 */
 
+.list-title{
+    font-size: 2em;
+}
 .card {
     border: none;
 }
@@ -617,6 +626,16 @@ list page
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
+}
+
+.page-nations{
+    text-align: center;
+}
+.page-nation{
+    color: var(--dark-gray);
+    font-size: 20px;
+    margin: 0 10px;
+    text-decoration: none;
 }
 
 /*
