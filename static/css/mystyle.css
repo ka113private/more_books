@@ -448,7 +448,7 @@ MoreBooksとはページ
 @media screen and (max-width: 768px){
     .about-title{
         color: white;
-        font-size: 40px;
+        font-size: 35px;
     }
 }
 
@@ -462,7 +462,7 @@ MoreBooksとはページ
     .about-message{
         color: white;
         line-height: 2;
-        font-size: 15px;
+        font-size: 13px;
     }
 }
 
@@ -482,8 +482,7 @@ MoreBooksとはページ
     .about-owner{
         text-align: center;
         display: inline-block;
-        margin-left: 60px;
-        margin-top: 30px;
+        margin: 30px auto;
     }
 }
 
