@@ -435,9 +435,16 @@ MoreBooksとはページ
 .about-us{
     background-position: center;
     background-size: cover;
+    height: 100vh;
     position: relative;
     z-index: 2;
     background-image: url("../assets/img/bg-masthead-index.jpg") ;
+}
+
+@media screen and (max-width: 768px){
+    .about-us{
+        height: 120vh;
+    }
 }
 
 .about-title{
