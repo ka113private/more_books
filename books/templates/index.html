@@ -437,8 +437,7 @@
             cardContainer.classList.remove('card-like');
             cardContainer.classList.remove('card-unlike');
             var moveOutWidth = document.body.clientWidth;
-            <!--var keep = Math.abs(event.deltaX) < 80 || Math.abs(event.velocityX) < 0.5;-->
-            var keep = Math.abs(event.deltaX) < 80
+            var keep = Math.abs(event.deltaX) < 80 || Math.abs(event.velocityX) < 0.5; 
             event.target.classList.toggle('removed', !keep);
 
             if (keep) {
@@ -452,6 +451,11 @@
                 var yMulti = event.deltaY / 80;
                 var rotate = xMulti * yMulti;
                 event.target.style.transform = 'translate(' + toX + 'px, ' + (toY + event.deltaY) + 'px) rotate(' + rotate + 'deg)';
+
+                thumbnailImage1st.src = '';
+                thumbnailImage2nd.src = '';
+                thumbnailImage3rd.src = '';
+
                 if(event.deltaX > 0){
                     const jsonData = JSON.stringify(bookList);
                     const url = '{% url "books:add_mybooks" %}';
@@ -474,20 +478,20 @@
 
     btnLike.addEventListener('click', e => {
         cardContainer.classList.add('card-like');
+        setTimeout(function(){cardContainer.classList.remove('card-like');},500);
         const jsonData = JSON.stringify(bookList);
         const url = '{% url "books:add_mybooks" %}';
         e.preventDefault();
-        const is_like = true;
-        fetchData(url, jsonData, is_like);
+        fetchData(url, jsonData);
     });
 
     btnUnLike.addEventListener('click', e => {
         cardContainer.classList.add('card-unlike');
+        setTimeout(function(){cardContainer.classList.remove('card-unlike');},500);
         const jsonData = JSON.stringify(bookList);
         const url = '{% url "books:not_add_mybooks" %}';
         e.preventDefault();
-        const is_like = false;
-        fetchData(url, jsonData, is_like);
+        fetchData(url, jsonData);
     });
 
     <!-- レコメンド書籍リストをサーバから取得する -->
@@ -517,7 +521,7 @@
     }
 
     <!-- レコメンド書籍リストをviewに返す処理 -->
-    function fetchData(url, data ,is_like){
+    function fetchData(url, data){
         fetch(url, {
             method: 'POST',
             body: data,
@@ -529,11 +533,6 @@
                 return response.json();
             }).then(data => {
                 if(data.exists){
-                    if(is_like){
-                        setTimeout(function(){cardContainer.classList.remove('card-like');},500);
-                    }else{
-                        setTimeout(function(){cardContainer.classList.remove('card-unlike');},500);
-                    }
                     bookList = JSON.parse(data.next_books);//JSONデータからリストを取得する。
                     thumbnailImage1st.src = '../../media/' + bookList.books[0].thumbnail_image;
                     thumbnailImage2nd.src = '../../media/' + bookList.books[1].thumbnail_image;
