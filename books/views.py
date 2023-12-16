@@ -16,13 +16,17 @@ logger = logging.getLogger(__name__)
 NUM_BOOKS_TO_DISPLAY = 6 # インデックスページで表示する際の書籍の数
 NUM_BOOKS_TO_DISPLAY_LISTPAGE = 30 # 一覧ページで表示する際の書籍の数
 NUM_BOOKS_SEARCH = 1000 # 検索する書籍の書籍の数
-NUM_RELATED_BOOKS = 1000 # 提案する書籍の書籍の数
+NUM_RECOMMEND_BOOKS = 1000 # 提案する書籍の書籍の数
 
 RECOMMEND_BOOKS = {}
 
 class IndexView(generic.TemplateView):
     """インデックスページ用View"""
     template_name = "index.html"
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['count'] = NUM_RECOMMEND_BOOKS
+        return context
 
 class AboutUsView(generic.TemplateView):
     """インデックスページ用View"""
@@ -386,16 +390,13 @@ def add_mybooks(request):
     }
     #postメソッドのbodyに格納されているのはjsonなので、変換をかける
     json_data = json.loads(request.body)
-    book_list = json_data['books']
-    #先頭の書籍についてBookshelfテーブルにstatus「読みたい」として登録する。登録後listから削除する
-    book = get_object_or_404(Book, pk=book_list[0]["id"])
-    Bookshelf.objects.create(book=book, user=request.user, status='読みたい')
-    book_list.pop(0)
-    if (len(book_list) != 0):
-        book_list_json = JsonResponse({'books': book_list})
-        context['next_books']=book_list_json.content.decode('utf-8')
-        context['exists']= True
-    else:
+    book = json_data['book']
+    is_like = json_data['is_like']
+    is_last = json_data['is_last']
+    if(is_like):
+        book = get_object_or_404(Book, pk=book["id"])
+        Bookshelf.objects.create(book=book, user=request.user, status='読みたい')
+    if (is_last):
         context['exists'] = False
     return JsonResponse(context)
 
@@ -436,9 +437,9 @@ def get_related_books(request):
     if (len(favorite_category_dict) != 0):
         related_books = Book.objects.filter(sub_category=favorite_category_dict['sub_category']) \
                             .exclude(id__in=library_id_list)\
-                            .order_by("?")[:NUM_RELATED_BOOKS]
+                            .order_by("?")[:NUM_RECOMMEND_BOOKS]
     else:
-        related_books = Book.objects.all().order_by("?")[:NUM_RELATED_BOOKS]
+        related_books = Book.objects.all().order_by("?")[:NUM_RECOMMEND_BOOKS]
 
     # JsonResponseに格納する
     related_books_list = list(related_books.values())
@@ -467,7 +468,7 @@ def get_new_books(request):
     # おすすめ書籍(ログインユーザーがmy本棚に追加していないサブカテゴリの書籍のうちランダムな書籍)のQuerySetを返す。
     new_books = Book.objects.all()\
                     .exclude(sub_category__in=my_categories) \
-                    .order_by("?")[:NUM_RELATED_BOOKS]
+                    .order_by("?")[:NUM_RECOMMEND_BOOKS]
 
     # 　JsonResponseに格納する
     new_books_list = list(new_books.values())

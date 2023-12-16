@@ -1,5 +1,5 @@
 <div class="modal fade" id="recommend-modal" tabindex="-1" aria-labelledby="RecommendLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-mobile">
+    <div class="modal-dialog modal-mobile">
         <div class="modal-content-index">
             <div class="modal-body">
                 <div class="container">
@@ -9,9 +9,11 @@
                                 <i class="card-status-icon fa-solid fa-xmark"></i>
                                 <i class="card-status-icon fa-solid fa-heart"></i>
                             </div>
-                            <img class="card-img card-img-top-modal-1st" id="thumbnail_image1st" src="" alt="">
-                            <img class="card-img card-img-top-modal-2nd" id="thumbnail_image2nd" src="" alt="">
-                            <img class="card-img card-img-top-modal-3rd" id="thumbnail_image3rd" src="" alt="">
+                            {% with ''|center:count as range %}
+                                {% for _ in range %}
+                                    <img class="card-img card-img-modal" src="" alt="">
+                                {% endfor %}
+                            {% endwith %}
                         </div>
                     </div>
                 </div>
