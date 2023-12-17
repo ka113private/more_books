@@ -537,6 +537,10 @@ Bookshlef
 modal common
 */
 
+.modal-open{
+    overflow: hidden;
+}
+
 .modal-footer{
     border-top: none;
 }

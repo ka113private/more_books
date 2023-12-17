@@ -23,7 +23,7 @@ RECOMMEND_BOOKS = {}
 class IndexView(generic.TemplateView):
     """インデックスページ用View"""
     template_name = "index.html"
-    
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['count'] = NUM_RECOMMEND_BOOKS
