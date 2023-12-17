@@ -591,13 +591,36 @@ matching-modal
     position: relative;
 }
 
+@media screen and (max-width: 768px){
+    .circle{
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background-color: transparent;
+        position: relative;
+    }
+}
+
 .circle-like{
     border: 10px solid var(--white-gray);
     transition: all 0.4s ease;
 }
 
+@media screen and (max-width: 768px){
+    .circle-like{
+        border: 5px solid var(--white-gray);
+        transition: all 0.4s ease;
+    }
+}
+
 .circle-like:hover{
     border: 10px solid var(--like);
+}
+
+@media screen and (max-width: 768px){
+    .circle-like:hover{
+        border: 5px solid var(--like);
+    }
 }
 
 .circle-unlike{
@@ -605,9 +628,23 @@ matching-modal
     transition: all 0.4s ease;
 }
 
+@media screen and (max-width: 768px){
+    .circle-unlike{
+        border: 5px solid var(--white-gray);
+        transition: all 0.4s ease;
+    }
+}
+
 .circle-unlike:hover{
     border: 10px solid var(--unlike);
 }
+
+@media screen and (max-width: 768px){
+    .circle-unlike:hover{
+        border: 5px solid var(--unlike);
+    }
+}
+
 
 .circle i{
     position: absolute;
@@ -615,6 +652,16 @@ matching-modal
     left: 50%;
     transform: translate(-50%, -50%);
     font-size: 35px;
+}
+
+@media screen and (max-width: 768px){
+    .circle i{
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 20px;
+    }
 }
 
 .circle-like i{
@@ -674,8 +721,8 @@ matching-modal
         display: flex;
         flex-direction: column;
         text-align: center;
-        margin: 10vh auto;
-        height: 50vh;
+        margin: 0vh auto;
+        height: 60vh;
     }
 }
 
