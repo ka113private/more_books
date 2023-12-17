@@ -408,10 +408,36 @@
     var btnLike = document.getElementById('btn_like');
     var btnUnLike = document.getElementById('btn_unlike');
     var btnRelatedBooks = document.getElementById('btn_related_books');
-    var allCards = document.querySelectorAll('.card-img');
+    var allCards = document.querySelectorAll('.card-img-modal');
     var cardContainer = document.querySelector('.card-images');
+    var selectBookIndex;
 
-    allCards.forEach(function (el) {
+    function initCards(card, index){
+        var removedCards = document.querySelectorAll('.card-removed');
+        removedCards.forEach(function (card) {
+            card.style.display = 'none';
+        });
+
+        var newCards = document.querySelectorAll('.card-img-modal:not(.card-removed)');
+        selectBookIndex = allCards.length - newCards.length;
+
+        newCards.forEach(function (card, index) {
+            card.style.zIndex = 0 - index;
+            card.style.position = 'absolute';
+            card.style.right= '50%';
+            card.style.transform = 'translate(50%, -' + 30*index + 'px) scale(' + (20-index)/20 + ')';
+
+            if(index > 2){
+                card.style.display = 'none';
+            } else {
+                card.style.display = 'inline-block';
+            }
+        });
+    }
+
+    initCards();
+
+    allCards.forEach(function (el, index) {
         var hammertime = new Hammer(el);
 
         hammertime.on('pan', function (event) {
@@ -437,11 +463,10 @@
             cardContainer.classList.remove('card-like');
             cardContainer.classList.remove('card-unlike');
             var moveOutWidth = document.body.clientWidth;
-            var keep = Math.abs(event.deltaX) < 80 || Math.abs(event.velocityX) < 0.5; 
-            event.target.classList.toggle('removed', !keep);
+            var keep = Math.abs(event.deltaX) < 80 || Math.abs(event.velocityX) < 0.5;
 
             if (keep) {
-                event.target.style.transform = '';
+                event.target.style.transform = 'translate(50%, 0)';
             } else {
                 var endX = Math.max(Math.abs(event.velocityX) * moveOutWidth, moveOutWidth);
                 var toX = event.deltaX > 0 ? endX : -endX;
@@ -452,25 +477,28 @@
                 var rotate = xMulti * yMulti;
                 event.target.style.transform = 'translate(' + toX + 'px, ' + (toY + event.deltaY) + 'px) rotate(' + rotate + 'deg)';
 
-                thumbnailImage1st.src = '';
-                thumbnailImage2nd.src = '';
-                thumbnailImage3rd.src = '';
+                (event.deltaX > 0) ? is_like = true : is_like = false;
+                (selectBookIndex == allCards.length) ? is_last = true : is_last = false;
 
-                if(event.deltaX > 0){
-                    const jsonData = JSON.stringify(bookList);
-                    const url = '{% url "books:add_mybooks" %}';
-                    fetchData(url, jsonData);
-                }else{
-                    const jsonData = JSON.stringify(bookList);
-                    const url = '{% url "books:not_add_mybooks" %}';
-                    fetchData(url, jsonData);
-                }
-                event.target.style.transform = 'translate(0px, 0px) rotate(0deg)';
+                const jsonData = {
+                    book: bookList.books[selectBookIndex],
+                    is_like: is_like,
+                    is_last: is_last
+                };
+                const jsonString = JSON.stringify(jsonData);
+                const url = '{% url "books:add_mybooks" %}';
+                fetchData(url, jsonString);
+                event.target.classList.add('card-removed');
+                initCards();
             }
         });
     });
 
     btnRelatedBooks.addEventListener('click', e => {
+        allCards.forEach(card =>  {
+            card.classList.remove('card-removed');
+        });
+        initCards();
         const url = '{% url "books:get_related_books" %}';
         e.preventDefault();
         getRecommendBooks(url)
@@ -478,20 +506,38 @@
 
     btnLike.addEventListener('click', e => {
         cardContainer.classList.add('card-like');
-        setTimeout(function(){cardContainer.classList.remove('card-like');},500);
-        const jsonData = JSON.stringify(bookList);
+        setTimeout(function(){cardContainer.classList.remove('card-like');},300);
+        is_like = true;
+        (selectBookIndex == allCards.length) ? is_last = true : is_last = false;
+        const jsonData = {
+            book: bookList.books[selectBookIndex],
+            is_like: is_like,
+            is_last: is_last
+        };
+        const jsonString = JSON.stringify(jsonData);
         const url = '{% url "books:add_mybooks" %}';
         e.preventDefault();
-        fetchData(url, jsonData);
+        fetchData(url, jsonString);
+        allCards[selectBookIndex].classList.add('card-removed');
+        initCards();
     });
 
     btnUnLike.addEventListener('click', e => {
         cardContainer.classList.add('card-unlike');
-        setTimeout(function(){cardContainer.classList.remove('card-unlike');},500);
-        const jsonData = JSON.stringify(bookList);
-        const url = '{% url "books:not_add_mybooks" %}';
+        setTimeout(function(){cardContainer.classList.remove('card-unlike');},300);
+        is_like = false;
+        (selectBookIndex == allCards.length) ? is_last = true : is_last = false;
+        const jsonData = {
+            book: bookList.books[selectBookIndex],
+            is_like: is_like,
+            is_last: is_last
+        };
+        const jsonString = JSON.stringify(jsonData);
+        const url = '{% url "books:add_mybooks" %}';
         e.preventDefault();
-        fetchData(url, jsonData);
+        fetchData(url, jsonString);
+        allCards[selectBookIndex].classList.add('card-removed');
+        initCards();
     });
 
     <!-- レコメンド書籍リストをサーバから取得する -->
@@ -507,13 +553,13 @@
             }).then(data => {
                 if(data.recommend_exists){
                     bookList = JSON.parse(data.recommend_books);//JSONデータからリストを取得する。
-                    thumbnailImage1st.src = '../../media/' + bookList.books[0].thumbnail_image;
-                    thumbnailImage2nd.src = '../../media/' + bookList.books[1].thumbnail_image;
-                    thumbnailImage3rd.src = '../../media/' + bookList.books[2].thumbnail_image;
+                    allCards.forEach(function(card, index){
+                        card.src = '../../media/' + bookList.books[index].thumbnail_image;
+                    });
                 }else{
-                    thumbnailImage1st.src = '../../media/static/sorry.png';
-                    thumbnailImage2nd.src = '../../media/static/sorry.png';
-                    thumbnailImage3rd.src = '../../media/static/sorry.png';
+                    allCards.forEach(function(card, index){
+                        card.src = '../../media/static/sorry.png';
+                    });
                 }
         }).catch(error => {
             console.log(error);
@@ -532,15 +578,7 @@
             }).then(response => {
                 return response.json();
             }).then(data => {
-                if(data.exists){
-                    bookList = JSON.parse(data.next_books);//JSONデータからリストを取得する。
-                    thumbnailImage1st.src = '../../media/' + bookList.books[0].thumbnail_image;
-                    thumbnailImage2nd.src = '../../media/' + bookList.books[1].thumbnail_image;
-                    thumbnailImage3rd.src = '../../media/' + bookList.books[2].thumbnail_image;
-                }else{
-                    thumbnailImage1st.src = '../../media/static/sorry.png';
-                    thumbnailImage2nd.src = '../../media/static/sorry.png';
-                    thumbnailImage3rd.src = '../../media/static/sorry.png';
+                if(!data.exists){
                 }
         }).catch(error => {
             console.log(error);
