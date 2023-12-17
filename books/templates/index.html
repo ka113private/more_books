@@ -492,6 +492,7 @@
     });
 
     btnRelatedBooks.addEventListener('click', e => {
+        document.getElementById('wrapper').classList.add('modal-open');
         allCards.forEach(card =>  {
             card.classList.remove('card-removed');
         });
