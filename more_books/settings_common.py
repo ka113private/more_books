@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',
     'django_bootstrap5',
-    'django_ses'
+    'django_ses',
+    'debug_toolbar'
 ]
 
 # django-allauthの設定
@@ -84,6 +85,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'allauth.account.middleware.AccountMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
 ROOT_URLCONF = 'more_books.urls'
@@ -163,3 +165,6 @@ MESSAGE_TAGS = {
 #　バックアップバッチ用
 BACKUP_PATH = 'backup/'
 NUM_SAVED_BACKUP = 30
+
+# DebugToolbar用
+INTERNAL_IPS = ['127.0.0.1']
