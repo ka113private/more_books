@@ -17,6 +17,12 @@ NUM_BOOKS_TO_DISPLAY = 6 # インデックスページで表示する際の書�
 NUM_BOOKS_TO_DISPLAY_LISTPAGE = 30 # 一覧ページで表示する際の書籍の数
 NUM_BOOKS_SEARCH = 1000 # 検索する書籍の書籍の数
 NUM_RECOMMEND_BOOKS = 1000 # 提案する書籍の書籍の数
+PER_FIRST = 0.5
+PER_SECOND = 0.3
+PER_THIRD = 0.1
+PER_FORTH = 0.1
+
+
 
 RECOMMEND_BOOKS = {}
 
@@ -30,7 +36,7 @@ class IndexView(generic.TemplateView):
         return context
 
 class AboutUsView(generic.TemplateView):
-    """インデックスページ用View"""
+    """MoreBooks紹介用ページ用View"""
     template_name = "about_us.html"
 
 class InquiryView(generic.FormView):
@@ -332,13 +338,8 @@ class MybooksListView(LoginRequiredMixin, generic.ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         #Bookshelfテーブルの取得
-        all = Bookshelf.objects.filter(user=self.request.user)
-        mybooks_want = all.filter(status="読みたい")
-        mybooks_reading = all.filter(status="読書中")
-        mybooks_read = all.filter(status="読了")
-        context['mybooks_want'] = mybooks_want
-        context['mybooks_reading'] = mybooks_reading
-        context['mybooks_read'] = mybooks_read
+        mybooks = Bookshelf.objects.select_related('book').filter(user=self.request.user).filter(status="読みたい")
+        context['mybooks'] = mybooks
         #お気に入り書籍の取得
         favorite_books = FavoriteBook.objects.filter(user=self.request.user)
         context['favorite_books'] = favorite_books
@@ -429,16 +430,26 @@ def get_related_books(request):
     library_list = Book.objects.filter(id__in=library_id_list)
 
     # my本棚において書籍数が一番多いサブカテゴリを取得。
-    favorite_category_dict = library_list.values('sub_category') \
+    my_categories = library_list.values('sub_category') \
         .annotate(count=Count('sub_category')) \
-        .order_by('-count') \
-        .first()
+        .order_by('-count')
 
-    # おすすめ書籍(該当のサブカテゴリに属する書籍でログインユーザーがmy本棚に追加していないランダムな書籍)のQuerySetを返す。
-    if (len(favorite_category_dict) != 0):
-        related_books = Book.objects.filter(sub_category=favorite_category_dict['sub_category']) \
-                            .exclude(id__in=library_id_list)\
-                            .order_by("?")[:NUM_RECOMMEND_BOOKS]
+    if (len(my_categories) >= 3):
+        first_cat = my_categories[0]['sub_category']
+        second_cat = my_categories[1]['sub_category']
+        third_cat = my_categories[2]['sub_category']
+        # おすすめ書籍(該当のサブカテゴリに属する書籍でログインユーザーがmy本棚に追加していないランダムな書籍)のQuerySetを返す。
+        qs1 = Book.objects.filter(sub_category=first_cat) \
+                  .exclude(id__in=library_id_list) \
+                  .order_by("?")[:(NUM_RECOMMEND_BOOKS * PER_FIRST)]
+        qs2 = Book.objects.filter(sub_category=second_cat) \
+                  .exclude(id__in=library_id_list) \
+                  .order_by("?")[:(NUM_RECOMMEND_BOOKS * PER_SECOND)]
+        qs3 = Book.objects.filter(sub_category=third_cat) \
+                  .exclude(id__in=library_id_list) \
+                  .order_by("?")[:(NUM_RECOMMEND_BOOKS * PER_THIRD)]
+        qs4 = Book.objects.all().order_by("?")[:(NUM_RECOMMEND_BOOKS * PER_FORTH)]
+        related_books = qs1.union(qs2, qs3, qs4, all=True).order_by("?")
     else:
         related_books = Book.objects.all().order_by("?")[:NUM_RECOMMEND_BOOKS]
 
