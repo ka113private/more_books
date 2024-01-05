@@ -9,6 +9,7 @@ defusedxml==0.7.1
 Django==3.2.16
 django-allauth==0.56.1
 django-bootstrap5==22.2
+django-debug-toolbar==4.2.0
 exceptiongroup==1.1.1
 flake8==5.0.4
 h11==0.14.0
