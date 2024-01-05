@@ -54,7 +54,7 @@
                 <ul class="page-nations">
                     <!-- 前のページへのリンク -->
                     {% if page_obj.has_previous %}
-                            <a class="page-nation" href="?page={{ page_obj.previous_page_number }}">
+                            <a class="page-nation" href="?page={{ page_obj.previous_page_number }}&query={{ query }}">
                                 <
                             </a>
                     {% endif %}
@@ -68,7 +68,7 @@
 
                     <!-- 次のページへのリンク -->
                     {% if page_obj.has_next %}
-                            <a class="page-nation" href="?page={{ page_obj.next_page_number }}">
+                            <a class="page-nation" href="?page={{ page_obj.next_page_number }}&query={{ query }}">
                                 >
                             </a>
                     {% endif %}
