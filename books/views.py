@@ -197,7 +197,7 @@ class MyPageView(LoginRequiredMixin, generic.DetailView):
 
         return context
 
-class TagAddView(LoginRequiredMixin, generic.CreateView):
+class TagAddView(LoginRequiredMixin, generic.FormView):
     """
     タグ追加処理用ビュー
     書籍詳細ページのフォームからpkを受け取り、モデル保存処理をする。
@@ -213,10 +213,11 @@ class TagAddView(LoginRequiredMixin, generic.CreateView):
     def form_valid(self, form):
         # 既にtagモデルに同名のタグが保存されているか確認する。されていない場合はタグを保存
         pk = self.kwargs['pk']
-        tag = form.save(commit=False)
-        if not (Tag.objects.filter(name=tag.name).exists()):
-            tag.save()
-        target_tag = Tag.objects.get(name=tag.name)
+        tag_name = form.cleaned_data.get('name')
+        if (Tag.objects.filter(name=tag_name).exists()):
+            target_tag = Tag.objects.get(name=tag_name)
+        else:
+            target_tag = form.save()
         book = Book.objects.get(pk=pk)
         if not (BookTag.objects.filter(book=book, tag=target_tag).exists()):
             booktag = BookTag(book=book, tag=target_tag)
