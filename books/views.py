@@ -67,7 +67,7 @@ class BookListFromSearchView(LoginRequiredMixin, generic.ListView):
             #★タグ検索もできるようにする
             queryset = queryset.filter(
                 Q(title__icontains=query) | Q(author__icontains=query) | Q(description__icontains=query)
-            )[:NUM_BOOKS_SEARCH]
+            ).order_by("?")[:NUM_BOOKS_SEARCH]
             self.count = queryset.count()
         return queryset
 
@@ -92,7 +92,7 @@ class BookListFromTagView(LoginRequiredMixin, generic.ListView):
         tag_pk = self.kwargs['pk']
         tag = get_object_or_404(Tag, pk=tag_pk)
         book_pk_list = BookTag.objects.filter(tag=tag).values_list('book', flat=True)
-        book_list = Book.objects.filter(pk__in=list(book_pk_list))
+        book_list = Book.objects.filter(pk__in=list(book_pk_list)).order_by("?")
         self.count = book_list.count()
         return book_list
 
@@ -117,7 +117,7 @@ class BookListFromCategoryView(LoginRequiredMixin, generic.ListView):
     def get_queryset(self, **kwargs):
         queryset = super().get_queryset()
         self.category = get_object_or_404(Category, pk=self.kwargs['pk'])
-        queryset = queryset.filter(sub_category__category=self.category.pk)
+        queryset = queryset.filter(sub_category__category=self.category.pk).order_by("?")
         self.count = queryset.count()
         return queryset
 
