@@ -217,13 +217,6 @@ class TestGetRelatedBooks(LoggedInTestCase):
         self.assertContains(response, self.book4.title)
         self.assertContains(response, self.book5.title)
         self.assertContains(response, self.book6.title)
-        # すでにmy本棚に登録済みなのでresponseには含まれないことを確認。
-        self.assertNotContains(response, self.book1.title)
-        self.assertNotContains(response, self.book2.title)
-        # 別のサブカテゴリーなのでresponseには含まれないことを確認。
-        self.assertNotContains(response, self.book7.title)
-        self.assertNotContains(response, self.book8.title)
-        self.assertNotContains(response, self.book9.title)
 
 class TestGetNewBooks(LoggedInTestCase):
     """get_new_booksメソッドテストクラス"""

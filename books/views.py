@@ -17,6 +17,12 @@ NUM_BOOKS_TO_DISPLAY = 6 # インデックスページで表示する際の書�
 NUM_BOOKS_TO_DISPLAY_LISTPAGE = 30 # 一覧ページで表示する際の書籍の数
 NUM_BOOKS_SEARCH = 1000 # 検索する書籍の書籍の数
 NUM_RECOMMEND_BOOKS = 1000 # 提案する書籍の書籍の数
+PER_FIRST = 0.5
+PER_SECOND = 0.3
+PER_THIRD = 0.1
+PER_FORTH = 0.1
+
+
 
 RECOMMEND_BOOKS = {}
 
@@ -30,7 +36,7 @@ class IndexView(generic.TemplateView):
         return context
 
 class AboutUsView(generic.TemplateView):
-    """インデックスページ用View"""
+    """MoreBooks紹介用ページ用View"""
     template_name = "about_us.html"
 
 class InquiryView(generic.FormView):
@@ -61,7 +67,7 @@ class BookListFromSearchView(LoginRequiredMixin, generic.ListView):
             #★タグ検索もできるようにする
             queryset = queryset.filter(
                 Q(title__icontains=query) | Q(author__icontains=query) | Q(description__icontains=query)
-            )[:NUM_BOOKS_SEARCH]
+            ).order_by("?")[:NUM_BOOKS_SEARCH]
             self.count = queryset.count()
         return queryset
 
@@ -86,7 +92,7 @@ class BookListFromTagView(LoginRequiredMixin, generic.ListView):
         tag_pk = self.kwargs['pk']
         tag = get_object_or_404(Tag, pk=tag_pk)
         book_pk_list = BookTag.objects.filter(tag=tag).values_list('book', flat=True)
-        book_list = Book.objects.filter(pk__in=list(book_pk_list))
+        book_list = Book.objects.filter(pk__in=list(book_pk_list)).order_by("?")
         self.count = book_list.count()
         return book_list
 
@@ -111,7 +117,7 @@ class BookListFromCategoryView(LoginRequiredMixin, generic.ListView):
     def get_queryset(self, **kwargs):
         queryset = super().get_queryset()
         self.category = get_object_or_404(Category, pk=self.kwargs['pk'])
-        queryset = queryset.filter(sub_category__category=self.category.pk)
+        queryset = queryset.filter(sub_category__category=self.category.pk).order_by("?")
         self.count = queryset.count()
         return queryset
 
@@ -191,7 +197,7 @@ class MyPageView(LoginRequiredMixin, generic.DetailView):
 
         return context
 
-class TagAddView(LoginRequiredMixin, generic.CreateView):
+class TagAddView(LoginRequiredMixin, generic.FormView):
     """
     タグ追加処理用ビュー
     書籍詳細ページのフォームからpkを受け取り、モデル保存処理をする。
@@ -207,10 +213,11 @@ class TagAddView(LoginRequiredMixin, generic.CreateView):
     def form_valid(self, form):
         # 既にtagモデルに同名のタグが保存されているか確認する。されていない場合はタグを保存
         pk = self.kwargs['pk']
-        tag = form.save(commit=False)
-        if not (Tag.objects.filter(name=tag.name).exists()):
-            tag.save()
-        target_tag = Tag.objects.get(name=tag.name)
+        tag_name = form.cleaned_data.get('name')
+        if (Tag.objects.filter(name=tag_name).exists()):
+            target_tag = Tag.objects.get(name=tag_name)
+        else:
+            target_tag = form.save()
         book = Book.objects.get(pk=pk)
         if not (BookTag.objects.filter(book=book, tag=target_tag).exists()):
             booktag = BookTag(book=book, tag=target_tag)
@@ -332,13 +339,8 @@ class MybooksListView(LoginRequiredMixin, generic.ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         #Bookshelfテーブルの取得
-        all = Bookshelf.objects.filter(user=self.request.user)
-        mybooks_want = all.filter(status="読みたい")
-        mybooks_reading = all.filter(status="読書中")
-        mybooks_read = all.filter(status="読了")
-        context['mybooks_want'] = mybooks_want
-        context['mybooks_reading'] = mybooks_reading
-        context['mybooks_read'] = mybooks_read
+        mybooks = Bookshelf.objects.select_related('book').filter(user=self.request.user).filter(status="読みたい")
+        context['mybooks'] = mybooks
         #お気に入り書籍の取得
         favorite_books = FavoriteBook.objects.filter(user=self.request.user)
         context['favorite_books'] = favorite_books
@@ -429,16 +431,26 @@ def get_related_books(request):
     library_list = Book.objects.filter(id__in=library_id_list)
 
     # my本棚において書籍数が一番多いサブカテゴリを取得。
-    favorite_category_dict = library_list.values('sub_category') \
+    my_categories = library_list.values('sub_category') \
         .annotate(count=Count('sub_category')) \
-        .order_by('-count') \
-        .first()
+        .order_by('-count')
 
-    # おすすめ書籍(該当のサブカテゴリに属する書籍でログインユーザーがmy本棚に追加していないランダムな書籍)のQuerySetを返す。
-    if (len(favorite_category_dict) != 0):
-        related_books = Book.objects.filter(sub_category=favorite_category_dict['sub_category']) \
-                            .exclude(id__in=library_id_list)\
-                            .order_by("?")[:NUM_RECOMMEND_BOOKS]
+    if (len(my_categories) >= 3):
+        first_cat = my_categories[0]['sub_category']
+        second_cat = my_categories[1]['sub_category']
+        third_cat = my_categories[2]['sub_category']
+        # おすすめ書籍(該当のサブカテゴリに属する書籍でログインユーザーがmy本棚に追加していないランダムな書籍)のQuerySetを返す。
+        qs1 = Book.objects.filter(sub_category=first_cat) \
+                  .exclude(id__in=library_id_list) \
+                  .order_by("?")[:(NUM_RECOMMEND_BOOKS * PER_FIRST)]
+        qs2 = Book.objects.filter(sub_category=second_cat) \
+                  .exclude(id__in=library_id_list) \
+                  .order_by("?")[:(NUM_RECOMMEND_BOOKS * PER_SECOND)]
+        qs3 = Book.objects.filter(sub_category=third_cat) \
+                  .exclude(id__in=library_id_list) \
+                  .order_by("?")[:(NUM_RECOMMEND_BOOKS * PER_THIRD)]
+        qs4 = Book.objects.all().order_by("?")[:(NUM_RECOMMEND_BOOKS * PER_FORTH)]
+        related_books = qs1.union(qs2, qs3, qs4, all=True).order_by("?")
     else:
         related_books = Book.objects.all().order_by("?")[:NUM_RECOMMEND_BOOKS]
 

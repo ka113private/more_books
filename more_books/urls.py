@@ -17,6 +17,7 @@ from django.contrib import admin
 from django.urls import path, include
 from django.contrib.staticfiles.urls import static
 from . import settings_common, settings_dev
+import debug_toolbar  # 追加
 
 urlpatterns = [
     #path('admin/', admin.site.urls),
@@ -27,3 +28,7 @@ urlpatterns = [
 
 # 開発サーバーでメディアを配信できるように設定
 urlpatterns += static(settings_common.MEDIA_URL, document_root=settings_dev.MEDIA_ROOT)
+
+# DebugToolBar
+if settings_dev.DEBUG:
+    urlpatterns += [path('__debug__/', include(debug_toolbar.urls))]

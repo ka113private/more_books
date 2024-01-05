@@ -19,7 +19,8 @@ class SubCategory(models.Model):
     category = models.ForeignKey(
         Category,
         verbose_name='カテゴリ',
-        on_delete=models.CASCADE)
+        on_delete=models.CASCADE,
+        related_name='category_subcategory')
 
     class Meta:
         verbose_name_plural = 'SubCategory'
@@ -108,7 +109,7 @@ class TagLike(models.Model):
 class Bookshelf(models.Model):
     """本棚"""
     user = models.ForeignKey(CustomUser, verbose_name='ユーザー', on_delete=models.CASCADE)
-    book = models.ForeignKey(Book, verbose_name='書籍', on_delete=models.CASCADE)
+    book = models.ForeignKey(Book, verbose_name='書籍', on_delete=models.CASCADE, related_name='bookshelves')
     status = models.CharField(verbose_name='ステータス', max_length=10)
     created_at = models.DateTimeField(verbose_name='作成日時', auto_now_add=True)
     update_at = models.DateTimeField(verbose_name='更新日時', auto_now=True)
