@@ -186,6 +186,19 @@ class TestTagAddView(LoggedInTestCase):
         tag = Tag.objects.get(name=params['name'])
         self.assertEqual(BookTag.objects.filter(book=self.book1, tag=tag).count(), 1)
 
+class TestExplorationView(LoggedInTestCase):
+    """ExplorationView用のテストクラス"""
+    def setUp(self):
+        self.loginSetUp()
+        self.createModelSetup()
+        self.url = reverse('books:exploration')
+
+    def test_book_exploration(self):
+        """ユーザーへのrecommendページが正しく取得できることを検証する"""
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'book_exploration.html')
+
 class TestGetRelatedBooks(LoggedInTestCase):
     """get_related_booksメソッドテストクラス"""
     def setUp(self):
@@ -204,3 +217,24 @@ class TestGetRelatedBooks(LoggedInTestCase):
         self.assertContains(response, self.book4.title)
         self.assertContains(response, self.book5.title)
         self.assertContains(response, self.book6.title)
+
+class TestGetNewBooks(LoggedInTestCase):
+    """get_new_booksメソッドテストクラス"""
+    def setUp(self):
+        self.loginSetUp()
+        self.createModelSetup()
+        self.bookshelf1 = Bookshelf.objects.create(user=self.test_user, book=self.book1, status='読書中')
+        self.bookshelf2 = Bookshelf.objects.create(user=self.test_user, book=self.book2, status='読書中')
+        self.bookshelf3 = Bookshelf.objects.create(user=self.test_user, book=self.book7, status='読書中')
+        self.url = reverse('books:get_new_books')
+
+    def test_get_new_books(self):
+        """ユーザーへのおすすめ書籍が正しく取得できることを検証する"""
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, self.book8.title)
+        self.assertContains(response, self.book9.title)
+        # リクエストユーザーが登録しているサブカテゴリーなのでresponseには含まれないことを確認。
+        self.assertNotContains(response, self.book1.title)
+        self.assertNotContains(response, self.book2.title)
+        self.assertNotContains(response, self.book7.title)

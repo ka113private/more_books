@@ -1,23 +1,33 @@
 import os
 from django import forms
 from django.core.mail import EmailMessage
-from .models import Tag, Bookshelf, CustomUser, Inquiry
+from .models import Tag, Bookshelf, CustomUser
 
 
-class InquiryForm(forms.ModelForm):
-    class Meta:
-        model = Inquiry
-        fields = ('name', 'email', 'title', 'message', )
+class InquiryForm(forms.Form):
+    name = forms.CharField(label='お名前', max_length=30)
+    email = forms.EmailField(label='メールアドレス')
+    title = forms.CharField(label='タイトル', max_length=30)
+    message = forms.CharField(label='メッセージ', widget=forms.Textarea)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        for field in self.fields.values():
-            field.widget.attrs['class'] = 'form-control-inquiry'
-        self.fields['name'].widget.attrs['placeholder'] = 'お名前'
-        self.fields['email'].widget.attrs['placeholder'] = 'メールアドレス'
-        self.fields['title'].widget.attrs['placeholder'] = 'タイトル'
-        self.fields['message'].widget.attrs['placeholder'] = 'お問い合わせ内容'
+        self.fields['name'].widget.attrs['class'] = 'form-control-inquiry'
+        self.fields['name'].widget.attrs['placeholder'] \
+            = 'お名前'
+
+        self.fields['email'].widget.attrs['class'] = 'form-control-inquiry'
+        self.fields['email'].widget.attrs['placeholder'] \
+            = 'メールアドレス'
+
+        self.fields['title'].widget.attrs['class'] = 'form-control-inquiry'
+        self.fields['title'].widget.attrs['placeholder'] \
+            = 'タイトル'
+
+        self.fields['message'].widget.attrs['class'] = 'form-control-inquiry'
+        self.fields['message'].widget.attrs['placeholder'] \
+            = 'メッセージ'
 
     def send_email(self):
         name = self.cleaned_data['name']
@@ -25,18 +35,15 @@ class InquiryForm(forms.ModelForm):
         title = self.cleaned_data['title']
         message = self.cleaned_data['message']
 
-        subject = '[MoreBooks!]お問い合わせ確認メール {}'.format(title)
-        message = '{0}様\n\n'.format(name)\
-                  +'この度はお問い合わせいただき、誠にありがとうございます。\n'\
-                  +'以下の内容でお問い合わせを承りました。\n'\
-                  +'担当者より順次ご返信させていただきますので、それまでお待ちください。\n\n' \
-                  +'■お問い合わせ内容\n' \
-                  +'氏名：{0}\nメールアドレス：{1}\nタイトル：{2}\nお問い合わせ内容：\n{3}'.format(name, email, title, message)
+        subject = 'お問い合わせ {}'.format(title)
+        message = '送信者名: {0}\nメールアドレス: {1}\nメッセージ: \n{2}'\
+            .format(name, email, message)
         from_email = os.environ.get('FROM_EMAIL')
         to_list = [
-            email
+            os.environ.get('FROM_EMAIL')
         ]
         cc_list = [
+            email
         ]
 
         emailMessage = EmailMessage(
@@ -54,11 +61,11 @@ class TagAddForm(forms.ModelForm):
         model = Tag
         fields = ('name',)
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        for field in self.fields.values():
+    def __int__(self, *args, **kwargs):
+        super().__int__(*args, **kwargs)
+        for field in self.field.values():
             field.widget.attrs['class'] = 'form-control'
-        self.fields['name'].widget.attrs['placeholder'] = '自由にタグをつけてみましょう'
+        self.fields['name'].initial = 'タグ'
 
 
 class BookshelfAddForm(forms.ModelForm):
@@ -66,3 +73,32 @@ class BookshelfAddForm(forms.ModelForm):
     class Meta:
         model = Bookshelf
         fields = ()
+
+    def __int__(self, *args, **kwargs):
+        super().__int__(*args, **kwargs)
+        for field in self.field.values():
+            field.widget.attrs['class'] = 'form-control'
+
+
+class ProfileEditForm(forms.ModelForm):
+    """プロフィール画像をアップロードするフォーム"""
+    class Meta:
+        model = CustomUser
+        fields = ('profile_image',)
+
+    def __int__(self, *args, **kwargs):
+        super().__int__(*args, **kwargs)
+        for field in self.field.values():
+            field.widget.attrs['class'] = 'form-control'
+
+
+class StatusChangeForm(forms.ModelForm):
+    """本棚にある書籍のステータスを変更するフォーム"""
+    class Meta:
+        model = Bookshelf
+        fields = ()
+
+    def __int__(self, *args, **kwargs):
+        super().__int__(*args, **kwargs)
+        for field in self.field.values():
+            field.widget.attrs['class'] = 'form-control'
