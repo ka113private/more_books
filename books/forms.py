@@ -1,7 +1,7 @@
 import os
 from django import forms
 from django.core.mail import EmailMessage
-from .models import Tag, Bookshelf, CustomUser, Inquiry
+from .models import Tag, Bookshelf, Inquiry
 
 
 class InquiryForm(forms.ModelForm):
