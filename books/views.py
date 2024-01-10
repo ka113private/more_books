@@ -2,12 +2,11 @@ import json
 import logging
 
 from django.urls import reverse_lazy
-from django.shortcuts import render
 from django.views import generic
 from .forms import InquiryForm, TagAddForm, BookshelfAddForm
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .models import Book, FavoriteBook, BookTag, TagLike, Tag, Bookshelf, CustomUser, Category, Inquiry
+from .models import Book, FavoriteBook, BookTag, TagLike, Tag, Bookshelf, Category, Inquiry
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from django.db.models import Q, Count

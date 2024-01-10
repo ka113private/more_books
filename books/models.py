@@ -1,6 +1,5 @@
 from accounts.models import CustomUser
 from django.db import models
-from datetime import datetime
 
 
 class Category(models.Model):
