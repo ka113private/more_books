@@ -2,12 +2,11 @@ import json
 import logging
 
 from django.urls import reverse_lazy
-from django.shortcuts import render
 from django.views import generic
-from .forms import InquiryForm, TagAddForm, BookshelfAddForm, ProfileEditForm, StatusChangeForm
+from .forms import InquiryForm, TagAddForm, BookshelfAddForm
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .models import Book, FavoriteBook, BookTag, TagLike, Tag, Bookshelf, CustomUser, Category
+from .models import Book, FavoriteBook, BookTag, TagLike, Tag, Bookshelf, Category, Inquiry
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from django.db.models import Q, Count
@@ -39,15 +38,21 @@ class AboutUsView(generic.TemplateView):
     """MoreBooks紹介用ページ用View"""
     template_name = "about_us.html"
 
-class InquiryView(generic.FormView):
+class InquiryView(generic.CreateView):
     """問い合わせページ用View"""
+    model = Inquiry
     template_name = "inquiry.html"
     form_class = InquiryForm
-    success_url = reverse_lazy('books:inquiry')
+
+    def get_success_url(self):
+        return reverse_lazy('books:inquiry')
 
     def form_valid(self, form):
+        inquiry = form.save(commit=False)
+        inquiry.user = self.request.user
+        form.save()
         form.send_email()
-        messages.success(self.request,'メッセージを送信しました')
+        messages.success(self.request,'お問い合わせありがとうございます。お問い合わせ確認メールを送信致しました。')
         logger.info('Inquiry sent by {}'.format(form.cleaned_data['name']))
         return super().form_valid(form)
 
@@ -127,31 +132,6 @@ class BookListFromCategoryView(LoginRequiredMixin, generic.ListView):
         context['query'] = self.category.name
         return context
 
-class BookListFromCustomView(LoginRequiredMixin, generic.ListView):
-    """カスタム書籍一覧ページ用のView"""
-    model = Book
-    template_name = 'book_list.html'
-    paginate_by = NUM_BOOKS_TO_DISPLAY_LISTPAGE
-
-    def get_queryset(self, **kwargs):
-        self.custom = self.kwargs['custom']
-        book_list = Book.objects.all()
-        if (self.custom == 'new_arrivals'):
-            book_list = book_list.order_by('-created_at')[:NUM_BOOKS_SEARCH]
-        elif (self.custom == 'popular'):
-            book_list = book_list.annotate(favorite_count=Count('favoritebook'))\
-                .order_by('-favorite_count')[:NUM_BOOKS_SEARCH]
-        return book_list
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        if (self.custom == 'new_arrivals'):
-            context['query'] = '新着書籍'
-        elif (self.custom == 'popular'):
-            context['query'] = '人気書籍'
-        context['count'] = NUM_BOOKS_SEARCH
-        return context
-
 class BookDetailView(LoginRequiredMixin, generic.DetailView):
     """書籍詳細ページ用View"""
     model = Book
@@ -183,18 +163,6 @@ class BookDetailView(LoginRequiredMixin, generic.DetailView):
             context['is_add_bookshelf'] = False
         # モーダル用フォーム
         context['tag_add_form'] = TagAddForm
-        return context
-
-class MyPageView(LoginRequiredMixin, generic.DetailView):
-    """マイページ用View"""
-    model = CustomUser
-    template_name = "mypage.html"
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        # プロフィール画像編集フォーム
-        context['profile_edit_form']=ProfileEditForm
-
         return context
 
 class TagAddView(LoginRequiredMixin, generic.FormView):
@@ -250,37 +218,6 @@ class MybooksAddView(LoginRequiredMixin, generic.CreateView):
 
         return super().form_valid(form)
 
-class ProfileEditView(LoginRequiredMixin, generic.UpdateView):
-    """プロフィール画像更新用のview"""
-    model = CustomUser
-    form_class = ProfileEditForm
-
-    def get_success_url(self):
-        return reverse_lazy('books:mypage', kwargs={'pk': self.request.user.pk})
-
-    def form_valid(self, form):
-        form.save()
-        messages.success(self.request, 'プロフィール画像を更新しました')
-        return super().form_valid(form)
-
-class StatusChangeView(LoginRequiredMixin, generic.UpdateView):
-    """MyBooksのステータス変更のview"""
-    model = Bookshelf
-    form_class = StatusChangeForm
-
-    def get_success_url(self):
-        return reverse_lazy('books:mybooks')
-
-    def form_valid(self, form):
-        bookshelf = form.save(commit=False)
-        target = Bookshelf.objects.get(pk=bookshelf.pk)
-        if (target.status=="読みたい"):
-            bookshelf.status = "読書中"
-        elif (target.status=="読書中"):
-            bookshelf.status = "読了"
-        bookshelf.save()
-        return super().form_valid(form)
-
 class StatusDeleteView(LoginRequiredMixin, generic.DeleteView):
     """MyBooksの削除view"""
     model = Bookshelf
@@ -292,44 +229,6 @@ class StatusDeleteView(LoginRequiredMixin, generic.DeleteView):
     def delete(self, request, *args, **kwargs):
         messages.success(self.request, '本棚から書籍を削除しました。')
         return super().delete(request, *args, **kwargs)
-
-class FeedbackView(LoginRequiredMixin, generic.UpdateView):
-    """読了の際にユーザーの読書の感想をタグいいねでフィードバックしてもらうView"""
-
-    def get_success_url(self):
-        return reverse_lazy('books:mybooks')
-
-    def post(self, request, *args, **kwargs):
-        checks_value = request.POST.getlist('booktags')
-        taglikes = TagLike.objects.filter(user=self.request.user)
-        booktags = BookTag.objects.all()
-        #チェックボックスでチェックが入っている項目に関してはいいねとしてみなす。
-        for value in checks_value:
-            booktag = booktags.get(pk=value)
-            if not taglikes.filter(booktag=booktag).exists():
-                taglike = TagLike(user=self.request.user, booktag=booktag)
-                taglike.save()
-        #ステータスを読了にする。
-        bookshelf = Bookshelf.objects.get(pk=self.kwargs['pk'])
-        bookshelf.status = "読了"
-        bookshelf.save()
-        #★mybooksページに遷移させたい。
-        return render(request, 'index.html')
-
-class ExplorationView(LoginRequiredMixin, generic.TemplateView):
-    """ユーザーへのおすすめの書籍を一覧表示するView"""
-    model = Book
-    template_name = 'book_exploration.html'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        new_arrivals = Book.objects.order_by('-created_at')[:NUM_BOOKS_TO_DISPLAY]
-        context['new_arrivals'] = new_arrivals
-        popular = Book.objects.annotate(favorite_count=Count('favoritebook')) \
-                        .order_by('-favorite_count')[:NUM_BOOKS_TO_DISPLAY]
-        context['popular'] = popular
-
-        return context
 
 class MybooksListView(LoginRequiredMixin, generic.ListView):
     """ユーザーのmy本棚を表示するView"""
@@ -421,7 +320,7 @@ def not_add_mybooks(request):
     return JsonResponse(context)
 
 def get_related_books(request):
-    # 「知見を深める」を選択した場合：ログインユーザーの興味があるサブカテゴリに属する人気の本を取得
+    # ログインユーザーの好みに応じた提案書籍をDBから取得
     context = {
         'user': request.user.username
     }
@@ -460,35 +359,6 @@ def get_related_books(request):
         context['recommend_exists'] = True
         related_books_list_json = JsonResponse({'books': related_books_list})
         context['recommend_books'] = related_books_list_json.content.decode('utf-8')
-    else:
-        context['recommend_exists'] = False
-    return JsonResponse(context)
-
-def get_new_books(request):
-    #「知見を広げる」を選択した場合：ログインユーザーがこれまで読んだことのないサブカテゴリに属する本を取得
-    context = {
-        'user': request.user.username
-    }
-    #  本棚にある書籍の全てのサブカテゴリを取得
-    library_id_list = Bookshelf.objects.filter(user=request.user) \
-        .values_list('book_id')
-    library_list = Book.objects.filter(id__in=library_id_list)
-    my_categories = library_list.values('sub_category') \
-        .annotate(count=Count('sub_category')) \
-        .order_by('-count') \
-        .values_list('sub_category')
-
-    # おすすめ書籍(ログインユーザーがmy本棚に追加していないサブカテゴリの書籍のうちランダムな書籍)のQuerySetを返す。
-    new_books = Book.objects.all()\
-                    .exclude(sub_category__in=my_categories) \
-                    .order_by("?")[:NUM_RECOMMEND_BOOKS]
-
-    # 　JsonResponseに格納する
-    new_books_list = list(new_books.values())
-    if (len(new_books_list) != 0):
-        context['recommend_exists'] = True
-        new_books_list_json = JsonResponse({'books': new_books_list})
-        context['recommend_books'] = new_books_list_json.content.decode('utf-8')
     else:
         context['recommend_exists'] = False
     return JsonResponse(context)

@@ -119,3 +119,18 @@ class Bookshelf(models.Model):
 
     def __str__(self):
         return self.book.title
+
+class Inquiry(models.Model):
+    """問い合わせ"""
+    user = models.ForeignKey(CustomUser, verbose_name='ユーザー', on_delete=models.CASCADE)
+    name = models.CharField(verbose_name='名前', max_length=30)
+    email = models.EmailField(verbose_name='メールアドレス')
+    title = models.CharField(verbose_name='タイトル', max_length=30)
+    message = models.TextField(verbose_name='お問い合わせ内容', max_length=2000)
+    created_at = models.DateTimeField(verbose_name='作成日時', auto_now_add=True)
+
+    class Meta:
+        verbose_name='Inquiry'
+
+    def __str__(self):
+        return self.name + '　：　' + self.title
