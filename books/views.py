@@ -7,7 +7,7 @@ from django.views import generic
 from .forms import InquiryForm, TagAddForm, BookshelfAddForm
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .models import Book, FavoriteBook, BookTag, TagLike, Tag, Bookshelf, CustomUser, Category
+from .models import Book, FavoriteBook, BookTag, TagLike, Tag, Bookshelf, CustomUser, Category, Inquiry
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from django.db.models import Q, Count
@@ -39,15 +39,21 @@ class AboutUsView(generic.TemplateView):
     """MoreBooks紹介用ページ用View"""
     template_name = "about_us.html"
 
-class InquiryView(generic.FormView):
+class InquiryView(generic.CreateView):
     """問い合わせページ用View"""
+    model = Inquiry
     template_name = "inquiry.html"
     form_class = InquiryForm
-    success_url = reverse_lazy('books:inquiry')
+
+    def get_success_url(self):
+        return reverse_lazy('books:inquiry')
 
     def form_valid(self, form):
+        inquiry = form.save(commit=False)
+        inquiry.user = self.request.user
+        form.save()
         form.send_email()
-        messages.success(self.request,'メッセージを送信しました')
+        messages.success(self.request,'お問い合わせありがとうございます。お問い合わせ確認メールを送信致しました。')
         logger.info('Inquiry sent by {}'.format(form.cleaned_data['name']))
         return super().form_valid(form)
 
