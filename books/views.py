@@ -6,7 +6,7 @@ from django.views import generic
 from .forms import InquiryForm, TagAddForm, BookshelfAddForm
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .models import Book, FavoriteBook, BookTag, TagLike, Tag, Bookshelf, Category, Inquiry
+from .models import Book, FavoriteBook, BookTag, TagLike, Tag, Bookshelf, Category, Inquiry, Topic
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from django.db.models import Q, Count
@@ -25,14 +25,24 @@ PER_FORTH = 0.1
 
 RECOMMEND_BOOKS = {}
 
-class IndexView(generic.TemplateView):
+class IndexView(generic.ListView):
     """インデックスページ用View"""
+    model = Topic
     template_name = "index.html"
+
+    def get_queryset(self, **kwargs):
+        queryset = Topic.objects.filter(is_open=True).order_by('-created_at')
+        return queryset
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['count'] = NUM_RECOMMEND_BOOKS
         return context
+
+class TopicDetailView(generic.DetailView):
+    """トピック詳細表示用View"""
+    model = Topic
+    template_name = 'topic_detail.html'
 
 class AboutUsView(generic.TemplateView):
     """MoreBooks紹介用ページ用View"""

@@ -134,3 +134,17 @@ class Inquiry(models.Model):
 
     def __str__(self):
         return self.name + '　：　' + self.title
+
+class Topic(models.Model):
+    """Topic"""
+    title = models.CharField(verbose_name='タイトル', max_length=40)
+    content = models.TextField(verbose_name='内容', max_length=2000)
+    is_open = models.BooleanField(verbose_name='オープン（画面表示）する場合チェックをいれる')
+    created_at = models.DateTimeField(verbose_name='作成日時', auto_now_add=True)
+    update_at = models.DateTimeField(verbose_name='追加日時', auto_now=True)
+
+    class Meta:
+        verbose_name = 'Topic'
+
+    def __str__(self):
+        return self.title
