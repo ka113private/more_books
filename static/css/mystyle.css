@@ -31,6 +31,10 @@ h1,h2,h3,h4,h5,h6 {
     color: var(--dark);
 }
 
+a {
+    text-decoration: none;
+}
+
 p {
     color: var(--dark);
     font-size: 20px;
@@ -322,6 +326,38 @@ book-recommends section
     font-size: 10px;
 }
 
+/*
+topics section
+*/
+.topic {
+    border-top : 2px solid var(--white-gray);
+    border-bottom : 2px solid var(--white-gray);
+    padding: 10px 20px;
+}
+
+tr[data-href]{
+  cursor: pointer;
+}
+
+.topic-detail {
+    margin-top: 70px;
+}
+
+.topic-date {
+    font-size: 13px;
+}
+
+.topic-title {
+    font-size: 20px;
+    color: var(--dark);
+    font-weight: bold;
+    margin-top: 1em;
+}
+
+.topic-content {
+    margin-top: 3em;
+    color: var(--dark);
+}
 /*
 book-category section
 */

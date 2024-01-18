@@ -27,6 +27,30 @@
         </div>
     </div>
 </section>
+<section class="topic-section">
+    <div class="container">
+        <div class="section-title">
+            <div class="section-title-en">Topics</div>
+            <div class="section-title-jp">お知らせ</div>
+        </div>
+    </div>
+    <div class="topics">
+        <div class="col-sm-8 offset-sm-2">
+            <table class="table">
+                <tbody>
+                {% for topic in topic_list %}
+                    <tr data-href="{% url 'books:topic_detail' topic.pk %}">
+                        <th scope="row"></th>
+                        <td>{{ topic.created_at|date:"Y/m/d" }}</td>
+                        <td>{{ topic.title }}</td>
+                        <td>></td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
 <section class="book-recommends">
     <div class="container">
         <div class="section-title">
@@ -400,6 +424,13 @@
 {% endblock %}
 
 {% block javascript %}
+
+$(function(){
+  $('tr[data-href]').on('click', function(){
+    location.href = $(this).data('href');
+  });
+});
+
 {% if user.is_authenticated %}
 
     var btnLike = document.getElementById('btn_like');
@@ -623,4 +654,6 @@ $(window).on('load', function () {
 
   EachTextAnimeControl();/* アニメーション用の関数を呼ぶ*/
 });// ここまで画面が読み込まれたらすぐに動かしたい場合の記述
+
+
 {% endblock %}

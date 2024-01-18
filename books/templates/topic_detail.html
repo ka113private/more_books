@@ -1,0 +1,29 @@
+    {% extends 'base.html' %}
+{% load static %}
+
+{% block title %}トピック{% endblock %}
+
+{% block head %}
+<link href="{% static 'css/shop-item-gh-pages.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block contents %}
+<section class="topic-detail">
+    <div class="row">
+        <div class="col-sm-8 mx-auto">
+            <div class="content-aria">
+                <div class="container">
+                    <div class="topic-date">{{ object.created_at|date:"Y/m/d" }}</div>
+                    <div class="topic-title">{{ object.title }}</div>
+                    <div class="topic-content">{{ object.content | linebreaksbr}}</div>
+                </div>
+            </div>
+            <a href="{% url 'books:index' %}"> < More Books!トップへ戻る</a>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extrajs %}
+
+{% endblock %}
