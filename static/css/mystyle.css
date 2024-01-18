@@ -182,20 +182,20 @@ Hero
 }
 
 .site-copy {
-    color: white;
+    color: transparent;
     font-size: 60px;
 }
 
 @media screen and (max-width: 768px){
     .site-copy {
-        color: white;
+        color: transparent;
         font-size: 60px;
         line-height: 1.5;
     }
 }
 @media screen and (max-width: 390px){
     .site-copy {
-        color: white;
+        color: transparent;
         font-size: 50px;
         line-height: 1.5;
     }
@@ -204,14 +204,14 @@ Hero
 
 .site-title
 {
-    color: white;
+    color: transparent;
     font-size: 30px;
     line-height: 1.5;
     margin-top: 50px;
 }
 @media screen and (max-width: 768px){
     .site-title{
-        color: white;
+        color: transparent;
         font-size: 25px;
         line-height: 1.3;
         margin-top: 50px;
@@ -247,6 +247,15 @@ Hero
         color: transparent;
         margin-bottom: 150px;
     }
+}
+
+.btn-fade {
+	opacity: 0;
+	transform: translateY(30px);
+	transition: opacity 2s, transform 3s;
+}.btn-fade.visible {
+	opacity: 1;
+	transform: translateY(0px);
 }
 /*
 section
