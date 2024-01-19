@@ -20,7 +20,7 @@
                 <p class="eachTextAnime site-title">本とめぐり逢う本屋_More Books!</p>
             </div>
             <div class="col-10 mx-auto text-center my-6">
-                <a type="button" class="btn-exploration btn btn-outline-light btn-lg fade" id="btn_related_books" data-toggle="modal" data-target="#recommend-modal">
+                <a type="button" class="btn-exploration btn btn-outline-light btn-lg btn-fade" id="btn_related_books" data-toggle="modal" data-target="#recommend-modal">
                     店主におすすめを聞いてみる
                 </a>
             </div>
@@ -412,7 +412,7 @@
                 <p class="eachTextAnime site-title">本とめぐり逢う本屋_More Books!</p>
             </div>
             <div class="col-10 mx-auto text-center my-6">
-                <a type="button" class="btn-exploration btn btn-outline-light btn-lg fade" href="{% url 'account_login' %}" id="btn_before_auth">
+                <a type="button" class="btn-exploration btn btn-outline-light btn-lg btn-fade" href="{% url 'account_login' %}" id="btn_before_auth">
                     新しい本と出会う
                 </a>
             </div>
@@ -424,53 +424,6 @@
 {% endblock %}
 
 {% block javascript %}
-
-/* HERO部分の文字の表示 */
-$(window).on('load', function () {
-  //spanタグを追加する
-  var element = $(".eachTextAnime");
-  element.each(function () {
-    var text = $(this).text();
-    var textbox = "";
-    text.split('').forEach(function (t, i) {
-      if (t !== "_") {
-        if (i < 10) {
-          textbox += '<span style="animation-delay:.' + i + 's; color: white;">' + t + '</span>';
-        } else {
-          var n = i / 10;
-          textbox += '<span style="animation-delay:' + n + 's; color: white;">' + t + '</span>';
-        }
-      } else {
-        textbox += '<br>'
-      }
-    });
-    $(this).html(textbox);
-  });
-
-  EachTextAnimeControl();/* アニメーション用の関数を呼ぶ*/
-});// ここまで画面が読み込まれたらすぐに動かしたい場合の記述
-
-// eachTextAnimeにappeartextというクラス名を付ける定義
-function EachTextAnimeControl() {
-  $('.eachTextAnime').each(function () {
-    var elemPos = $(this).offset().top - 50;
-    var scroll = $(window).scrollTop();
-    var windowHeight = $(window).height();
-    if (scroll >= elemPos - windowHeight) {
-      $(this).addClass("appeartext");
-    } else {
-      $(this).removeClass("appeartext");
-    }
-  });
-　//ボタンも表示する
-    {% if user.is_authenticated %}
-        var btn = document.getElementById('btn_related_books');
-    {% else %}
-        var btn = document.getElementById('btn_before_auth');
-    {% endif %}
-        btn.classList.add('visible');
-}
-
 
 /* Topic欄のクリック処理 */
 $(function(){
@@ -631,6 +584,7 @@ $(function(){
                 if(data.recommend_exists){
                     bookList = JSON.parse(data.recommend_books);//JSONデータからリストを取得する。
                     allCards.forEach(function(card, index){
+                        console.log(index + bookList.books[index].title);
                         card.src = '../../media/' + bookList.books[index].thumbnail_image;
                     });
                 }else{
@@ -662,5 +616,53 @@ $(function(){
         });
     }
 {% endif %}
+
+
+/* HERO部分の文字の表示 */
+$(window).on('load', function () {
+  //spanタグを追加する
+  var element = $(".eachTextAnime");
+  element.each(function () {
+    var text = $(this).text();
+    var textbox = "";
+    text.split('').forEach(function (t, i) {
+      if (t !== "_") {
+        if (i < 10) {
+          textbox += '<span style="animation-delay:.' + i + 's; color: white;">' + t + '</span>';
+        } else {
+          var n = i / 10;
+          textbox += '<span style="animation-delay:' + n + 's; color: white;">' + t + '</span>';
+        }
+      } else {
+        textbox += '<br>'
+      }
+    });
+    $(this).html(textbox);
+  });
+
+  EachTextAnimeControl();/* アニメーション用の関数を呼ぶ*/
+});// ここまで画面が読み込まれたらすぐに動かしたい場合の記述
+
+// eachTextAnimeにappeartextというクラス名を付ける定義
+function EachTextAnimeControl() {
+  $('.eachTextAnime').each(function () {
+    var elemPos = $(this).offset().top - 50;
+    var scroll = $(window).scrollTop();
+    var windowHeight = $(window).height();
+    if (scroll >= elemPos - windowHeight) {
+      $(this).addClass("appeartext");
+    } else {
+      $(this).removeClass("appeartext");
+    }
+  });
+　//ボタンも表示する
+    {% if user.is_authenticated %}
+        var btn = document.getElementById('btn_related_books');
+    {% else %}
+        var btn = document.getElementById('btn_before_auth');
+    {% endif %}
+        btn.classList.add('visible');
+}
+
 
 {% endblock %}

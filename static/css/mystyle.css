@@ -249,11 +249,11 @@ Hero
     }
 }
 
-.fade {
+.btn-fade {
 	opacity: 0;
 	transform: translateY(30px);
 	transition: opacity 2s, transform 3s;
-}.fade.visible {
+}.btn-fade.visible {
 	opacity: 1;
 	transform: translateY(0px);
 }
