@@ -50,6 +50,7 @@ class Book(models.Model):
                                   null=True)
     created_at = models.DateTimeField(verbose_name='作成日時', auto_now_add=True)
     update_at = models.DateTimeField(verbose_name='追加日時', auto_now=True)
+    registered_date = models.CharField(verbose_name='登録月', max_length=6)
 
     class Meta:
         verbose_name_plural = 'Book'

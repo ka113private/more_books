@@ -11,11 +11,13 @@ git pull origin main
 source ../bin/activate
 
 # CSSを適用する
-python manage.py collectstatic
-yes
+# python manage.py collectstatic
 
 # モデルのマイグレーションを行う
-# python manage.py migrate
+python manage.py migrate
+
+# jsonからbookデータを追加する。
+python manage.py loaddata books/fixtures/book.json
 
 #　仮想環境から出る
 deactivate
