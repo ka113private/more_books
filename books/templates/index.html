@@ -5,11 +5,11 @@
 {% block title %}人生を変える本に出会おう。More Books!{% endblock %}
 
 {% block header %}
-    {% include 'recommend_modal.html' %}
+
 {% endblock %}
 
 {% block contents %}
-
+{% include 'recommend_modal.html' %}
 <!-- hero section -->
 {% if user.is_authenticated %}
 <section class="hero hero-index-afterauth vh-100 d-flex align-items-center">
@@ -437,7 +437,6 @@ $(function(){
 });
 
 {% if user.is_authenticated %}
-
     var btnLike = document.getElementById('btn_like');
     var btnUnLike = document.getElementById('btn_unlike');
     var btnRelatedBooks = document.getElementById('btn_related_books');
@@ -619,6 +618,7 @@ $(function(){
             console.log(error);
         });
     }
+
 {% endif %}
 
 
